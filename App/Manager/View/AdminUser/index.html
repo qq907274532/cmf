@@ -79,7 +79,7 @@
                                                 <if condition="$v.status eq 1">
                                                     <span class="label label-success arrowed">启用</span>
                                                     <else/>
-                                                    <span class="label  label-warning arrowed ">禁用</span>
+                                                    <span class="label  label-danger arrowed ">禁用</span>
                                                 </if>
                                             </td>
                                             <td class="hidden-480"> <span class="badge badge-purple">{$v.name}</span></td>
@@ -114,3 +114,47 @@
             </div>
             <!--/HEADER -->
             <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(".checkStatus").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).attr("data-original-title");
+                    var status;
+                    if(msg=='禁用') {
+                        status=1;
+                    }else {
+                        status=2;
+                    }
+                    layer.confirm('你确定要'+msg+"吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "{:U('AdminUser/del')}",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
+                                return false;
+                            }
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
+                    });
+
+                });
+
+                function load(){
+                    window.location.href="{:U('AdminUser/index')}";
+                }
+            </script>

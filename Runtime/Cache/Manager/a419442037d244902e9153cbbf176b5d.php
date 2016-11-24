@@ -171,10 +171,10 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="<?php echo U('AdminUser/index');?>">管理员</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>修改管理员</li>
+                                <a href="<?php echo U('AdminUser/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
 
@@ -192,7 +192,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>添加管理员</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -201,48 +201,37 @@
 
                                 </div>
                             </div>
-                            <div class="box-body">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
-                                            <td>
-                                                <?php if($v["status"] == 1): ?><span class="label label-success arrowed">启用</span>
-                                                    <?php else: ?>
-                                                    <span class="label  label-danger arrowed ">禁用</span><?php endif; ?>
-                                            </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
-                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
-                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
-                                              <?php if($v["status"] == '1'): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
-                                               <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
-                                            </td>
-                                        </tr><?php endforeach; endif; else: echo "" ;endif; ?>
-                                    </tbody>
-                                </table>
+                            <div class="box-body big">
+                                <form class="form-horizontal" role="form" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">用户名：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="username" id="username" value=""
+                                                    placeholder="用户名" disabled>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">权限组：</label>
+
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="role_id" id="role">
+                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>"><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-10">
+
+                                            <div type="text" class="btn btn-success" id="submit">提交</div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        <?php echo ($data["page"]); ?>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -300,45 +289,45 @@
 </body>
 </html>
             <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
+                $(function(){
+                    $("#submit").click(function(){
+                        var sort=$("input[name='sort']").val();
+                        var username=$("input[name='username']").val();
+                        var password=$("input[name='password']").val();
+                        var repassword=$("input[name='repassword']").val();
+                        var role=$("#role").val();
+                        if($.trim(username)=='') {
+                            throwExc("用户名必须填写");
+                            return false;
+                        }
+                        if($.trim(password)=='') {
+                            throwExc("密码必须填写");
+                            return false;
+                        }
+                        if($.trim(repassword)=='') {
+                            throwExc("确认密码必须填写");
+                            return false;
+                        }
+                        if(role==''&& !isNaN(role)) {
+                            throwExc("请选择权限组");
+                            return false;
+                        }
+                        $.post("<?php echo U('AdminUser/add');?>",{
+                            'role':role,
+                            'password':password,
+                            'repassword':repassword,
+                            'username':username
+                        },function( response ){
+                            if(response.error==100) {
+                                throwExc(response.message);
                                 return false;
+                            }else if(response.error==200) {
+                                showSucc(response.message);
+                                setTimeout("load()",1000);
                             }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
-                        });
+                        },"json");
                     });
-
                 });
-
                 function load(){
                     window.location.href="<?php echo U('AdminUser/index');?>";
                 }

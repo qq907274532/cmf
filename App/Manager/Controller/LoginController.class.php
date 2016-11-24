@@ -2,7 +2,8 @@
     namespace Manager\Controller;
 
 
-    use Model\AdminUser;
+
+    use Manager\Model\AdminUserModel;
     use Think\Controller;
 
     class LoginController extends Controller
@@ -20,25 +21,25 @@
             if (IS_POST) {
                 $error=100;
                 if (empty($verify = trim(I('verify')))) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'验证码不能为空'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'验证码不能为空'));
                 }
                 if (!$this->model->check_verify($verify)) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'验证码不正确'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'验证码不正确'));
                 }
                 if (empty($username = trim(I('username')))) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'用户名不能为空'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名不能为空'));
                 }
                 if (empty($password = trim(I('password')))) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'密码不能为空'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'密码不能为空'));
                 }
 
                 if (empty($userInfoDetail = $this->model->userInfo(array('username' => $username)))) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'用户名或密码不正确'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名或密码不正确'));
                 }
                 if (!checkPassword($userInfoDetail['password'], $password)) {
-                    $this->ajaxReturn(array('error'=>$error,'msg'=>'用户名或密码不正确'));
+                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名或密码不正确'));
                 }
-                if ($userInfoDetail['status'] == AdminUser::STATUS_DISABLE) {
+                if ($userInfoDetail['status'] == AdminUserModel::STATUS_DISABLE) {
                     throw new \Exception("该用户已被禁用");
                 }
                 $data = array(
@@ -49,9 +50,9 @@
                 $this->model->where(array('id' => $userInfoDetail['id']))->save($data);
                 session('id', $userInfoDetail['id']);
                 session('name', $userInfoDetail['username']);
-                $this->ajaxReturn(array('error'=>200,'msg'=>'登录成功'));
+                $this->ajaxReturn(array('error'=>200,'message'=>'登录成功'));
             } else {
-                $this->display("index");
+                $this->display();
             }
 
         }

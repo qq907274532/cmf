@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?>﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -112,8 +112,8 @@
 
 <!-- PAGE -->
 
-<!-- SIDEBAR -->
-<div id="sidebar" class="sidebar">
+	<!-- SIDEBAR -->
+	<div id="sidebar" class="sidebar">
     <div class="sidebar-menu nav-collapse">
         <div class="divide-20"></div>
         <!-- SEARCH BAR -->
@@ -149,109 +149,47 @@
         <!-- /SIDEBAR MENU -->
     </div>
 </div><!--/HEADER -->
-<!-- /SIDEBAR -->
-<div id="main-content">
-    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+	<!-- /SIDEBAR -->
+	<div id="main-content">
+		<!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
 
-    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
-    <div class="container">
-        <div class="row">
-            <div id="content" class="col-lg-12">
-                <!-- PAGE HEADER-->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="page-header">
-                            <!-- STYLER -->
+		<!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+		<div class="container">
+			<div class="row">
+				<div id="content" class="col-lg-12">
+					<!-- PAGE HEADER-->
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="page-header">
+								<!-- STYLER -->
 
-                            <!-- /STYLER -->
-                            <!-- BREADCRUMBS -->
-                            <ul class="breadcrumb">
-                                <li>
-                                    <i class="fa fa-home"></i>
-                                    <a href="<?php echo U('Index/index');?>">首页</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">权限管理</a>
-                                </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
-                            </ul>
-                            <div class="clearfix">
+								<!-- /STYLER -->
+								<!-- BREADCRUMBS -->
+								<ul class="breadcrumb">
+									<li>
+										<i class="fa fa-home"></i>
+										<a href="<?php echo U('Index/index');?>">首页</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">首页</a>
+									</li>
+									<li>首页</li>
+								</ul>
+								<!-- /BREADCRUMBS -->
 
-                            </div>
-                            <!-- /BREADCRUMBS -->
+							</div>
+						</div>
+					</div>
+					<!-- /PAGE HEADER -->
+					<!-- SIMPLE STRIPED -->
+					<div class="row">
 
-                        </div>
-                    </div>
-                </div>
-                <!-- /PAGE HEADER -->
-                <!-- SIMPLE STRIPED -->
-                <div class="row">
+					</div>
 
-                    <div class="col-md-12">
-                        <!-- BOX -->
-                        <div class="box border primary">
-                            <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
-                                <div class="tools">
-
-                                    <a href="javascript:;" class="collapse">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
-                                            <td>
-                                                <?php if($v["status"] == 1): ?><span class="label label-success arrowed">启用</span>
-                                                    <?php else: ?>
-                                                    <span class="label  label-danger arrowed ">禁用</span><?php endif; ?>
-                                            </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
-                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
-                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
-                                              <?php if($v["status"] == '1'): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
-                                               <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
-                                            </td>
-                                        </tr><?php endforeach; endif; else: echo "" ;endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        <?php echo ($data["page"]); ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /BOX -->
-                    </div>
-                </div>
-
-                <!-- /BORDERED HOVER -->
-            </div>
-            <!--/HEADER -->
-            <div class="footer-tools">
+					<!-- /BORDERED HOVER -->
+				</div>
+				<!--/HEADER -->
+				<div class="footer-tools">
 							<span class="go-top">
 								<i class="fa fa-chevron-up"></i> Top
 							</span>
@@ -299,47 +237,3 @@
 <!-- /JAVASCRIPTS -->
 </body>
 </html>
-            <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
-                        });
-                    });
-
-                });
-
-                function load(){
-                    window.location.href="<?php echo U('AdminUser/index');?>";
-                }
-            </script>
