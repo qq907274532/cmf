@@ -18,7 +18,14 @@
     <!-- DATE RANGE PICKER -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <!-- TABLE CLOTH -->
-    <link rel="stylesheet" type="text/css" href="/Public/admin/js/tablecloth/css/tablecloth.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/typeahead/typeahead.css"/>
+    <!-- FILE UPLOAD -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-fileupload/bootstrap-fileupload.min.css"/>
+    <!-- SELECT2 -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
+    <!-- UNIFORM -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
 
     <!-- FONTS -->
 
@@ -107,7 +114,26 @@
 </header>
 <section id="page"><!--/HEADER -->
 <!--/HEADER -->
+<style type="text/css">
 
+    .wminimize:hover {
+        text-decoration: none;
+    }
+
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 8px;
+        line-height: 1.428571429;
+        vertical-align: top;
+        border-top: 0px solid #DDD;
+    }
+    .collapsed .expander{
+        background-image:url('/Public/admin/img/toggle-collapse-dark.png');
+    }
+    .expander .expander{
+        background-image:url('/Public/admin/img/toggle-expand-dark.png');
+    }
+
+</style>
 <!-- PAGE -->
 
 <!-- SIDEBAR -->
@@ -171,8 +197,8 @@
                                 <li>
                                     <a href="javascript:void(0)">权限管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>节点管理</li>
+                                <a href="<?php echo U('Node/add');?>" class="btn btn-primary pull-right ">增加节点 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -190,7 +216,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>节点列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -203,46 +229,70 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
+                                        <th colspan="1" rowspan="1">编号</th>
+                                        <th >Name</th>
+                                        <th >Title</th>
+                                        <th >状态</th>
+                                        <th >操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
-                                            <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
+                                    <?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?><tr  class="initialized parent collapsed expander" id="tr<?php echo ($val["id"]); ?>">
+                                            <td><span style="padding-left: 20px" <?php if($val["show"] == 1): ?>class="expander"<?php endif; ?>   onclick="tr_show(<?php echo ($val["id"]); ?>)"></span><span><?php echo ($val["id"]); ?></span></td>
+                                            <td ><?php echo ($val["name"]); ?></td>
+                                            <td ><?php echo ($val["title"]); ?></td>
+                                            <td >
+                                                <?php if($val["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in adminstatus"><?php echo ($val["nodeStatus"]); ?></span>
+                                                <?php else: ?>
+                                                    <span class="label label-danger arrow-in arrow-in-right adminstatus"><?php echo ($val["nodeStatus"]); ?></span><?php endif; ?>
+                                            </td>
+                                            <td >
+                                                <a href="<?php echo U('Node/edit',array('id'=>$val['id']));?>" class="fa fa-pencil tip" data-original-title="修改" id="tr<?php echo ($val["id"]); ?>"></a>&nbsp;
+                                                <?php if($val["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="禁用"></a>
+                                                 <?php else: ?>
+                                                    <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="启用"></a><?php endif; ?>
+                                            </td>
+                                        </tr>
+                                        <?php if(is_array($val["child"])): $i = 0; $__LIST__ = $val["child"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr  class="initialized parent collapsed expander show<?php echo ($val["id"]); ?>" style="margin-left: 20px; display:none" id="tr<?php echo ($vo["id"]); ?>">
+                                                <td>
+                                                    <span style="padding-left: 20px;margin-left: 15px;" <?php if($vo["show"] == 1): ?>class="expander"<?php endif; ?>  onclick="tr_show(<?php echo ($vo["id"]); ?>)"></span><span><?php echo ($vo["id"]); ?></span>
+                                                </td>
+                                                <td >&nbsp;&nbsp;├─<?php echo ($vo["name"]); ?></td>
+                                                <td >&nbsp;&nbsp;├─<?php echo ($vo["title"]); ?></td>
+                                                <td >
+                                                    <?php if($vo["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in adminstatus"><?php echo ($vo["nodeStatus"]); ?></span>
+                                                     <?php else: ?>
+                                                        <span class="label label-danger arrow-in arrow-in-right adminstatus"><?php echo ($vo["nodeStatus"]); ?></span><?php endif; ?>
+                                                </td>
+                                                <td >
+                                                    <a href="<?php echo U('Node/edit',array('id'=>$vo['id']));?>" class="fa fa-pencil tip" data-original-title="修改" id="tr<?php echo ($vo["id"]); ?>"></a>&nbsp;
+                                                    <?php if($vo["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="禁用"></a>
                                                     <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
-                                            </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
-                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
-                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                                        <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="启用"></a><?php endif; ?>
 
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
-                                               <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
-                                            </td>
-                                        </tr><?php endforeach; endif; else: echo "" ;endif; ?>
+                                                </td>
+                                            </tr>
+                                            <?php if(is_array($vo["child"])): $i = 0; $__LIST__ = $vo["child"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr  class="initialized parent collapsed expander show<?php echo ($vo["id"]); ?>" style="margin-left: 20px; display:none" id="tr<?php echo ($v["id"]); ?>">
+                                                    <td><span style="padding-left: 20px;margin-left: 15px;" <?php if($v["show"] == 1): ?>class="expander"<?php endif; ?> onclick="tr_show(<?php echo ($v["id"]); ?>)""></span><span><?php echo ($v["id"]); ?></span></td>
+                                                    <td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  └─ <?php echo ($v["name"]); ?></td>
+                                                    <td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  └─ <?php echo ($v["title"]); ?></td>
+                                                    <td >
+                                                        <?php if($v["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in adminstatus"><?php echo ($v["nodeStatus"]); ?></span>
+                                                        <?php else: ?>
+                                                            <span class="label label-danger arrow-in arrow-in-right adminstatus"><?php echo ($v["nodeStatus"]); ?></span><?php endif; ?>
+                                                    </td>
+                                                    <td ><a href="<?php echo U('Node/edit',array('id'=>$v['id']));?>"
+                                                            class="fa fa-pencil tip" data-original-title="修改" id="tr<?php echo ($v["id"]); ?>"></a>&nbsp;
+                                                        <?php if($v["status"] == Manager\Model\AuthRuleModel::STATUS_ENABLE): ?><a href="javascript:void(0);" style="cursor: pointer;" class="fa fa-trash-o tip status" data-original-title="禁用"></a>
+                                                         <?php else: ?>
+                                                            <a href="javascript:void(0);" style="cursor: pointer;" class="fa fa-trash-o tip status" data-original-title="启用"></a><?php endif; ?>
+
+                                                    </td>
+                                                </tr><?php endforeach; endif; else: echo "" ;endif; endforeach; endif; else: echo "" ;endif; endforeach; endif; else: echo "" ;endif; ?>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        <?php echo ($data["page"]); ?>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -300,46 +350,48 @@
 </body>
 </html>
             <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
+                $(function(){
+                    $(".status").click(function(){
+                        var parent=$(this).parent().parent()
+                        var id=parent.find('td:first span').eq(1).html();
+                        var msg=$(this).attr("data-original-title");
+                        if(msg=="启用") {
+                            status="<?=Manager\Model\AuthRuleModel::STATUS_DISABLE?>";
+                        }else {
+                            status="<?=Manager\Model\AuthRuleModel::STATUS_ENABLE?>";
+                        }
+                        layer.confirm('你确定要'+msg+"吗？",{
+                            btn:[ '确认','取消' ] //按钮
+                        },function(){
+                            $.post("<?php echo U('Node/del');?>",{ "id":id,"status":status },function( response ){
                                 if(response.error==100) {
                                     throwExc(response.message);
                                     return false;
-                                }else if(response.error==200){
+                                }else if(response.error==200) {
                                     showSucc(response.message);
-                                    setTimeout("load()",1000);
+                                    setTimeout("location.reload()",1000);
+                                }else {
+                                    throwExc(response.info);
+                                    return false;
                                 }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
+                            },"json");
+
+                        },function(){
+                            layer.msg('取消成功',{
+                                time:800, //20s后自动关闭
+                            });
                         });
+
                     });
-
-                });
-
+                })
                 function load(){
                     location.reload() ;
+                }
+
+
+                function tr_show(data){
+                    var show= $('.show'+data);
+                    $("#tr"+data).toggleClass('expander');
+                    show.toggle();
                 }
             </script>

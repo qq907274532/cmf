@@ -29,8 +29,8 @@
                                 <li>
                                     <a href="javascript:void(0)">权限管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="{:U('AdminUser/add')}" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>角色管理</li>
+                                <a href="{:U('Role/add')}" class="btn btn-primary pull-right ">增加角色 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>角色列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -62,9 +62,9 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>管理员名称</th>
+                                        <th>名称</th>
+                                        <th>备注</th>
                                         <th>状态</th>
-                                        <th>权限组</th>
                                         <th class="hidden-480">创建时间</th>
                                         <th class="hidden-480">更新时间</th>
                                         <th>操作</th>
@@ -74,22 +74,23 @@
                                     <volist name="data.list" id="v">
                                         <tr>
                                             <td>{$v.id}</td>
-                                            <td>{$v.username}</td>
+                                            <td>{$v.title}</td>
+                                            <td>{$v.remark}</td>
                                             <td>
-                                                <if condition="$v.status eq Manager\Model\AdminUserModel::STATUS_ENABLE">
+                                                <if condition="$v.status eq Manager\Model\AuthGroupModel::STATUS_ENABLE">
                                                     <span class="label label-primary arrow-in">{$v.statusName}</span>
                                                     <else/>
                                                     <span class="label  label-danger arrow-out ">{$v.statusName}</span>
                                                 </if>
                                             </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple">{$v.name}</span></td>
+
                                             <td class="hidden-480">{$v.create_time}</td>
                                             <td class="hidden-480">{$v.update_time}</td>
                                             <td>
-                                              <a href="{:U('AdminUser/modifyPassword',array('id'=>$v['id']))}" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="{:U('AdminUser/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                                <a href="{:U('Role/rbac',array('id'=>$v['id']))}" class="fa fa-fire tip" data-original-title="授权"></a>
+                                              <a href="{:U('Role/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
 
-                                              <if condition="$v.status eq Manager\Model\AdminUserModel::STATUS_ENABLE">
+                                              <if condition="$v.status eq Manager\Model\AuthGroupModel::STATUS_ENABLE">
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <else/>
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a>
@@ -130,7 +131,7 @@
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "{:U('AdminUser/del')}",
+                            url: "{:U('Role/del')}",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",

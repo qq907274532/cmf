@@ -27,10 +27,10 @@
                                     <a href="{:U('Index/index')}">首页</a>
                                 </li>
                                 <li>
-                                    <a href="{:U('AdminUser/index')}">管理员</a>
+                                    <a href="{:U('Role/index')}">管理员</a>
                                 </li>
-                                <li>添加管理员</li>
-                                <a href="{:U('AdminUser/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                                <li>修改角色</li>
+                                <a href="{:U('Role/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加管理员</h4>
+                                <h4><i class="fa fa-table"></i>修改角色</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -60,45 +60,26 @@
                             <div class="box-body big">
                                 <form class="form-horizontal" role="form" id="myForm">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">用户名：</label>
+                                        <label class="col-sm-3 control-label">角色名称：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="username" id="username" value=""
-                                                    placeholder="用户名">
+                                            <input type="text" class="form-control" name="title" id="title" value="{$info.title}"
+                                                    placeholder="角色名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">密码：</label>
+                                        <label class="col-sm-3 control-label">角色描述：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                    placeholder="密码" value="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">确认密码：</label>
-
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="repassword" id="repassword"
-                                                    placeholder="确认密码" value="">
+                                            <textarea class="form-control" rows="5" name="remark" id="remark" placeholder="角色描述">{$info.remark}</textarea>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">权限组：</label>
 
-                                        <div class="col-sm-4">
-                                            <select class="form-control" name="role_id" id="role">
-                                                <volist name="roleList" id="v">
-                                                    <option value="{$v.id}">{$v.title}</option>
-                                                </volist>
-                                            </select>
 
-                                        </div>
-                                    </div>
                                     <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
-
+                                             <input type="hidden" name="id" value="{$info.id}" >
                                             <div type="text" class="btn btn-success" id="submit">提交</div>
                                         </div>
                                     </div>
@@ -117,32 +98,22 @@
             <script type="text/javascript">
                 $(function(){
                     $("#submit").click(function(){
-                        var sort=$("input[name='sort']").val();
-                        var username=$("input[name='username']").val();
-                        var password=$("input[name='password']").val();
-                        var repassword=$("input[name='repassword']").val();
-                        var role=$("#role").val();
-                        if($.trim(username)=='') {
-                            throwExc("用户名必须填写");
+                        var title=$("input[name='title']").val();
+                        var id=$("input[name='id']").val();
+                        var remark=$("#remark").val();
+                        if($.trim(title)=='') {
+                            throwExc("角色必须填写");
                             return false;
                         }
-                        if($.trim(password)=='') {
-                            throwExc("密码必须填写");
+                        if($.trim(remark)=='') {
+                            throwExc("角色必须填写");
                             return false;
                         }
-                        if($.trim(repassword)=='') {
-                            throwExc("确认密码必须填写");
-                            return false;
-                        }
-                        if(role==''&& !isNaN(role)) {
-                            throwExc("请选择权限组");
-                            return false;
-                        }
-                        $.post("{:U('AdminUser/add')}",{
-                            'role':role,
-                            'password':password,
-                            'repassword':repassword,
-                            'username':username
+
+                        $.post("{:U('Role/edit')}",{
+                            'title':title,
+                            'id':id,
+                            'remark':remark,
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);
@@ -155,6 +126,6 @@
                     });
                 });
                 function load(){
-                    window.location.href="{:U('AdminUser/index')}";
+                    window.location.href="{:U('Role/index')}";
                 }
             </script>

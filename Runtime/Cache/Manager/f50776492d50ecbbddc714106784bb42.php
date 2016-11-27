@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit();?>﻿<!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -112,8 +112,8 @@
 
 <!-- PAGE -->
 
-	<!-- SIDEBAR -->
-	<div id="sidebar" class="sidebar">
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar">
     <div class="sidebar-menu nav-collapse">
         <div class="divide-20"></div>
         <!-- SEARCH BAR -->
@@ -149,47 +149,96 @@
         <!-- /SIDEBAR MENU -->
     </div>
 </div><!--/HEADER -->
-	<!-- /SIDEBAR -->
-	<div id="main-content">
-		<!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
 
-		<!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
-		<div class="container">
-			<div class="row">
-				<div id="content" class="col-lg-12">
-					<!-- PAGE HEADER-->
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="page-header">
-								<!-- STYLER -->
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
 
-								<!-- /STYLER -->
-								<!-- BREADCRUMBS -->
-								<ul class="breadcrumb">
-									<li>
-										<i class="fa fa-home"></i>
-										<a href="<?php echo U('Index/index');?>">首页</a>
-									</li>
-									<li>
-										<a href="javascript:void(0)">首页</a>
-									</li>
-									<li>首页</li>
-								</ul>
-								<!-- /BREADCRUMBS -->
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="<?php echo U('Index/index');?>">首页</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo U('Role/index');?>">管理员</a>
+                                </li>
+                                <li>修改角色</li>
+                                <a href="<?php echo U('Role/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                            </ul>
+                            <div class="clearfix">
 
-							</div>
-						</div>
-					</div>
-					<!-- /PAGE HEADER -->
-					<!-- SIMPLE STRIPED -->
-					<div class="row">
+                            </div>
+                            <!-- /BREADCRUMBS -->
 
-					</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
 
-					<!-- /BORDERED HOVER -->
-				</div>
-				<!--/HEADER -->
-				<div class="footer-tools">
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>修改角色</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body big">
+                                <form class="form-horizontal" role="form" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">角色名称：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="title" id="title" value="<?php echo ($info["title"]); ?>"
+                                                    placeholder="角色名称">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">角色描述：</label>
+
+                                        <div class="col-sm-4">
+                                            <textarea class="form-control" rows="5" name="remark" id="remark" placeholder="角色描述"><?php echo ($info["remark"]); ?></textarea>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-6">
+                                             <input type="hidden" name="id" value="<?php echo ($info["id"]); ?>" >
+                                            <div type="text" class="btn btn-success" id="submit">提交</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <div class="footer-tools">
 							<span class="go-top">
 								<i class="fa fa-chevron-up"></i> Top
 							</span>
@@ -237,3 +286,37 @@
 <!-- /JAVASCRIPTS -->
 </body>
 </html>
+            <script type="text/javascript">
+                $(function(){
+                    $("#submit").click(function(){
+                        var title=$("input[name='title']").val();
+                        var id=$("input[name='id']").val();
+                        var remark=$("#remark").val();
+                        if($.trim(title)=='') {
+                            throwExc("角色必须填写");
+                            return false;
+                        }
+                        if($.trim(remark)=='') {
+                            throwExc("角色必须填写");
+                            return false;
+                        }
+
+                        $.post("<?php echo U('Role/edit');?>",{
+                            'title':title,
+                            'id':id,
+                            'remark':remark,
+                        },function( response ){
+                            if(response.error==100) {
+                                throwExc(response.message);
+                                return false;
+                            }else if(response.error==200) {
+                                showSucc(response.message);
+                                setTimeout("load()",1000);
+                            }
+                        },"json");
+                    });
+                });
+                function load(){
+                    window.location.href="<?php echo U('Role/index');?>";
+                }
+            </script>

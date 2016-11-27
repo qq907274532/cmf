@@ -60,7 +60,7 @@
             <li class="dropdown" id="header-notification">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-bell"></i>
-                    <span class="badge">7</span>
+                    <span class="badge"></span>
 
                 </a>
 
@@ -70,7 +70,7 @@
             <li class="dropdown" id="header-message">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-envelope"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -79,7 +79,7 @@
             <li class="dropdown" id="header-tasks">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-tasks"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -92,9 +92,7 @@
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> Account Settings</a></li>
-                    <li><a href="#"><i class="fa fa-eye"></i> Privacy Settings</a></li>
+                    <li><a href="#"><i class="fa fa-user"></i> 修改资料</a></li>
                     <li><a href="<?php echo U('Login/logout');?>"><i class="fa fa-power-off"></i> 退出登录</a></li>
                 </ul>
             </li>
@@ -173,7 +171,7 @@
                                 <li>
                                     <a href="<?php echo U('AdminUser/index');?>">管理员</a>
                                 </li>
-                                <li>添加管理员</li>
+                                <li>重置密码</li>
                                 <a href="<?php echo U('AdminUser/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
@@ -192,7 +190,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加管理员</h4>
+                                <h4><i class="fa fa-table"></i>重置密码</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -207,16 +205,8 @@
                                         <label class="col-sm-3 control-label">用户名：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="username" id="username" value=""
-                                                    placeholder="用户名">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">密码：</label>
-
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                    placeholder="密码" value="">
+                                            <input type="password" class="form-control" name="password" id="password" value=""
+                                                    placeholder="新密码">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -229,18 +219,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">权限组：</label>
-
-                                        <div class="col-sm-4">
-                                            <select class="form-control" name="role_id" id="role">
-                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>"><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
-
+                                            <input type="hidden" name="id" value="<?php echo ($id); ?>">
                                             <div type="text" class="btn btn-success" id="submit">提交</div>
                                         </div>
                                     </div>
@@ -306,15 +286,10 @@
             <script type="text/javascript">
                 $(function(){
                     $("#submit").click(function(){
-                        var sort=$("input[name='sort']").val();
-                        var username=$("input[name='username']").val();
+                        var id=$("input[name='id']").val();
                         var password=$("input[name='password']").val();
                         var repassword=$("input[name='repassword']").val();
-                        var role=$("#role").val();
-                        if($.trim(username)=='') {
-                            throwExc("用户名必须填写");
-                            return false;
-                        }
+
                         if($.trim(password)=='') {
                             throwExc("密码必须填写");
                             return false;
@@ -323,15 +298,11 @@
                             throwExc("确认密码必须填写");
                             return false;
                         }
-                        if(role==''&& !isNaN(role)) {
-                            throwExc("请选择权限组");
-                            return false;
-                        }
-                        $.post("<?php echo U('AdminUser/add');?>",{
-                            'role':role,
+
+                        $.post("<?php echo U('AdminUser/modifyPassword');?>",{
+                            'id':id,
                             'password':password,
                             'repassword':repassword,
-                            'username':username
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);

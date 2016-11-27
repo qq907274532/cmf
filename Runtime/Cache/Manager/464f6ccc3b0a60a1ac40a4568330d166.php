@@ -171,10 +171,10 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo U('AdminUser/index');?>">管理员</a>
+                                    <a href="<?php echo U('Role/index');?>">管理员</a>
                                 </li>
-                                <li>添加管理员</li>
-                                <a href="<?php echo U('AdminUser/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                                <li>添加角色</li>
+                                <a href="<?php echo U('Role/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
 
@@ -192,7 +192,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加管理员</h4>
+                                <h4><i class="fa fa-table"></i>添加角色</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -204,40 +204,23 @@
                             <div class="box-body big">
                                 <form class="form-horizontal" role="form" id="myForm">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">用户名：</label>
+                                        <label class="col-sm-3 control-label">角色名称：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="username" id="username" value=""
-                                                    placeholder="用户名">
+                                            <input type="text" class="form-control" name="title" id="title" value=""
+                                                    placeholder="角色名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">密码：</label>
+                                        <label class="col-sm-3 control-label">角色描述：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                    placeholder="密码" value="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">确认密码：</label>
-
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="repassword" id="repassword"
-                                                    placeholder="确认密码" value="">
+                                            <textarea class="form-control" rows="5" name="remark" id="remark" placeholder="角色描述"></textarea>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">权限组：</label>
 
-                                        <div class="col-sm-4">
-                                            <select class="form-control" name="role_id" id="role">
-                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>"><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
-                                            </select>
 
-                                        </div>
-                                    </div>
                                     <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
 
@@ -306,32 +289,20 @@
             <script type="text/javascript">
                 $(function(){
                     $("#submit").click(function(){
-                        var sort=$("input[name='sort']").val();
-                        var username=$("input[name='username']").val();
-                        var password=$("input[name='password']").val();
-                        var repassword=$("input[name='repassword']").val();
-                        var role=$("#role").val();
-                        if($.trim(username)=='') {
-                            throwExc("用户名必须填写");
+                        var title=$("input[name='title']").val();
+                        var remark=$("#remark").val();
+                        if($.trim(title)=='') {
+                            throwExc("角色必须填写");
                             return false;
                         }
-                        if($.trim(password)=='') {
-                            throwExc("密码必须填写");
+                        if($.trim(remark)=='') {
+                            throwExc("角色必须填写");
                             return false;
                         }
-                        if($.trim(repassword)=='') {
-                            throwExc("确认密码必须填写");
-                            return false;
-                        }
-                        if(role==''&& !isNaN(role)) {
-                            throwExc("请选择权限组");
-                            return false;
-                        }
-                        $.post("<?php echo U('AdminUser/add');?>",{
-                            'role':role,
-                            'password':password,
-                            'repassword':repassword,
-                            'username':username
+
+                        $.post("<?php echo U('Role/add');?>",{
+                            'title':title,
+                            'remark':remark,
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);

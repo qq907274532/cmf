@@ -18,7 +18,14 @@
     <!-- DATE RANGE PICKER -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <!-- TABLE CLOTH -->
-    <link rel="stylesheet" type="text/css" href="/Public/admin/js/tablecloth/css/tablecloth.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/typeahead/typeahead.css"/>
+    <!-- FILE UPLOAD -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-fileupload/bootstrap-fileupload.min.css"/>
+    <!-- SELECT2 -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
+    <!-- UNIFORM -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
 
     <!-- FONTS -->
 
@@ -60,7 +67,7 @@
             <li class="dropdown" id="header-notification">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-bell"></i>
-                    <span class="badge">7</span>
+                    <span class="badge"></span>
 
                 </a>
 
@@ -70,7 +77,7 @@
             <li class="dropdown" id="header-message">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-envelope"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -79,7 +86,7 @@
             <li class="dropdown" id="header-tasks">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-tasks"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -92,9 +99,7 @@
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> Account Settings</a></li>
-                    <li><a href="#"><i class="fa fa-eye"></i> Privacy Settings</a></li>
+                    <li><a href="#"><i class="fa fa-user"></i> 修改资料</a></li>
                     <li><a href="<?php echo U('Login/logout');?>"><i class="fa fa-power-off"></i> 退出登录</a></li>
                 </ul>
             </li>
@@ -171,10 +176,10 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo U('AdminUser/index');?>">管理员</a>
+                                    <a href="javascript:void(0)">权限管理</a>
                                 </li>
-                                <li>添加管理员</li>
-                                <a href="<?php echo U('AdminUser/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                                <li>角色管理</li>
+                                <a href="<?php echo U('Role/add');?>" class="btn btn-primary pull-right ">增加角色 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -192,7 +197,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加管理员</h4>
+                                <h4><i class="fa fa-table"></i>角色列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -201,52 +206,51 @@
 
                                 </div>
                             </div>
-                            <div class="box-body big">
-                                <form class="form-horizontal" role="form" id="myForm">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">用户名：</label>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>名称</th>
+                                        <th>备注</th>
+                                        <th>状态</th>
+                                        <th class="hidden-480">创建时间</th>
+                                        <th class="hidden-480">更新时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
+                                            <td><?php echo ($v["id"]); ?></td>
+                                            <td><?php echo ($v["title"]); ?></td>
+                                            <td><?php echo ($v["remark"]); ?></td>
+                                            <td>
+                                                <?php if($v["status"] == Manager\Model\AuthGroupModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
+                                                    <?php else: ?>
+                                                    <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
+                                            </td>
 
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="username" id="username" value=""
-                                                    placeholder="用户名">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">密码：</label>
+                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
+                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
+                                            <td>
+                                                <a href="<?php echo U('Role/rbac',array('id'=>$v['id']));?>" class="fa fa-fire tip" data-original-title="授权"></a>
+                                              <a href="<?php echo U('Role/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
 
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                    placeholder="密码" value="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">确认密码：</label>
-
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" name="repassword" id="repassword"
-                                                    placeholder="确认密码" value="">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">权限组：</label>
-
-                                        <div class="col-sm-4">
-                                            <select class="form-control" name="role_id" id="role">
-                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>"><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-4 col-sm-6">
-
-                                            <div type="text" class="btn btn-success" id="submit">提交</div>
-                                        </div>
-                                    </div>
-                                </form>
+                                              <?php if($v["status"] == Manager\Model\AuthGroupModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
+                                               <?php else: ?>
+                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
+                                            </td>
+                                        </tr><?php endforeach; endif; else: echo "" ;endif; ?>
+                                    </tbody>
+                                </table>
                             </div>
-
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        <?php echo ($data["page"]); ?>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -304,46 +308,46 @@
 </body>
 </html>
             <script type="text/javascript">
-                $(function(){
-                    $("#submit").click(function(){
-                        var sort=$("input[name='sort']").val();
-                        var username=$("input[name='username']").val();
-                        var password=$("input[name='password']").val();
-                        var repassword=$("input[name='repassword']").val();
-                        var role=$("#role").val();
-                        if($.trim(username)=='') {
-                            throwExc("用户名必须填写");
-                            return false;
-                        }
-                        if($.trim(password)=='') {
-                            throwExc("密码必须填写");
-                            return false;
-                        }
-                        if($.trim(repassword)=='') {
-                            throwExc("确认密码必须填写");
-                            return false;
-                        }
-                        if(role==''&& !isNaN(role)) {
-                            throwExc("请选择权限组");
-                            return false;
-                        }
-                        $.post("<?php echo U('AdminUser/add');?>",{
-                            'role':role,
-                            'password':password,
-                            'repassword':repassword,
-                            'username':username
-                        },function( response ){
-                            if(response.error==100) {
-                                throwExc(response.message);
+                $(".checkStatus").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).attr("data-original-title");
+                    var status;
+                    if(msg=='禁用') {
+                        status=1;
+                    }else {
+                        status=2;
+                    }
+                    layer.confirm('你确定要'+msg+"吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "<?php echo U('Role/del');?>",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
                                 return false;
-                            }else if(response.error==200) {
-                                showSucc(response.message);
-                                setTimeout("load()",1000);
                             }
-                        },"json");
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
                     });
+
                 });
+
                 function load(){
-                    window.location.href="<?php echo U('AdminUser/index');?>";
+                    location.reload() ;
                 }
             </script>

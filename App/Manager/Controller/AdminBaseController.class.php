@@ -7,6 +7,7 @@
     {
         private $Auth;
         private $name;
+
         public function __construct()
         {
             parent::__construct();
@@ -20,20 +21,19 @@
             /*第三级菜单pid*/
             $openId = $this->Auth->getId($this->name);
             /*第二级菜单的pid*/
-            print_r($this->ruleList($_SESSION['id']));die;
             $openFirstId = $this->Auth->getFirstId($openId);
             $this->assign('openFirstId', $openFirstId);
             $this->assign('open', $openId);
             $this->assign('menus', $this->ruleList($_SESSION['id']));
 
         }
+
         /**
          * [checkAuth 判断是否有权限]
          * @return [type] [description]
          */
         public function checkAuth($auth, $id)
         {
-
             if (CONTROLLER_NAME != 'Index') {
                 if (!$this->Auth->check($auth, $id)) {
                     $this->error('没有权限访问本页面!', U('Index/index'));
@@ -61,11 +61,11 @@
          * @param  [type] $order   [排序]
          * @return [type]          [description]
          */
-        public function page_com($model, $order=[], $where = [], $pageAll ='' )
+        public function page_com($model, $order = [], $where = [], $pageAll = '')
         {
 
             $count = $model->where($where)->count();// 查询满足要求的总记录数
-            $page_number=empty($pageAll)?C('PAGE_NUMBER'):$pageAll;
+            $page_number = empty($pageAll) ? C('PAGE_NUMBER') : $pageAll;
             $Page = new \Classs\Page($count, $page_number);
             //$Page       = new \Think\Page($count,$pageAll);// true实例化分页类 传入总记录数和每页显示的记录数(25)
             $show = $Page->show();// 分页显示输出

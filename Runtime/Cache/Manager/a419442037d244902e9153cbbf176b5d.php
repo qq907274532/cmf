@@ -192,7 +192,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加管理员</h4>
+                                <h4><i class="fa fa-table"></i>修改管理员</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -207,8 +207,8 @@
                                         <label class="col-sm-3 control-label">用户名：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="username" id="username" value=""
-                                                    placeholder="用户名" disabled>
+                                            <input type="text" class="form-control" name="username" id="username"
+                                                    placeholder="用户名" value="<?php echo ($info["username"]); ?>" disabled >
                                         </div>
                                     </div>
 
@@ -218,14 +218,14 @@
 
                                         <div class="col-sm-4">
                                             <select class="form-control" name="role_id" id="role">
-                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>"><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+                                                <?php if(is_array($roleList)): $i = 0; $__LIST__ = $roleList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><option value="<?php echo ($v["id"]); ?>" <?php if($info['role_id'] == $v['id']): ?>selected="selected"<?php endif; ?>><?php echo ($v["title"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
                                             </select>
 
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-sm-offset-3 col-sm-10">
-
+                                        <div class="col-sm-offset-4 col-sm-6">
+                                             <input type="hidden" name="id" value="<?php echo ($info["id"]); ?>">
                                             <div type="text" class="btn btn-success" id="submit">提交</div>
                                         </div>
                                     </div>
@@ -291,32 +291,16 @@
             <script type="text/javascript">
                 $(function(){
                     $("#submit").click(function(){
-                        var sort=$("input[name='sort']").val();
-                        var username=$("input[name='username']").val();
-                        var password=$("input[name='password']").val();
-                        var repassword=$("input[name='repassword']").val();
+                        var id=$("input[name='id']").val();
                         var role=$("#role").val();
-                        if($.trim(username)=='') {
-                            throwExc("用户名必须填写");
-                            return false;
-                        }
-                        if($.trim(password)=='') {
-                            throwExc("密码必须填写");
-                            return false;
-                        }
-                        if($.trim(repassword)=='') {
-                            throwExc("确认密码必须填写");
-                            return false;
-                        }
-                        if(role==''&& !isNaN(role)) {
+
+                        if(role=='') {
                             throwExc("请选择权限组");
                             return false;
                         }
-                        $.post("<?php echo U('AdminUser/add');?>",{
+                        $.post("<?php echo U('AdminUser/edit');?>",{
                             'role':role,
-                            'password':password,
-                            'repassword':repassword,
-                            'username':username
+                            'id':id,
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);
