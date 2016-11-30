@@ -18,7 +18,14 @@
     <!-- DATE RANGE PICKER -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <!-- TABLE CLOTH -->
-    <link rel="stylesheet" type="text/css" href="/Public/admin/js/tablecloth/css/tablecloth.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/typeahead/typeahead.css"/>
+    <!-- FILE UPLOAD -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/bootstrap-fileupload/bootstrap-fileupload.min.css"/>
+    <!-- SELECT2 -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
+    <!-- UNIFORM -->
+    <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
 
     <!-- FONTS -->
 
@@ -60,7 +67,7 @@
             <li class="dropdown" id="header-notification">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-bell"></i>
-                    <span class="badge">7</span>
+                    <span class="badge"></span>
 
                 </a>
 
@@ -70,7 +77,7 @@
             <li class="dropdown" id="header-message">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-envelope"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -79,7 +86,7 @@
             <li class="dropdown" id="header-tasks">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-tasks"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"></span>
                 </a>
 
             </li>
@@ -92,9 +99,7 @@
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> Account Settings</a></li>
-                    <li><a href="#"><i class="fa fa-eye"></i> Privacy Settings</a></li>
+                    <li><a href="#"><i class="fa fa-user"></i> 修改资料</a></li>
                     <li><a href="<?php echo U('Login/logout');?>"><i class="fa fa-power-off"></i> 退出登录</a></li>
                 </ul>
             </li>
@@ -264,8 +269,7 @@
 
                                         <div class="col-sm-4">
                                             <select class="form-control" name="menu" id="menu">
-                                                <option value="1">是</option>
-                                                <option value="0">否</option>
+                                               <?php if(is_array($menu)): $k = 0; $__LIST__ = $menu;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?><option value="<?php echo ($k); ?>" ><?php echo ($val); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
                                             </select>
 
                                         </div>
