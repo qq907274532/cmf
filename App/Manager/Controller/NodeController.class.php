@@ -46,6 +46,7 @@
                 $this->ajaxReturn(array('error' => 200, 'msg' => '添加成功'));
 
             } else {
+                $this->menu=AuthRuleModel::$MENU_MAP;
                 $list = $this->model->where(array('status' => AuthRuleModel::STATUS_ENABLE))->order(array('sort', 'id' => 'desc'))->select();
                 $this->assign('list', node_merges($list));
                 $this->display();
@@ -82,6 +83,7 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('Node/index'));
                 }
+                $this->menu=AuthRuleModel::$MENU_MAP;
                 $this->info = $this->model->where(array('id' => $id))->find();
                 $list = $this->model->where(array('status' => AuthRuleModel::STATUS_ENABLE))->order(array('sort', 'id' => 'desc'))->select();
                 $this->assign('list', node_merges($list));

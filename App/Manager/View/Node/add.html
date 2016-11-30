@@ -124,8 +124,9 @@
 
                                         <div class="col-sm-4">
                                             <select class="form-control" name="menu" id="menu">
-                                                <option value="1">是</option>
-                                                <option value="0">否</option>
+                                               <volist name="menu" id="val" key="k">
+                                                <option value="{$k}" >{$val}</option>
+                                             </volist>
                                             </select>
 
                                         </div>

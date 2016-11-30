@@ -9,6 +9,12 @@ use Think\Model;
 class AuthRuleModel extends Model {
 	const STATUS_ENABLE="1";
 	const STATUS_DISABLE="2";
+    const IS_MENU=1;
+    const IS_NOT_MENU=2;
+    public static $MENU_MAP=[
+        self::IS_MENU=>'是',
+        self::IS_NOT_MENU=>'否'
+    ];
 	public static $STATUS_MAP=[
 	    self::STATUS_ENABLE=>'启用',
         self::STATUS_DISABLE=>'禁用'
