@@ -121,9 +121,12 @@
                                         <label class="col-sm-3 control-label">是否是菜单：</label>
 
                                         <div class="col-sm-4">
+
                                             <select class="form-control" name="menu" id="menu">
-                                                <option value="1"<if condition="$info['menu'] eq '1'">selected=selected</if> >是</option>
-                                                <option value="0"  <if condition="$info['menu'] eq '0'">selected=selected</if> >否</option>
+                                             <volist name="menu" id="val" key="k">
+                                                <option value="{$k}" <if condition="$info['menu'] eq $k">selected=selected</if>>{$val}</option>
+                                             </volist>
+                                               
                                             </select>
 
                                         </div>
