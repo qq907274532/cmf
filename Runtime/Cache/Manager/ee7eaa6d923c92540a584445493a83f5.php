@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -178,8 +181,8 @@
                                 <li>
                                     <a href="javascript:void(0)">权限管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>角色管理</li>
+                                <a href="<?php echo U('Role/add');?>" class="btn btn-primary pull-right ">增加角色 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -197,7 +200,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>角色列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -211,9 +214,9 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>管理员名称</th>
+                                        <th>名称</th>
+                                        <th>备注</th>
                                         <th>状态</th>
-                                        <th>权限组</th>
                                         <th class="hidden-480">创建时间</th>
                                         <th class="hidden-480">更新时间</th>
                                         <th>操作</th>
@@ -222,20 +225,21 @@
                                     <tbody>
                                     <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
                                             <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
+                                            <td><?php echo ($v["title"]); ?></td>
+                                            <td><?php echo ($v["remark"]); ?></td>
                                             <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
+                                                <?php if($v["status"] == Manager\Model\AuthGroupModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
                                                     <?php else: ?>
                                                     <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
                                             </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
+
                                             <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
                                             <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
                                             <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                                <a href="<?php echo U('Role/rbac',array('id'=>$v['id']));?>" class="fa fa-fire tip" data-original-title="授权"></a>
+                                              <a href="<?php echo U('Role/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
 
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
+                                              <?php if($v["status"] == Manager\Model\AuthGroupModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <?php else: ?>
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
                                             </td>
@@ -297,6 +301,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -312,15 +319,15 @@
                     var msg=$(this).attr("data-original-title");
                     var status;
                     if(msg=='禁用') {
-                        status=1;
+                        status="<?=Manager\Model\AuthGroupModel::STATUS_ENABLE?>";
                     }else {
-                        status=2;
+                        status="<?=Manager\Model\AuthGroupModel::STATUS_DISABLE?>";
                     }
                     layer.confirm('你确定要'+msg+"吗？", {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
+                            url: "<?php echo U('Role/del');?>",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",

@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -176,13 +179,51 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="javascript:void(0)">用户管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li class="active">用户列表</li>
+                                <!--<a href="<?php echo U('Role/add');?>" class="btn btn-primary pull-right "> <i class="fa fa-arrow-right"></i></a>-->
                             </ul>
                             <div class="clearfix">
+                                 <form action=""  class="form-horizontal" method="get">
+                                     <input type="hidden" name="m" value="Users">
+                                    <input type="hidden" name="c" value="index">
+                                        
+                                    <div  class="col-sm-12">
+                                        <div class="form-group col-sm-3">
+                                            <label class=" control-label col-sm-4">用户名称：</label>
 
+                                            <div class="col-sm-8">
+
+                                                <input type="text" class="col-sm-12 form-control"  placeholder="用户名称" name="username" id="username" 
+                                                        value="<?php echo ($_GET['username']); ?>">
+                                                </div>
+
+                                        </div>
+                                        <div class="col-sm-3" >
+                                            <label class=" control-label col-sm-4" >开始时间：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control col-sm-12"  placeholder="开始时间" id="startTime" name="startTime"  value="<?php echo ($_GET['startTime']); ?>">
+                                                </div>
+
+                                        </div>    
+                                            
+                                            <div class="col-sm-3" >
+                                                <label class=" control-label col-sm-4">结束时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  placeholder="结束时间" id="endTime" name="endTime" value="<?php echo ($_GET['endTime']); ?>">
+                                                     </div>
+
+                                            </div>
+                                          
+                                            <div class="col-sm-2">
+                                                <div class="col-sm-offset-1 col-sm-10">
+                                                    <button class="btn btn-primary" type="submit">搜索</button>
+                                                </div>
+                                            </div>
+                                          
+                                        </div>
+                                    </form>
                             </div>
                             <!-- /BREADCRUMBS -->
 
@@ -196,8 +237,9 @@
                     <div class="col-md-12">
                         <!-- BOX -->
                         <div class="box border primary">
+
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>用户列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -211,9 +253,13 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>管理员名称</th>
+                                        <th>会员名称</th>
+                                        <th>邮件地址</th>
+                                        <th>可用资金</th>
+                                        <th>冻结资金</th>
+                                        <th>等级积分</th>
+                                        <th>消费积分</th>
                                         <th>状态</th>
-                                        <th>权限组</th>
                                         <th class="hidden-480">创建时间</th>
                                         <th class="hidden-480">更新时间</th>
                                         <th>操作</th>
@@ -223,19 +269,24 @@
                                     <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
                                             <td><?php echo ($v["id"]); ?></td>
                                             <td><?php echo ($v["username"]); ?></td>
+                                            <td><?php echo ($v["email"]); ?></td>
+                                            <td><?php echo ($v["user_money"]); ?></td>
+                                            <td><?php echo ($v["frozen_money"]); ?></td>
+                                            <td><?php echo ($v["pay_points"]); ?></td>
+                                            <td><?php echo ($v["rank_points"]); ?></td>
                                             <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
+                                                <?php if($v["status"] == Common\Model\UserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
                                                     <?php else: ?>
                                                     <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
                                             </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
+
                                             <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
                                             <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
                                             <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
-
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
+                                                    <a href="<?php echo U('Users/receiptAddress',array('id'=>$v['id']));?>" class="fa  fa-bullseye tip " data-original-title="收货地址" > </a>
+                                        <a href="<?php echo U('Users/accountDetails',array('id'=>$v['id']));?>" class="fa fa-hdd-o tip " data-original-title="账目明细" > </a>
+                                               
+                                              <?php if($v["status"] == Common\Model\UserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <?php else: ?>
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
                                             </td>
@@ -297,6 +348,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -306,47 +360,69 @@
 <!-- /JAVASCRIPTS -->
 </body>
 </html>
-            <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
+          <script type="text/javascript">
+
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().find("td:eq(0)").html();
+        var msg=$(this).attr("data-original-title");
+        var status;
+        if(msg=='禁用') {
+            status="<?=Common\Model\UserModel::STATUS_ENABLE?>";
+        }else {
+            status="<?=Common\Model\UserModel::STATUS_DISABLE?>";
+        }
+        layer.confirm('你确定要'+msg+"吗？", {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url: "<?php echo U('Users/del');?>",
+                type: "POST",
+                data :{ "id":id,"status":status },
+                dataType: "json",
+                success:function(response){
+                    if(response.error==100) {
+                        throwExc(response.message);
+                        return false;
+                    }else if(response.error==200){
+                        showSucc(response.message);
+                        setTimeout("load()",1000);
                     }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
-                        });
-                    });
-
-                });
-
-                function load(){
-                    location.reload() ;
+                },
+                error:function(response){
+                    throwExc(response.responseText);
+                    return false;
                 }
-            </script>
+            })
+        }, function(){
+            layer.msg('取消操作', {
+                time: 800, //20s后自动关闭
+            });
+        });
+
+    });
+
+    function load(){
+        location.reload() ;
+    }
+</script>
+   <script type="text/javascript">
+        $(function () {
+            // 时间控件
+            $('#startTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+        });
+    </script>

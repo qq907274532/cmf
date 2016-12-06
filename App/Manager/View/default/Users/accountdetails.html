@@ -1,0 +1,211 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<style type="text/css">
+    .getReo{
+        color: #0000FF
+    }
+    .letReo{
+        color: #FF0000
+    }
+</style>
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">用户管理</a>
+                                </li>
+                                 <li class="active">账目明细</li>
+                                <a href="{:U('Users/index')}" class="btn btn-primary pull-right "> <i class="fa fa-arrow-left"></i> 返回</a>
+                            </ul>
+                            <div class="clearfix">
+                                
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>账目明细</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                       <tr>
+                                            <th class="hidden-480">创建时间</th>
+                                            <th>变动原因</th>
+                                            <th>可用帐户</th>
+                                            <th>冻结资金</th>
+                                            <th>等级积分</th>
+                                            <th>消费积分</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data.list" id="v">
+                                         <tr>
+                                            <td>{$v.change_time}</td>
+                                            <td>{$v.change_desc}</td>
+                                            <td>
+                                              <if condition="$v.user_money gt 0">
+                                                <span class="getReo">+{$v.user_money}</span>
+                                               <elseif condition="$v.user_money lt 0"/>
+                                                 <span class="letReo">{$v.user_money}</span>
+                                               <else/>
+                                                 <span class="eqReo">{$v.user_money}</span>
+                                               </if> 
+                                            </td>
+                                            <td>
+                                                 <if condition="$v.frozen_money gt 0">
+                                                    <span class="getReo">+{$v.frozen_money}</span>
+                                                <elseif condition="$v.frozen_money lt 0"/>
+                                                     <span class="letReo">{$v.frozen_money}</span>
+                                                <else/>
+                                                     <span class="eqReo">{$v.frozen_money}</span>
+                                                </if> 
+                                           
+                                            </td>
+                                            <td>
+                                                 <if condition="$v.rank_points gt 0">
+                                                    <span class="getReo">+{$v.rank_points}</span>
+                                                <elseif condition="$v.rank_points lt 0"/>
+                                                     <span class="letReo">{$v.rank_points}</span>
+                                                <else/>
+                                                     <span class="eqReo">{$v.rank_points}</span>
+                                                </if> 
+                                           
+                                            </td>
+                                            <td>
+                                                 <if condition="$v.pay_points gt 0">
+                                                    <span class="getReo">+{$v.pay_points}</span>
+                                                <elseif condition="$v.pay_points lt 0"/>
+                                                     <span class="letReo">{$v.pay_points}</span>
+                                                <else/>
+                                                     <span class="eqReo">{$v.pay_points}</span>
+                                                </if> 
+                                               
+                                            </td>
+                                        </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        {$data.page}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+          <script type="text/javascript">
+
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().find("td:eq(0)").html();
+        var msg=$(this).attr("data-original-title");
+        var status;
+        if(msg=='禁用') {
+            status="<?=Common\Model\UserModel::STATUS_ENABLE?>";
+        }else {
+            status="<?=Common\Model\UserModel::STATUS_DISABLE?>";
+        }
+        layer.confirm('你确定要'+msg+"吗？", {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url: "{:U('Users/del')}",
+                type: "POST",
+                data :{ "id":id,"status":status },
+                dataType: "json",
+                success:function(response){
+                    if(response.error==100) {
+                        throwExc(response.message);
+                        return false;
+                    }else if(response.error==200){
+                        showSucc(response.message);
+                        setTimeout("load()",1000);
+                    }
+                },
+                error:function(response){
+                    throwExc(response.responseText);
+                    return false;
+                }
+            })
+        }, function(){
+            layer.msg('取消操作', {
+                time: 800, //20s后自动关闭
+            });
+        });
+
+    });
+
+    function load(){
+        location.reload() ;
+    }
+</script>
+   <script type="text/javascript">
+        $(function () {
+            // 时间控件
+            $('#startTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+        });
+    </script>

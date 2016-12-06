@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -176,13 +179,13 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="javascript:void(0)">用户管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li class="active">收货地址</li>
+                                <a href="<?php echo U('Users/index');?>" class="btn btn-primary pull-right "> <i class="fa fa-arrow-left"></i> 返回</a>
                             </ul>
                             <div class="clearfix">
-
+                                
                             </div>
                             <!-- /BREADCRUMBS -->
 
@@ -196,8 +199,9 @@
                     <div class="col-md-12">
                         <!-- BOX -->
                         <div class="box border primary">
+
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>用户列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -209,47 +213,39 @@
                             <div class="box-body">
                                 <table class="table table-striped">
                                     <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>收货人</th>
+                                            <th>地址</th>
+                                            <th>电话</th>
+                                            <th>手机</th>
+                                            <th>邮箱</th>
+                                            <th class="hidden-480">创建时间</th>
+                                            <th class="hidden-480">更新时间</th>
+                                        </tr>
+                                 </thead>
+                                <tbody>
+                                    <?php if(is_array($userAddress)): $i = 0; $__LIST__ = $userAddress;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
+                                            <td><?php echo ($v["address_id"]); ?></td>
+                                            <td><?php echo ($v["consignee"]); ?></td>
                                             <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
-                                                    <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
+                                                <p><?php echo ($v["country_name"]); ?>&nbsp;<?php echo ($v["province_name"]); ?>&nbsp;<?php echo ($v["city_name"]); ?>&nbsp;<?php echo ($v["district_name"]); ?></p>
+                                                <p><?php echo ($v["address"]); ?></p>
+
                                             </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
+                                            <td><?php echo ($v["tel"]); ?></td>
+                                            <td><?php echo ($v["mobile"]); ?></td>
+                                            <td><?php echo ($v["email"]); ?></td>
+
                                             <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
                                             <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
 
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
-                                               <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
-                                            </td>
+
                                         </tr><?php endforeach; endif; else: echo "" ;endif; ?>
-                                    </tbody>
+                                 </tbody>
                                 </table>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        <?php echo ($data["page"]); ?>
-                                    </ul>
-                                </div>
-                            </div>
+                          
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -297,6 +293,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -306,47 +305,3 @@
 <!-- /JAVASCRIPTS -->
 </body>
 </html>
-            <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
-                        });
-                    });
-
-                });
-
-                function load(){
-                    location.reload() ;
-                }
-            </script>

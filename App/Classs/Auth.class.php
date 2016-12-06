@@ -181,7 +181,7 @@ class Auth{
         $map['id']=array('in',$rules);
         $user_groups = M('auth_rule')->where($map)->select();
         foreach ($user_groups as $key => $value) {
-            $user_groups[$key]['urls']='/'.$value['url'];
+            $user_groups[$key]['urls']=U($value['url']);
          }
         return $user_groups;
     }

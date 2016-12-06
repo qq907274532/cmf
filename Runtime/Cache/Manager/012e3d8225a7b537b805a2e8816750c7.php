@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -154,6 +157,14 @@
         <!-- /SIDEBAR MENU -->
     </div>
 </div><!--/HEADER -->
+<style type="text/css">
+    .getReo{
+        color: #0000FF
+    }
+    .letReo{
+        color: #FF0000
+    }
+</style>
 <!-- /SIDEBAR -->
 <div id="main-content">
     <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
@@ -176,13 +187,13 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="javascript:void(0)">用户管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                 <li class="active">账目明细</li>
+                                <a href="<?php echo U('Users/index');?>" class="btn btn-primary pull-right "> <i class="fa fa-arrow-left"></i> 返回</a>
                             </ul>
                             <div class="clearfix">
-
+                                
                             </div>
                             <!-- /BREADCRUMBS -->
 
@@ -196,8 +207,9 @@
                     <div class="col-md-12">
                         <!-- BOX -->
                         <div class="box border primary">
+
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>账目明细</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -209,35 +221,49 @@
                             <div class="box-body">
                                 <table class="table table-striped">
                                     <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
-                                    </tr>
+                                       <tr>
+                                            <th class="hidden-480">创建时间</th>
+                                            <th>变动原因</th>
+                                            <th>可用帐户</th>
+                                            <th>冻结资金</th>
+                                            <th>等级积分</th>
+                                            <th>消费积分</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
+                                            <td><?php echo ($v["change_time"]); ?></td>
+                                            <td><?php echo ($v["change_desc"]); ?></td>
                                             <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
-                                                    <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
-                                            </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
-                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
-                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
-
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
+                                              <?php if($v["user_money"] > 0): ?><span class="getReo">+<?php echo ($v["user_money"]); ?></span>
+                                               <?php elseif($v["user_money"] < 0): ?>
+                                                 <span class="letReo"><?php echo ($v["user_money"]); ?></span>
                                                <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
+                                                 <span class="eqReo"><?php echo ($v["user_money"]); ?></span><?php endif; ?> 
+                                            </td>
+                                            <td>
+                                                 <?php if($v["frozen_money"] > 0): ?><span class="getReo">+<?php echo ($v["frozen_money"]); ?></span>
+                                                <?php elseif($v["frozen_money"] < 0): ?>
+                                                     <span class="letReo"><?php echo ($v["frozen_money"]); ?></span>
+                                                <?php else: ?>
+                                                     <span class="eqReo"><?php echo ($v["frozen_money"]); ?></span><?php endif; ?> 
+                                           
+                                            </td>
+                                            <td>
+                                                 <?php if($v["rank_points"] > 0): ?><span class="getReo">+<?php echo ($v["rank_points"]); ?></span>
+                                                <?php elseif($v["rank_points"] < 0): ?>
+                                                     <span class="letReo"><?php echo ($v["rank_points"]); ?></span>
+                                                <?php else: ?>
+                                                     <span class="eqReo"><?php echo ($v["rank_points"]); ?></span><?php endif; ?> 
+                                           
+                                            </td>
+                                            <td>
+                                                 <?php if($v["pay_points"] > 0): ?><span class="getReo">+<?php echo ($v["pay_points"]); ?></span>
+                                                <?php elseif($v["pay_points"] < 0): ?>
+                                                     <span class="letReo"><?php echo ($v["pay_points"]); ?></span>
+                                                <?php else: ?>
+                                                     <span class="eqReo"><?php echo ($v["pay_points"]); ?></span><?php endif; ?> 
+                                               
                                             </td>
                                         </tr><?php endforeach; endif; else: echo "" ;endif; ?>
                                     </tbody>
@@ -297,6 +323,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -306,47 +335,69 @@
 <!-- /JAVASCRIPTS -->
 </body>
 </html>
-            <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
+          <script type="text/javascript">
+
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().find("td:eq(0)").html();
+        var msg=$(this).attr("data-original-title");
+        var status;
+        if(msg=='禁用') {
+            status="<?=Common\Model\UserModel::STATUS_ENABLE?>";
+        }else {
+            status="<?=Common\Model\UserModel::STATUS_DISABLE?>";
+        }
+        layer.confirm('你确定要'+msg+"吗？", {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url: "<?php echo U('Users/del');?>",
+                type: "POST",
+                data :{ "id":id,"status":status },
+                dataType: "json",
+                success:function(response){
+                    if(response.error==100) {
+                        throwExc(response.message);
+                        return false;
+                    }else if(response.error==200){
+                        showSucc(response.message);
+                        setTimeout("load()",1000);
                     }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
-                        });
-                    });
-
-                });
-
-                function load(){
-                    location.reload() ;
+                },
+                error:function(response){
+                    throwExc(response.responseText);
+                    return false;
                 }
-            </script>
+            })
+        }, function(){
+            layer.msg('取消操作', {
+                time: 800, //20s后自动关闭
+            });
+        });
+
+    });
+
+    function load(){
+        location.reload() ;
+    }
+</script>
+   <script type="text/javascript">
+        $(function () {
+            // 时间控件
+            $('#startTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: "zh-CN",
+                autoclose: true,
+                minView: 0,
+                startView: 2,
+                minView: 2,
+            });
+        });
+    </script>

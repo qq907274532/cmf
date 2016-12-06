@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -154,6 +157,7 @@
         <!-- /SIDEBAR MENU -->
     </div>
 </div><!--/HEADER -->
+
 <!-- /SIDEBAR -->
 <div id="main-content">
     <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
@@ -176,10 +180,10 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="javascript:void(0)">角色管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="<?php echo U('AdminUser/add');?>" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>角色授权</li>
+                                <a href="<?php echo U('Role/index');?>" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>  返回 </a>
                             </ul>
                             <div class="clearfix">
 
@@ -197,7 +201,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>角色授权</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -207,49 +211,41 @@
                                 </div>
                             </div>
                             <div class="box-body">
+                                <form action="" method="post" id="myForm">
                                 <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
                                     <tbody>
-                                    <?php if(is_array($data["list"])): $i = 0; $__LIST__ = $data["list"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><tr>
-                                            <td><?php echo ($v["id"]); ?></td>
-                                            <td><?php echo ($v["username"]); ?></td>
-                                            <td>
-                                                <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><span class="label label-primary arrow-in"><?php echo ($v["statusName"]); ?></span>
-                                                    <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["statusName"]); ?></span><?php endif; ?>
-                                            </td>
-                                            <td class="hidden-480"> <span class="badge badge-purple"><?php echo ($v["name"]); ?></span></td>
-                                            <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
-                                            <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
-                                            <td>
-                                              <a href="<?php echo U('AdminUser/modifyPassword',array('id'=>$v['id']));?>" class="fa fa-sun-o tip" data-original-title="修改密码"></a>
-                                              <a href="<?php echo U('AdminUser/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                    <?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?><tr>
+                                            <th class="right " colspan="6" style="font-size: 20px;">
+                                                <input type="checkbox" class="ace" name="node[]" value="<?php echo ($val["id"]); ?>"<?php if($val["access"] == 1): ?>checked=checked<?php endif; ?>/> <span class="lbl">&nbsp;&nbsp;<?php echo ($val["title"]); ?></span>
 
-                                              <?php if($v["status"] == Manager\Model\AdminUserModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
-                                               <?php else: ?>
-                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a><?php endif; ?>
-                                            </td>
-                                        </tr><?php endforeach; endif; else: echo "" ;endif; ?>
+                                            </th>
+
+                                        </tr>
+                                        <?php if(is_array($val["child"])): $i = 0; $__LIST__ = $val["child"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
+                                                <td class="right  td<?php echo ($val["id"]); ?>" style="font-size: 15px;">
+                                                    <input type="checkbox" class="ace" name="node[]" value="<?php echo ($vo["id"]); ?>" <?php if($vo["access"] == 1): ?>checked=checked<?php endif; ?>
+                                                    /> <span class="lbl">&nbsp;&nbsp;<?php echo ($vo["title"]); ?></span>
+                                                </td>
+                                                <?php if(is_array($vo["child"])): $i = 0; $__LIST__ = $vo["child"];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><td class="td<?php echo ($val["id"]); ?>" style="font-size: 14px;">
+                                                        <input type="checkbox" class="ace" name="node[]" value="<?php echo ($v["id"]); ?>" <?php if($v["access"] == 1): ?>checked=checked<?php endif; ?>
+                                                        /> <span class="lbl">&nbsp;&nbsp;<?php echo ($v["title"]); ?></span>
+                                                    </td><?php endforeach; endif; else: echo "" ;endif; ?>
+                                            </tr><?php endforeach; endif; else: echo "" ;endif; endforeach; endif; else: echo "" ;endif; ?>
+                                    <tr>
+                                        <td colspan="15">
+                                            <input type="hidden" name="id" value="<?php echo ($id); ?>">
+                                            <div class="col-sm-offset-2 col-sm-2">
+                                                <div class="btn btn-primary pull-right " id="submit">
+                                                    提交
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
+                                </form>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        <?php echo ($data["page"]); ?>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -297,6 +293,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -307,45 +306,43 @@
 </body>
 </html>
             <script type="text/javascript">
-                $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.ajax({
-                            url: "<?php echo U('AdminUser/del');?>",
-                            type: "POST",
-                            data :{ "id":id,"status":status },
-                            dataType: "json",
-                            success:function(response){
-                                if(response.error==100) {
-                                    throwExc(response.message);
-                                    return false;
-                                }else if(response.error==200){
-                                    showSucc(response.message);
-                                    setTimeout("load()",1000);
-                                }
-                            },
-                            error:function(response){
-                                throwExc(response.responseText);
-                                return false;
-                            }
-                        })
-                    }, function(){
-                        layer.msg('取消操作', {
-                            time: 800, //20s后自动关闭
+                jQuery(function( $ ){
+
+                    $('table th input:checkbox').on('click',function(){
+                        var that=this;
+                        var id='.td'+$(this).val();
+                        $(this).closest('tr').nextAll().find(id+' input:checkbox')
+                        .each(function(){
+                            this.checked=that.checked;
+                            //$(this).closest('tr').toggleClass('selected');
                         });
+
                     });
 
-                });
+                    $('table .right input:checkbox').on('click',function(){
+                        var that=this;
+                        //alert($(this).closest('td').attr('class'));
+                        $(this).closest('tr').find('td input:checkbox')
+                        .each(function(){
+                            this.checked=that.checked;
+                            $(this).closest('tr').toggleClass('selected');
+                        });
 
+                    });
+                    $("#submit").click(function(){
+
+                        $.post("<?php echo U('Role/rbac');?>",$("#myForm").serialize(),function( response ){
+                            if(response.error==100) {
+                                throwExc(response.message);
+                                return false;
+                            }else if(response.error==200) {
+                                showSucc(response.message);
+                                setTimeout("load()",1000);
+                            }
+                        },"json");
+                    });
+
+                })
                 function load(){
                     location.reload() ;
                 }

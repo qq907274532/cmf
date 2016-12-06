@@ -27,6 +27,17 @@
         return $arr;
     }
     /**
+     * 生成商户唯一订单id
+     *
+     * @return string
+     */
+    function generate_orderid()
+    {
+        $tmp = str_replace('.', '', microtime(true)); //毫秒
+
+        return str_pad($tmp, 15, '0') . mt_rand(1000, 9999);
+    }
+    /**
      * 检验django密码
      *
      * @param $storepassword 已加密的密码
