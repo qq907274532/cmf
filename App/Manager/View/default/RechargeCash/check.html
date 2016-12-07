@@ -29,8 +29,8 @@
                                 <li>
                                     <a href="javascript:void(0)">会员管理</a>
                                 </li>
-                                <li>申请提现</li>
-                                <a href="{:U('RechargeCash/add')}" class="btn btn-primary pull-right ">增加申请 <i class="fa fa-arrow-right"></i></a>
+                                <li>到款审核</li>
+                                <a href="{:U('RechargeCash/inedx')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i> 返回 </a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>申请提现</h4>
+                                <h4><i class="fa fa-table"></i>到款审核</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -61,59 +61,65 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>会员名称</th>
-                                        <th>操作日期</th>
-                                        <th>类型</th>
-                                        <th>金额</th>
-                                        <th>支付方式</th>
-                                        <th>到款状态</th>
-                                        <th>操作员</th>
-                                        <th>操作</th>
+                                        <th colspan="4">会员金额信息：</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <volist name="data.list" id="v">
                                         <tr>
-                                            <td>{$v.id}</td>
-                                            <td>{$v.user_name}</td>
-                                            <td>{$v.create_time}</td>
-                                            <td>{$v.process_type_name}</td>
-
-                                            <td>{$v.amount}</td>
-                                            <td>{$v.payment}</td>
-                                            <td>
-                                                <if condition="$v.PAY_STATUS_SUCCESS eq Common\Model\UserAccountModel::PAY_STATUS_SUCCESS">
-                                                    <span class="label label-primary arrow-in">{$v.is_paid_name}</span>
-                                                    <else/>
-                                                    <span class="label  label-danger arrow-out ">{$v.is_paid_name}</span>
-                                                </if>
-                                            </td>
-
-                                            <td>{$v.admin_user}</td>
-
-
-                                            <td>
-                                                <if condition="$v.is_paid eq Common\Model\UserAccountModel::PAY_STATUS_SUCCESS ">
-                                                    <a href="{:U('RechargeCash/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
-                                                <else/>
-                                                    <a href="{:U('RechargeCash/check',array('id'=>$v['id']))}" class="fa fa-sun-o tip" data-original-title="审核"></a>
-                                                    <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="删除"> </a>
-                                                </if>
-
-                                            </td>
+                                            <td>会员名称：{$info.username}</td>
+                                            <td> 金额：{$info.amount}</td>
+                                            <td>操作日期：{$info.create_time}</td>
+                                            <td>类型：{$info.process_type_name}</td>
                                         </tr>
-                                        </volist>
+                                        <tr>
+                                            <td colspan="4">会员描述：{$info.user_note}</td>
+                                        </tr>
+                                        <form class="form-horizontal" role="form" id="myForm">
+
+                                            <tr>
+                                                <td colspan="4">
+
+                                                    <div class="form-group">
+                                                        <label class=" col-sm-1 control-label ">管理员备注：</label>
+
+                                                        <div class="col-sm-4">
+                                                            <textarea class="form-control" rows="5" name="admin_note" id="admin_note" placeholder="管理员备注">{$info.admin_note}</textarea>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            <td colspan="4">
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-1 control-label">到款状态：</label>
+                                                    <div class="col-sm-4">
+                                                        <volist name="pay_status" id="v" >
+                                                            <label class="radio-inline"> <input type="radio" class="is_paid" name="is_paid"  value="{$key}" <if condition="$info.is_paid eq $key">checked="checked"</if> > {$v} </label>
+                                                        </volist>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="3">
+
+                                                    <div class="col-sm-offset-4 col-sm-6">
+                                                        <input type="hidden" name="id" value="{$info.id}">
+                                                        <div type="text" class="btn btn-primary" id="submit">提交</div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        </form>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <div class="dataTables_paginate paging_bootstrap ">
-                                    <ul class="pagination ">
-                                        {$data.page}
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                         <!-- /BOX -->
                     </div>
@@ -125,19 +131,14 @@
             <include file="Public/footer"/>
             <script type="text/javascript">
                 $(".checkStatus").click(function(){
-                    var id=$(this).parent().parent().find("td:eq(0)").html();
-                    var msg=$(this).attr("data-original-title");
-                    var status;
-                    if(msg=='禁用') {
-                        status=1;
-                    }else {
-                        status=2;
-                    }
-                    layer.confirm('你确定要'+msg+"吗？", {
+                    var id=$("input[name='id']").val();
+                    var is_paid=$("input[name='is_paid']:checked").val();
+
+                    layer.confirm("你确定要提交吗？", {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "{:U('AdminUser/del')}",
+                            url: "{:U('AdminUser/add')}",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",

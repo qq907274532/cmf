@@ -14,5 +14,23 @@ class UserModel extends Model {
 		self::STATUS_DISABLE=>'禁用',
 		);
 
+    /**
+     * @param $username
+     * @return mixed
+     */
+	public function getUserInfoByUserName($username){
+        $info=$this->where(['username'=>$username])->find();
+        return $info;
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     */
+    public function getUserInfoByUserId($uid){
+        $info=$this->where(['id'=>$uid])->getField('username');
+        return $info;
+    }
+
 }
 ?>
