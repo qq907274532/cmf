@@ -10,21 +10,22 @@
 
         public function __construct()
         {
-            parent::__construct();
-            if (!isset($_SESSION['id'])) {
-                $this->redirect('Login/index');
-            }
-            $this->Auth = new \Classs\Auth();
-            $this->name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
 
-//            $this->checkAuth($this->name, $_SESSION['id']);
-            /*第三级菜单pid*/
-            $openId = $this->Auth->getId($this->name);
-            /*第二级菜单的pid*/
-            $openFirstId = $this->Auth->getFirstId($openId);
-            $this->assign('openFirstId', $openFirstId);
-            $this->assign('open', $openId);
-            $this->assign('menus', $this->ruleList($_SESSION['id']));
+            parent::__construct();
+             if (!isset($_SESSION['id'])) {
+                 $this->redirect('Login/index');
+             }
+             $this->Auth = new \Classs\Auth();
+             $this->name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
+
+ //            $this->checkAuth($this->name, $_SESSION['id']);
+             /*第三级菜单pid*/
+             $openId = $this->Auth->getId($this->name);
+             /*第二级菜单的pid*/
+             $openFirstId = $this->Auth->getFirstId($openId);
+             $this->assign('openFirstId', $openFirstId);
+             $this->assign('open', $openId);
+             $this->assign('menus', $this->ruleList($_SESSION['id']));
 
         }
 

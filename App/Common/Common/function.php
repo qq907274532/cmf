@@ -26,6 +26,31 @@
         }
         return $arr;
     }
+
+    /**
+     * 验证邮箱格式
+     * @param $email
+     * @return bool
+     */
+    function checkEmail($email){
+        $pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
+        if ( preg_match( $pattern, $email ) ){
+             return true;
+        }else{
+            return false;
+        }
+    }
+    /**
+     * 生成商户唯一订单id
+     *
+     * @return string
+     */
+    function generate_orderid()
+    {
+        $tmp = str_replace('.', '', microtime(true)); //毫秒
+
+        return str_pad($tmp, 15, '0') . mt_rand(1000, 9999);
+    }
     /**
      * 检验django密码
      *

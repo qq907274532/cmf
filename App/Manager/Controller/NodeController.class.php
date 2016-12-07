@@ -37,7 +37,7 @@
                     $this->ajaxReturn(array('error' => $errno, 'msg' => '请选择是否是菜单'));
                 }
                 if (!$this->model->create($data)) {
-                    $this->ajaxReturn(array('error' => $errno, 'msg' => $this->model->getError));
+                    $this->ajaxReturn(array('error' => $errno, 'msg' => $this->model->getError()));
                 } else {
                     if (!$this->model->add()) {
                         $this->ajaxReturn(array('error' => $errno, 'msg' => '添加失败'));
