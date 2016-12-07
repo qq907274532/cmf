@@ -27,10 +27,10 @@
                                     <a href="{:U('Index/index')}">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">权限管理</a>
+                                    <a href="javascript:void(0)">会员管理</a>
                                 </li>
-                                <li>管理员</li>
-                                <a href="{:U('AdminUser/add')}" class="btn btn-primary pull-right ">增加管理员 <i class="fa fa-arrow-right"></i></a>
+                                <li>申请提现</li>
+                                <a href="{:U('RechargeCash/add')}" class="btn btn-primary pull-right ">增加申请 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>管理员列表</h4>
+                                <h4><i class="fa fa-table"></i>申请提现</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -62,12 +62,13 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>管理员名称</th>
-                                        <th>邮箱</th>
-                                        <th>状态</th>
-                                        <th>权限组</th>
-                                        <th class="hidden-480">创建时间</th>
-                                        <th class="hidden-480">更新时间</th>
+                                        <th>会员名称</th>
+                                        <th>操作日期</th>
+                                        <th>类型</th>
+                                        <th>金额</th>
+                                        <th>支付方式</th>
+                                        <th>到款状态</th>
+                                        <th>操作员</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>

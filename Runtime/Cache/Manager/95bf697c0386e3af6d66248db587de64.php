@@ -215,7 +215,7 @@
                                 <table class="table table-striped">
                                     <tbody>
                                     <?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?><tr>
-                                            <th class="right " colspan="6" style="font-size: 20px;">
+                                            <th class="right " colspan="20" style="font-size: 20px;">
                                                 <input type="checkbox" class="ace" name="node[]" value="<?php echo ($val["id"]); ?>"<?php if($val["access"] == 1): ?>checked=checked<?php endif; ?>/> <span class="lbl">&nbsp;&nbsp;<?php echo ($val["title"]); ?></span>
 
                                             </th>

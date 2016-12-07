@@ -29,7 +29,7 @@
                                 <li>
                                     <a href="{:U('UserRank/index')}">会员等级</a>
                                 </li>
-                                <li>添加等级</li>
+                                <li>修改等级</li>
                                 <a href="{:U('UserRank/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加等级</h4>
+                                <h4><i class="fa fa-table"></i>修改等级</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -63,8 +63,8 @@
                                         <label class="col-sm-3 control-label">会员等级名称：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="rank_name" id="rank_name" value=""
-                                                    placeholder="会员等级名称">
+                                            <input type="text" class="form-control" name="rank_name" id="rank_name" value="{$info.rank_name}"
+                                                    placeholder="会员等级名称" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -72,7 +72,7 @@
 
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="min_points" id="min_points"
-                                                    placeholder="最低积分" value="">
+                                                    placeholder="最低积分" value="{$info.min_points}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -80,7 +80,7 @@
 
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="max_points" id="max_points"
-                                                    placeholder="最高积分" value="">
+                                                    placeholder="最高积分" value="{$info.max_points}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -88,7 +88,7 @@
 
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="discount" id="discount"
-                                                    placeholder="商品折扣" value="">
+                                                    placeholder="商品折扣" value="{$info.discount}">
                                         </div>
                                         <label class="control-label">%</label>
                                     </div>
@@ -98,7 +98,7 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" name="special_rank" id="special_rank">
                                                 <volist name="special_rank" id="v" >
-                                                    <option value="{$key}">{$v}</option>
+                                                    <option value="{$key}" <if condition="$info.special_rank eq $key">selected</if>>{$v}</option>
                                                 </volist>
                                             </select>
 
@@ -110,7 +110,7 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" name="show_price" id="show_price">
                                                 <volist name="show_price" id="v" >
-                                                    <option value="{$key}">{$v}</option>
+                                                    <option value="{$key}" <if condition="$info.show_price eq $key">selected</if>>{$v}</option>
                                                 </volist>
                                             </select>
 
@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
-
+                                            <input type="hidden" name="id" value="{$info.rank_id}">
                                             <div type="text" class="btn btn-primary" id="submit">提交</div>
                                         </div>
                                     </div>
@@ -137,10 +137,11 @@
             <script type="text/javascript">
                 $(function(){
                     $("#submit").click(function(){
-                        var rank_name=$("input[name='rank_name']").val();
+
                         var min_points=$("input[name='min_points']").val();
                         var max_points=$("input[name='max_points']").val();
                         var discount=$("input[name='discount']").val();
+                        var id=$("input[name='id']").val();
                         var special_rank=$("#special_rank").val();
                         var show_price=$("#show_price").val();
                         if($.trim(rank_name)=='') {
@@ -160,8 +161,9 @@
                             return false;
                         }
 
-                        $.post("{:U('UserRank/add')}",{
-                            'rank_name':rank_name,
+                        $.post("{:U('UserRank/edit')}",{
+
+                            'id':id,
                             'min_points':min_points,
                             'max_points':max_points,
                             'discount':discount,

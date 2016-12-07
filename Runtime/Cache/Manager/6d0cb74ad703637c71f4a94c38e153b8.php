@@ -269,9 +269,10 @@
                                         <label class="col-sm-3 control-label">是否是菜单：</label>
 
                                         <div class="col-sm-4">
+
                                             <select class="form-control" name="menu" id="menu">
-                                                <option value="1"<?php if($info['menu'] == '1'): ?>selected=selected<?php endif; ?> >是</option>
-                                                <option value="0"  <?php if($info['menu'] == '0'): ?>selected=selected<?php endif; ?> >否</option>
+                                             <?php if(is_array($menu)): $k = 0; $__LIST__ = $menu;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?><option value="<?php echo ($k); ?>" <?php if($info['menu'] == $k): ?>selected=selected<?php endif; ?>><?php echo ($val); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+                                               
                                             </select>
 
                                         </div>

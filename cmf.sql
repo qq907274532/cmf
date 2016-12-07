@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2016-12-06 23:33:12
+Date: 2016-12-07 18:38:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -80,21 +80,23 @@ CREATE TABLE `hx_admin_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '后台管理用户',
   `username` varchar(30) NOT NULL,
   `password` varchar(100) NOT NULL,
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
   `status` tinyint(4) DEFAULT '1' COMMENT '锁定状态2锁定，1：未锁定',
   `last_time` datetime DEFAULT NULL COMMENT '登录时间',
   `last_ip` varchar(255) DEFAULT NULL COMMENT '登录ip',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `username` (`username`) USING BTREE,
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '1', '2016-12-06 20:50:44', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-06 20:50:44');
-INSERT INTO `hx_admin_user` VALUES ('2', 'root', 'pbkdf2_sha256$12000$6UUdpVdTMcxA$ypzocPbaYvbECQWOyjdwT5XJH4XgAHbp6B7rp3pfFao=', '2', null, null, '2016-11-27 15:13:21', '2016-11-27 17:53:08');
-INSERT INTO `hx_admin_user` VALUES ('3', '', 'pbkdf2_sha256$12000$dZZUn08zFcIx$3do7IV4qIFTuJq++bA9jWYymKpO2HcpWtsqZtufCPGc=', '1', null, null, '2016-12-06 23:16:04', null);
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-07 15:26:39', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-07 15:26:39');
+INSERT INTO `hx_admin_user` VALUES ('2', 'root', 'pbkdf2_sha256$12000$6UUdpVdTMcxA$ypzocPbaYvbECQWOyjdwT5XJH4XgAHbp6B7rp3pfFao=', '9072745322@qq.com', '2', null, null, '2016-11-27 15:13:21', '2016-12-07 15:25:12');
+INSERT INTO `hx_admin_user` VALUES ('4', '111111', 'pbkdf2_sha256$12000$yaQobFQo9YH6$1BFWSalfqnjoVfabFJY56KDx1Oeege4G4lGhydV3wc8=', '9072745323@qq.com', '1', null, null, '2016-12-07 15:08:07', '2016-12-07 15:25:15');
 
 -- ----------------------------
 -- Table structure for hx_article
@@ -145,7 +147,7 @@ CREATE TABLE `hx_auth_group` (
 -- ----------------------------
 -- Records of hx_auth_group
 -- ----------------------------
-INSERT INTO `hx_auth_group` VALUES ('1', '超级管理员', null, '1', '59,58,57,56,55,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-06 22:25:02');
+INSERT INTO `hx_auth_group` VALUES ('1', '超级管理员', null, '1', '71,70,69,68,67,66,65,64,63,62,61,60,59,58,57,56,55,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-07 18:01:10');
 INSERT INTO `hx_auth_group` VALUES ('2', '普通管理员', '普通管理员', '1', '54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,17,18,19,20,21,43,44,45,46,47,48,49,50,51,52,53,37,38,39,40,41,42,24,25,26,27,28,29,30,31,32,33,34,35,36', '2016-11-27 16:28:50', '2016-12-06 20:51:06');
 INSERT INTO `hx_auth_group` VALUES ('3', '测试', '测试1', '2', '51,33,22,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-06 22:52:17');
 
@@ -167,6 +169,7 @@ CREATE TABLE `hx_auth_group_access` (
 INSERT INTO `hx_auth_group_access` VALUES ('1', '1');
 INSERT INTO `hx_auth_group_access` VALUES ('2', '2');
 INSERT INTO `hx_auth_group_access` VALUES ('3', '0');
+INSERT INTO `hx_auth_group_access` VALUES ('4', '1');
 
 -- ----------------------------
 -- Table structure for hx_auth_rule
@@ -186,7 +189,7 @@ CREATE TABLE `hx_auth_rule` (
   `icon` varchar(150) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hx_auth_rule
@@ -207,11 +210,11 @@ INSERT INTO `hx_auth_rule` VALUES ('13', 'Manager/Role/index', '列表', '1', '1
 INSERT INTO `hx_auth_rule` VALUES ('14', 'Manager/Role/add', '添加', '1', '1', '', '12', 'Role/add', '2', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('15', 'Manager/Role/edit', '修改', '1', '1', '', '12', 'Role/edit', '3', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('16', 'Manager/Role/del', '启用/禁用', '1', '1', '', '12', 'Role/del', '4', '0', '');
-INSERT INTO `hx_auth_rule` VALUES ('17', 'Manager/Users/lists', '用户管理', '1', '1', '', '0', 'Users/index', '2', '1', ' fa-user');
-INSERT INTO `hx_auth_rule` VALUES ('18', 'Manager/Users/list', '用户管理', '1', '1', '', '17', 'Users/index', '1', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('17', 'Manager/Users/lists', '会员管理', '1', '1', '', '0', 'Users/index', '2', '1', ' fa-user');
+INSERT INTO `hx_auth_rule` VALUES ('18', 'Manager/Users/list', '会员管理', '1', '1', '', '17', 'Users/index', '1', '1', '');
 INSERT INTO `hx_auth_rule` VALUES ('19', 'Manager/Users/index', '列表', '1', '1', '', '18', 'Users/index', '1', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('20', 'Manager/Users/del', '启用/禁用', '1', '1', '', '18', 'User/del', '2', '0', '');
-INSERT INTO `hx_auth_rule` VALUES ('55', 'Manager/UserRank/list', '用户等级', '1', '1', '', '17', 'UserRank/index', '2', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('55', 'Manager/UserRank/list', '会员等级', '1', '1', '', '17', 'UserRank/index', '2', '1', '');
 INSERT INTO `hx_auth_rule` VALUES ('22', 'Manager/Role/rbac', '授权', '1', '1', '', '12', 'Role/rbac', '5', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('23', 'Manager/UserInfo/list', '个人信息', '1', '1', '', '24', 'UserInfo/index', '2', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('24', 'Manager/UserInfo/index', '修改昵称', '1', '1', '', '27', 'UserInfo/index', '1', '0', '');
@@ -247,6 +250,18 @@ INSERT INTO `hx_auth_rule` VALUES ('56', 'Manager/UserRank/index', '等级列表
 INSERT INTO `hx_auth_rule` VALUES ('57', 'Manager/UserRank/add', '增加等级', '1', '1', '', '55', 'UserRank/add', '2', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('58', 'Manager/UserRank/edit', '修改等级', '1', '1', '', '55', 'UserRank/edit', '3', '0', '');
 INSERT INTO `hx_auth_rule` VALUES ('59', 'Manager/UserRank/del', '删除等级', '1', '1', '', '55', 'UserRank/del', '4', '0', '');
+INSERT INTO `hx_auth_rule` VALUES ('60', 'Manager/Feedback/list', '会员留言', '1', '1', '', '17', 'Feedback/index', '4', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('61', 'Manager/Feedback/index', '刘洋列表', '1', '1', '', '60', 'Feedback/index', '1', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('62', 'Manager/Feedback/info', '查看详情', '1', '1', '', '60', 'Feedback/info', '2', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('63', 'Manager/Feedback/del', '删除留言', '1', '1', '', '60', 'Feedback/del', '3', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('64', 'Manager/UserRank/showPrice', '是否显示价格', '1', '1', '', '55', 'UserRank/showPrice', '50', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('65', 'Manager/UserRank/specialRank', '是否特殊会员', '1', '1', '', '55', 'UserRank/specialRank', '50', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('66', 'Manager/RechargeCash/list', '充值提现', '1', '1', '', '17', 'RechargeCash/index', '3', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('67', 'Manager/RechargeCash/index', '申请列表', '1', '1', '', '66', 'RechargeCash/index', '1', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('68', 'Manager/RechargeCash/add', '添加申请', '1', '1', '', '66', 'RechargeCash/add', '2', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('69', 'Manager/RechargeCash/edit', '修改申请', '1', '1', '', '66', 'RechargeCash/edit', '3', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('70', 'Manager/RechargeCash/del', '删除申请', '1', '1', '', '66', 'RechargeCash/del', '5', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('71', 'Manager/RechargeCash/check', '审核申请', '1', '1', '', '66', 'RechargeCash/check', '4', '2', '');
 
 -- ----------------------------
 -- Table structure for hx_cate
@@ -295,6 +310,47 @@ CREATE TABLE `hx_comments` (
 -- ----------------------------
 -- Records of hx_comments
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for hx_feedback
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_feedback`;
+CREATE TABLE `hx_feedback` (
+  `msg_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户名',
+  `parent_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '父节点，取自该表msg_id；反馈该值为0；回复反馈为节点id',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `user_name` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
+  `user_email` varchar(60) NOT NULL DEFAULT '' COMMENT 'Email',
+  `msg_title` varchar(200) NOT NULL DEFAULT '' COMMENT '标题',
+  `msg_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '类型1:投诉;2:询问,3:售后,4:求购',
+  `msg_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
+  `msg_content` text NOT NULL COMMENT '内容',
+  `msg_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '时间',
+  `message_img` varchar(255) NOT NULL DEFAULT '0' COMMENT '图片',
+  `order_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '是否回复',
+  `msg_area` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`msg_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_feedback
+-- ----------------------------
+INSERT INTO `hx_feedback` VALUES ('1', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '2', '三星SGH-F258什么时候有货', '2016-12-07 13:05:36', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('2', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('3', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('4', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('5', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('6', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('7', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('8', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('9', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('10', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('11', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('12', '0', '1', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 11:35:16', '', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('13', '0', '3', 'ecshop', 'ecshop@ecshop.com', '三星SGH-F258什么时候到', '4', '1', '三星SGH-F258什么时候有货', '2016-12-07 17:08:17', '1.jpg', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('14', '12', '0', 'admin', '', 'reply', '1', '1', '1111啊啊啊', '2016-12-07 16:54:40', '0', '0', '0');
+INSERT INTO `hx_feedback` VALUES ('15', '11', '1', 'admin', '', 'reply', '1', '1', '测试1111', '2016-12-07 17:10:02', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for hx_link
@@ -5024,6 +5080,37 @@ INSERT INTO `hx_user` VALUES ('30', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN
 INSERT INTO `hx_user` VALUES ('31', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-12-06 21:50:46');
 
 -- ----------------------------
+-- Table structure for hx_users
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_users`;
+CREATE TABLE `hx_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
+  `user_pass` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码；hx_password加密',
+  `user_nicename` varchar(50) NOT NULL DEFAULT '' COMMENT '用户美名',
+  `user_email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
+  `user_url` varchar(100) NOT NULL DEFAULT '' COMMENT '用户个人网站',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像，相对于upload/avatar目录',
+  `sex` smallint(1) DEFAULT '0' COMMENT '性别；0：保密，1：男；2：女',
+  `birthday` int(11) DEFAULT NULL COMMENT '生日',
+  `signature` varchar(255) DEFAULT NULL COMMENT '个性签名',
+  `last_login_ip` varchar(16) NOT NULL COMMENT '最后登录ip',
+  `user_activation_key` varchar(60) NOT NULL DEFAULT '' COMMENT '激活码',
+  `user_status` int(11) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
+  `score` int(11) NOT NULL DEFAULT '0' COMMENT '用户积分',
+  `last_login_time` int(11) DEFAULT NULL,
+  `create_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_login_key` (`user_login`) USING BTREE,
+  KEY `user_nicename` (`user_nicename`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_users
+-- ----------------------------
+INSERT INTO `hx_users` VALUES ('1', 'haoxuan', '123456', 'haoxuan', '907274532@qq.com', '', '', '0', '0', '', '127.0.0.1', '', '1', '0', '1439514188', '1437654152');
+
+-- ----------------------------
 -- Table structure for hx_user_account
 -- ----------------------------
 DROP TABLE IF EXISTS `hx_user_account`;
@@ -5037,8 +5124,9 @@ CREATE TABLE `hx_user_account` (
   `process_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '操作类型，1，退款；0，预付费，其实就是充值',
   `payment` varchar(90) NOT NULL COMMENT '支付渠道的名称，取自payment的pay_name字段',
   `is_paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已经付款，０，未付；１，已付',
+  `status` tinyint(1) DEFAULT '1' COMMENT '删除 1：正常，2：删除',
   `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `pay_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `is_paid` (`is_paid`)
@@ -5099,7 +5187,7 @@ CREATE TABLE `hx_user_rank` (
 -- ----------------------------
 -- Records of hx_user_rank
 -- ----------------------------
-INSERT INTO `hx_user_rank` VALUES ('1', '注册用户', '0', '10000', '100', '1', '2', '1', '2011-11-11 00:00:00', '2016-12-06 22:56:42');
-INSERT INTO `hx_user_rank` VALUES ('2', 'vip', '10000', '10000000', '95', '1', '2', '1', '2011-11-11 00:00:00', '2016-12-06 22:56:53');
-INSERT INTO `hx_user_rank` VALUES ('3', '代销用户', '0', '0', '90', '2', '1', '1', '2011-11-11 00:00:00', '2016-12-06 22:56:35');
-INSERT INTO `hx_user_rank` VALUES ('4', '11', '111', '1111', '1', '1', '1', '1', '2016-12-06 23:19:44', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_rank` VALUES ('1', '注册用户', '111', '1111', '1', '2', '2', '1', '2011-11-11 00:00:00', '2016-12-07 10:07:54');
+INSERT INTO `hx_user_rank` VALUES ('2', 'vip', '111', '1111', '1', '2', '2', '1', '2011-11-11 00:00:00', '2016-12-07 10:07:43');
+INSERT INTO `hx_user_rank` VALUES ('3', '代销用户', '111', '1111', '1', '2', '1', '1', '2011-11-11 00:00:00', '2016-12-07 13:52:47');
+INSERT INTO `hx_user_rank` VALUES ('4', '11', '111', '1111', '1', '2', '2', '1', '2016-12-06 23:19:44', '2016-12-07 10:07:22');

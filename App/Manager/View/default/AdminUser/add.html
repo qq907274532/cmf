@@ -83,6 +83,14 @@
                                                     placeholder="确认密码" value="">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">邮箱：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="email" id="email"
+                                                    placeholder="邮箱" value="">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">权限组：</label>
@@ -121,7 +129,13 @@
                         var username=$("input[name='username']").val();
                         var password=$("input[name='password']").val();
                         var repassword=$("input[name='repassword']").val();
+                        var email=$("input[name='email']").val();
+                        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
                         var role=$("#role").val();
+                        if(!reg.test(email)){
+                            throwExc("邮箱格式不正确");
+                            return false;
+                        }
                         if($.trim(username)=='') {
                             throwExc("用户名必须填写");
                             return false;
@@ -134,6 +148,7 @@
                             throwExc("确认密码必须填写");
                             return false;
                         }
+
                         if(role==''&& !isNaN(role)) {
                             throwExc("请选择权限组");
                             return false;
@@ -142,7 +157,8 @@
                             'role':role,
                             'password':password,
                             'repassword':repassword,
-                            'username':username
+                            'username':username,
+                            'email':email
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);

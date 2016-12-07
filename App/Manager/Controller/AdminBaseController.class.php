@@ -72,7 +72,6 @@
             $show = $Page->show();// 分页显示输出
             // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
             $list = $model->where($where)->order($order)->limit($Page->firstRow . ',' . $Page->listRows)->select();
-//            echo $model->getLastSql();die;
             $data = array(
                 'list' => $list,
                 'page' => $show

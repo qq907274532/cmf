@@ -14,6 +14,7 @@ class AdminUserModel extends Model {
 	const STATUS_DISABLE="2";
 	protected $_validate = array(
      array('username','require','管理员名称必须填写'),  // 都有时间都验证
+     array('email','require','管理员名称必须填写'),  // 都有时间都验证
      array('username','','管理员名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一
      array('password','require','密码必须填写'),  // 只在登录时候验证
      array('repassword','password','确认密码和密码不一致',0,'confirm'), // 验证确认密码是否和密码一致

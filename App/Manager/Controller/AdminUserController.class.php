@@ -40,6 +40,9 @@
                 try {
                     $data = I('post.');
                     $data['create_time'] = date("Y-m-d H:i:s");
+                    if(!checkEmail($data['email'])){
+                        throw new \Exception("邮箱格式不正确");
+                    }
                     $this->model->startTrans();
                     if (!$this->model->create($data)) {
                         throw new \Exception($this->model->getError());
@@ -65,14 +68,24 @@
         {
             $id = I('id');
             if (IS_POST) {
-                if ($id <= 0) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "不合法请求"));
+                try {
+                    if ($id <= 0) {
+                        $this->ajaxReturn(array('error' => 100, 'message' => "不合法请求"));
+                    }
+                    $this->model->startTrans();
+                    $group_id = I('post.role');
+                    $email = I('post.email');
+                    if(!checkEmail($email)){
+                        throw new \Exception("邮箱格式不正确");
+                    }
+                    $this->modelRoleAcc->where(array('uid' => $id))->save(['group_id'=>$group_id]);
+                    $this->model->where(array('id'=>$id))->save(['email'=>$email]);
+                    $this->model->commit();
+                    $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
+                } catch (\Exception $e) {
+                    $this->model->rollback();
+                    $this->ajaxReturn(array('error' => 100, 'message' => $e->getMessage()));
                 }
-                $data['group_id'] = I('post.role');
-                if (!$this->modelRoleAcc->where(array('uid' => $id))->save($data)) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "修改失败"));
-                }
-                $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
             } else {
                 if ($id <= 0) {
                     $this->error("不合法请求", U('AdminUser/index'));

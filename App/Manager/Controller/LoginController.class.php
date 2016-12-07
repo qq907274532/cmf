@@ -50,6 +50,7 @@
                 $this->model->where(array('id' => $userInfoDetail['id']))->save($data);
                 session('id', $userInfoDetail['id']);
                 session('name', $userInfoDetail['username']);
+                session('email', $userInfoDetail['email']);
                 $this->ajaxReturn(array('error'=>200,'message'=>'登录成功'));
             } else {
                 $this->display();

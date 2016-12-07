@@ -272,8 +272,7 @@
 
                                         <div class="col-sm-4">
                                             <select class="form-control" name="menu" id="menu">
-                                                <option value="1">是</option>
-                                                <option value="0">否</option>
+                                               <?php if(is_array($menu)): $k = 0; $__LIST__ = $menu;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?><option value="<?php echo ($k); ?>" ><?php echo ($val); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
                                             </select>
 
                                         </div>

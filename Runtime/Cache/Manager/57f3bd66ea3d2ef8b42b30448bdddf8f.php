@@ -179,9 +179,9 @@
                                     <a href="<?php echo U('Index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">用户管理</a>
+                                    <a href="javascript:void(0)">会员管理</a>
                                 </li>
-                                <li class="active">用户等级</li>
+                                <li class="active">会员等级</li>
                                 <a href="<?php echo U('UserRank/add');?>" class="btn btn-primary pull-right ">增加等级 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
@@ -200,7 +200,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>用户等级列表</h4>
+                                <h4><i class="fa fa-table"></i>会员等级列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -233,17 +233,18 @@
                                             <td><?php echo ($v["min_points"]); ?></td>
                                             <td><?php echo ($v["max_points"]); ?></td>
                                             <td><?php echo ($v["discount"]); ?></td>
+                                            <td class="hidden-480">
+                                                <?php if($v["special_rank"] == Common\Model\UserRankModel::IS_SPECIAL_RANK): ?><span class="label label-primary arrow-out specialRank" style="cursor:pointer"><?php echo ($v["specialRankName"]); ?></span>
+                                                    <?php else: ?>
+                                                    <span class="label  label-danger arrow-in specialRank" style="cursor:pointer"><?php echo ($v["specialRankName"]); ?></span><?php endif; ?>
+                                            </td>
                                             <td>
-                                                <?php if($v["show_price"] == Common\Model\UserRankModel::IS_SHOW_PRICE): ?><span class="label label-primary arrow-in"><?php echo ($v["showPriceName"]); ?></span>
+                                                <?php if($v["show_price"] == Common\Model\UserRankModel::IS_SHOW_PRICE): ?><span class="label label-primary arrow-in showPrice" style="cursor:pointer"><?php echo ($v["showPriceName"]); ?></span>
                                                 <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["showPriceName"]); ?></span><?php endif; ?>
+                                                    <span class="label  label-danger arrow-out showPrice" style="cursor:pointer"><?php echo ($v["showPriceName"]); ?></span><?php endif; ?>
                                             </td>
 
-                                            <td class="hidden-480">
-                                                <?php if($v["special_rank"] == Common\Model\UserRankModel::IS_SPECIAL_RANK): ?><span class="label label-primary arrow-in"><?php echo ($v["specialRankName"]); ?></span>
-                                                 <?php else: ?>
-                                                    <span class="label  label-danger arrow-out "><?php echo ($v["specialRankName"]); ?></span><?php endif; ?>
-                                            </td>
+
                                             <td class="hidden-480"><?php echo ($v["create_time"]); ?></td>
                                             <td class="hidden-480"><?php echo ($v["update_time"]); ?></td>
                                             <td>
@@ -253,7 +254,7 @@
                                             </td>
                                             <td>
 
-                                              <a href="<?php echo U('UserRank/edit',array('id'=>$v['id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                              <a href="<?php echo U('UserRank/edit',array('id'=>$v['rank_id']));?>" class="fa fa-pencil tip" data-original-title="修改"></a>
 
                                               <?php if($v["status"] == Common\Model\UserRankModel::STATUS_ENABLE): ?><a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <?php else: ?>
@@ -344,6 +345,87 @@
                     }, function(){
                         $.ajax({
                             url: "<?php echo U('UserRank/del');?>",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
+                                return false;
+                            }
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
+                    });
+
+                });
+                $(".specialRank").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).html();
+                    var status;
+                    if(msg=='否') {
+                        msg="设置成特殊会员组"
+                        status="<?=Common\Model\UserRankModel::IS_SPECIAL_RANK?>";
+                    }else {
+                        msg="取消特殊会员组"
+                        status="<?=Common\Model\UserRankModel::IS_NOT_SPECIAL_RANK?>";
+                    }
+                    layer.confirm('你确定要'+msg+"吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "<?php echo U('UserRank/specialRank');?>",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
+                                return false;
+                            }
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
+                    });
+
+                });
+                $(".showPrice").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).html();
+
+                    var status;
+                    if(msg=="不显示") {
+                        msg='显示'
+                        status="<?=Common\Model\UserRankModel::IS_SHOW_PRICE?>";
+                    }else {
+                        msg='不显示'
+                        status="<?=Common\Model\UserRankModel::IS_NOT_SHOW_PRICE?>";
+                    }
+                    layer.confirm('你确定要 '+msg+" 会员价吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "<?php echo U('UserRank/showPrice');?>",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",

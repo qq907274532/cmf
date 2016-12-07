@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/select2/select2.min.css"/>
     <!-- UNIFORM -->
     <link rel="stylesheet" type="text/css" href="/Public/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="/Public/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="/Public/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+   
 
     <!-- FONTS -->
 
@@ -232,6 +235,14 @@
                                                     placeholder="确认密码" value="">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">邮箱：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="email" id="email"
+                                                    placeholder="邮箱" value="">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">权限组：</label>
@@ -246,7 +257,7 @@
                                     <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
 
-                                            <div type="text" class="btn btn-success" id="submit">提交</div>
+                                            <div type="text" class="btn btn-primary" id="submit">提交</div>
                                         </div>
                                     </div>
                                 </form>
@@ -299,6 +310,9 @@
 <script src="/Public/admin/js/script.js"></script>
 <script src="/Public/layer/layer.js"></script>
 <script src="/Public/kindeditor/kindeditor.js"></script>
+
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/admin/js/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
 <script>
     jQuery(document).ready(function() {
         App.setPage("simple_table");  //Set current page
@@ -315,7 +329,13 @@
                         var username=$("input[name='username']").val();
                         var password=$("input[name='password']").val();
                         var repassword=$("input[name='repassword']").val();
+                        var email=$("input[name='email']").val();
+                        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
                         var role=$("#role").val();
+                        if(!reg.test(email)){
+                            throwExc("邮箱格式不正确");
+                            return false;
+                        }
                         if($.trim(username)=='') {
                             throwExc("用户名必须填写");
                             return false;
@@ -328,6 +348,7 @@
                             throwExc("确认密码必须填写");
                             return false;
                         }
+
                         if(role==''&& !isNaN(role)) {
                             throwExc("请选择权限组");
                             return false;
@@ -336,7 +357,8 @@
                             'role':role,
                             'password':password,
                             'repassword':repassword,
-                            'username':username
+                            'username':username,
+                            'email':email
                         },function( response ){
                             if(response.error==100) {
                                 throwExc(response.message);
