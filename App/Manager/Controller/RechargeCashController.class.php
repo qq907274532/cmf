@@ -1,7 +1,5 @@
 <?php
     namespace Manager\Controller;
-
-    use Common\Model\FeedbackModel;
     use Common\Model\UserAccountModel;
     use Think\Controller;
 
@@ -38,7 +36,11 @@
             $this->display();
         }
         public function add(){
-            $this->display();
+            if(IS_POST){
+
+            }else{
+                $this->display();
+            }
         }
         public function info()
         {
