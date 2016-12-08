@@ -26,6 +26,31 @@
         }
         return $arr;
     }
+    function logs($arg, $logName = 'debug')
+    {
+
+        $logName = $logName ? $logName : 'wanglibao';//日志名称
+        if(!is_dir(__APP_LOGS_PATH__)){
+            mkdir(__APP_LOGS_PATH__, 0777, true);
+        }
+
+        $fp = fopen(__APP_LOGS_PATH__ . '/' . $logName . '.log.' . date('Ymd'), 'a');
+
+        $traces = debug_backtrace();
+        $logMsg = 'FILE:' . basename($traces[0]['file']) . PHP_EOL;
+        $logMsg .= 'FUNC:' . $traces[1]['function'] . PHP_EOL;
+        $logMsg .= 'LINE:' . $traces[0]['line'] . PHP_EOL;
+
+        if (is_string($arg)) {
+            $logMsg .= 'ARGS:' . $arg . PHP_EOL;
+        } else {
+            $logMsg .= 'ARGS:' . var_export($arg, true) . PHP_EOL;
+        }
+        $logMsg .= 'DATETIME:' . date('Y-m-d H:i:s') . PHP_EOL . PHP_EOL;
+
+        fwrite($fp, $logMsg);
+        fclose($fp);
+    }
 
     /**
      * 验证邮箱格式
