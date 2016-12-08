@@ -18,7 +18,7 @@
 
         public function index()
         {
-            $this->order = array('create_time', 'id' => 'desc');
+            $this->order = array('create_time'=>'desc', 'id' => 'desc');
             //查询出支付方式
             $payMent = D('Payment')->getPaymentListByStatus();
             //组合成新的数组
@@ -70,24 +70,12 @@
                     }
                     $is_paid = I('post.is_paid');
                     $pay_type = I('post.process_type');
+                    $admin_note = I('post.admin_note');
+                    $user_note = I('post.user_note');
+                    $payMent = I('post.payMent');
                     $amount = I('post.amount');
-                    $data = [
-                        'user_id' => $userInfo['id'],
-                        'process_type' => $pay_type,
-                        'amount' => UserAccountModel::$PAY_TYPE_SYMBOL[$pay_type] . $amount,
-                        'admin_user' => $_SESSION['name'],
-                        'admin_note' => I('post.admin_note'),
-                        'user_note' => I('post.user_note'),
-                        'payment_id' => I('post.payMent'),
-                        'status' => UserAccountModel::STATUS_ENABLE,
-                        'create_time' => date('Y-m-d H:i:s'),
-                        'pay_time' => date('Y-m-d H:i:s'),
-                        'is_paid' => $is_paid,
-                    ];
-                    if (!$this->model->create($data)) {
-                        throw new \Exception($this->model->getError());
-                    }
-                    $this->model->add();
+                   
+                    $this->model->addAcount($userInfo['id'],$_SESSION['name'],$amount,$admin_note,$user_note,$payMent,$pay_type,$is_paid);
                     if ($is_paid == UserAccountModel::PAY_STATUS_SUCCESS) {
                         D('AccountLog')->addAcountLog($userInfo['id'], $amount, $pay_type);
                     }
