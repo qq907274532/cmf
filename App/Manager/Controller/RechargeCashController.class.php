@@ -1,5 +1,6 @@
 <?php
     namespace Manager\Controller;
+
     use Common\Model\UserAccountModel;
     use Common\Model\UserModel;
     use Think\Controller;
@@ -18,54 +19,77 @@
         public function index()
         {
             $this->order = array('create_time', 'id' => 'desc');
-            $where=['status'=>UserAccountModel::STATUS_ENABLE];
-            $title=empty(I('title'))?'':I('title');
-//            if(!empty($title)){
-//                $where['msg_title']= array('like','%'.$title.'%');
-//            }
-
-            $data = $this->page_com($this->model, $this->order,$where);
+            //查询出支付方式
+            $payMent = D('Payment')->getPaymentListByStatus();
+            //组合成新的数组
+            $newPayMent = array_combine(array_column($payMent, 'pay_id'), array_column($payMent, 'pay_name'));
+            $where = ['status' => UserAccountModel::STATUS_ENABLE];
+            $username = empty(I('username')) ? '' : I('username');
+            $process_type = empty(I('process_type')) ? '' : I('process_type');
+            $payMentType = empty(I('payMent')) ? '' : I('payMent');
+            $is_paid = empty(I('is_paid')) ? '' : I('is_paid');
+            if (!empty($title)) {
+                $userInfo = D('User')->getUserInfoByUserName($username);
+                $where['user_id'] = array('eq', $userInfo['id']);
+            }
+            if (!empty($process_type)) {
+                $where['process_type'] = array('eq', $process_type);
+            }
+            if (!empty($is_paid)) {
+                $where['is_paid'] = array('eq', $is_paid);
+            }
+            if (!empty($payMentType)) {
+                $where['payment_id'] = array('eq', $payMentType);
+            }
+            $data = $this->page_com($this->model, $this->order, $where);
             foreach ($data['list'] as $k => $v) {
-                $data['list'][$k]['amount']="¥".sprintf('%0.2f',abs($v['amount']))."元";
+                $data['list'][$k]['amount'] = "¥" . sprintf('%0.2f', abs($v['amount'])) . "元";
                 $data['list'][$k]['user_name'] = D('User')->getUserInfoByUserId($v['user_id']);
+                $data['list'][$k]['payment'] = $newPayMent[$v['payment_id']];
                 $data['list'][$k]['process_type_name'] = UserAccountModel::$PAY_TYPE_MAP[$v['process_type']];
                 $data['list'][$k]['is_paid_name'] = UserAccountModel::$PAY_STATUS[$v['is_paid']];
 
             }
+            $this->payMent = $payMent;
+            $this->pay_status = UserAccountModel::$PAY_STATUS;
+            $this->pay_type = UserAccountModel::$PAY_TYPE_MAP;
             $this->data = $data;
             $this->display();
         }
-        public function add(){
-            if(IS_POST){
-                $username=I('post.username');
-                $userInfo=D('User')->getUserInfoByUserName($username);
-                if(empty($userInfo)){
-                    $this->ajaxReturn(array('error' => 100, 'message' => "该用户名不存在"));
-                }
+
+        //添加申请
+        public function add()
+        {
+            if (IS_POST) {
+                $username = I('post.username');
+                $userInfo = D('User')->getUserInfoByUserName($username);
                 $this->model->startTrans();
                 try {
-                    $is_paid=I('post.is_paid');
-                    $pay_type=I('post.process_type');
-                    $amount=I('post.amount');
-                    $data=[
-                        'user_id'=>$userInfo['id'],
-                        'process_type'=>$pay_type,
-                        'amount'=>UserAccountModel::$PAY_TYPE_SYMBOL[$pay_type].$amount,
-                        'admin_user'=>$_SESSION['name'],
-                        'admin_note'=>I('post.admin_note'),
-                        'user_note'=>I('post.user_note'),
-                        'payment'=>I('post.payMentName'),
-                        'status'=>UserAccountModel::STATUS_ENABLE,
-                        'create_time'=>date('Y-m-d H:i:s'),
-                        'is_paid'=>$is_paid,
+                    if (empty($userInfo)) {
+                        throw new \Exception('该用户名不存在');
+                    }
+                    $is_paid = I('post.is_paid');
+                    $pay_type = I('post.process_type');
+                    $amount = I('post.amount');
+                    $data = [
+                        'user_id' => $userInfo['id'],
+                        'process_type' => $pay_type,
+                        'amount' => UserAccountModel::$PAY_TYPE_SYMBOL[$pay_type] . $amount,
+                        'admin_user' => $_SESSION['name'],
+                        'admin_note' => I('post.admin_note'),
+                        'user_note' => I('post.user_note'),
+                        'payment_id' => I('post.payMent'),
+                        'status' => UserAccountModel::STATUS_ENABLE,
+                        'create_time' => date('Y-m-d H:i:s'),
+                        'pay_time' => date('Y-m-d H:i:s'),
+                        'is_paid' => $is_paid,
                     ];
                     if (!$this->model->create($data)) {
                         throw new \Exception($this->model->getError());
                     }
-                    if($is_paid==UserAccountModel::PAY_STATUS_UNPAID){
-                        $this->model->add();
-                    } else{
-
+                    $this->model->add();
+                    if ($is_paid == UserAccountModel::PAY_STATUS_SUCCESS) {
+                        D('AccountLog')->addAcountLog($userInfo['id'], $amount, $pay_type);
                     }
                     $this->model->commit();
                     $this->ajaxReturn(array('error' => 200, 'message' => "申请成功"));
@@ -74,82 +98,103 @@
                     $this->ajaxReturn(array('error' => 100, 'message' => $e->getMessage()));
                 }
 
-
-            }else{
-                $this->pay_status=UserAccountModel::$PAY_STATUS;
-                $this->pay_type=UserAccountModel::$PAY_TYPE_MAP;
-                $this->payMent=D('Payment')->getPaymentListByStatus();
+            } else {
+                $this->pay_status = UserAccountModel::$PAY_STATUS;
+                $this->pay_type = UserAccountModel::$PAY_TYPE_MAP;
+                $this->payMent = D('Payment')->getPaymentListByStatus();
                 $this->display();
             }
         }
-        public function check(){
-            $id=I('id');
+        public function edit(){
+            $id = I('id');
+            $errno=100;
             if(IS_POST){
-
+                if (($id = I('id', 0, 'intval')) <= 0) {
+                    $this->ajaxReturn(array('error' => $errno, 'message' => "数据格式有误"));
+                }
+                if (empty($admin_note = I('admin_note'))) {
+                    $this->ajaxReturn(array('error' => $errno, 'message' => "管理员的备注必须填写"));
+                }
+                if (empty($user_note = I('user_note'))) {
+                    $this->ajaxReturn(array('error' => $errno, 'message' => "用户备注必须填写"));
+                }
+               $data=[
+                   'admin_note'=>$admin_note,
+                   'user_note'=>$user_note,
+               ];
+                if($this->model->where(['id'=>$id])->save($data)){
+                    $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
+                }else{
+                    $this->ajaxReturn(array('error' => $errno, 'message' => "修改失败"));
+                }
             }else{
                 if ($id <= 0) {
                     $this->error("不合法请求", U('RechargeCash/index'));
                 }
-                $this->pay_status=UserAccountModel::$PAY_STATUS;
-                $info=$this->model->where(array('id'=>$id))->find();
-                $info['username']= D('User')->getUserInfoByUserId($info['user_id']);;
-                $info['process_type_name']= UserAccountModel::$PAY_TYPE_MAP[$info['process_type']];
-                $this->assign('info',$info);
+                $info = $this->model->getUserAccountInfoById($id);
+                $this->pay_status = UserAccountModel::$PAY_STATUS;
+                $info['username'] = D('User')->getUserInfoByUserId($info['user_id']);;
+                $info['amount']=abs($info['amount']);
+                $this->pay_type = UserAccountModel::$PAY_TYPE_MAP;
+                $this->payMent = D('Payment')->getPaymentListByStatus();
+                $this->assign('info', $info);
                 $this->display();
             }
         }
-        public function info()
+        //审核
+        public function check()
         {
-            $id=I('id');
+            $id = I('id');
             if (IS_POST) {
-                $data['msg_content'] = I('post.msg_content');
-                $data['email'] = I('post.user_email');
-                $data['parent_id'] = I('post.parent_id');
-                $msg_id=I('post.msg_id');
-                if(empty($data['msg_content'])){
-                    $this->ajaxReturn(array('error' => 100, 'message' => "回复内容必须填写"));
+                try {
+                    $is_paid = I('post.is_paid');
+                    $admin_note = I('post.admin_note');
+                    if (empty($is_paid)) {
+                        throw new \Exception('到款状态必须选择');
+                    }
+                    if (empty($admin_note)) {
+                        throw new \Exception('管理员备注必须填写');
+                    }
+                    $data = [
+                        'is_paid' => $is_paid,
+                        'admin_note' => $admin_note,
+                    ];
+                    $this->model->startTrans();
+                    $info = $this->model->getUserAccountInfoById($id);
+                    $this->model->where(['id' => $id])->save($data);
+                    if ($is_paid == UserAccountModel::PAY_STATUS_SUCCESS) {
+                        D('AccountLog')->addAcountLog($info['user_id'], $info['amount'], $info['process_type']);
+                    }
+                    $this->model->commit();
+                    $this->ajaxReturn(array('error' => 200, 'message' => "操作成功"));
+                } catch (\Exception $e) {
+                    $this->model->rollback();
+                    $this->ajaxReturn(array('error' => 100, 'message' => $e->getMessage()));
                 }
-                if(!checkEmail($data['email'])){
-                    $this->ajaxReturn(array('error' => 100, 'message' => "邮件格式不正确"));
-                }
-                if(empty($data['parent_id'])){
-                    $data['parent_id']=$msg_id;
-                    $data['user_id']=$_SESSION['id'];
-                    $data['user_name']=$_SESSION['name'];
-                    $data['msg_time']=date('Y-m-d H:i:s');
-                    $data['msg_title']='reply';
-                    $msgReplay=$this->model->add($data);
-                }else{
-                    $data['user_name']=$_SESSION['name'];
-                    $data['msg_title']='reply';
-                    $msgReplay=$this->model->where(array('parent_id'=>$msg_id))->save($data);
-                }
-
-                if($msgReplay){
-                    $this->ajaxReturn(array('error' => 200, 'message' => "回复成功"));
-                } else{
-                    $this->ajaxReturn(array('error' => 100, 'message' => "回复失败"));
-                }
-
-
             } else {
                 if ($id <= 0) {
-                    $this->error("不合法请求", U('FeedBack/index'));
+                    $this->error("不合法请求", U('RechargeCash/index'));
                 }
-                $this->info=$this->model->where(array('msg_id'=>$id))->find();
-                $this->replay=$this->model->where(array('parent_id'=>$id))->find();
+                $info = $this->model->getUserAccountInfoById($id);
+                $this->pay_status = UserAccountModel::$PAY_STATUS;
+                $info['username'] = D('User')->getUserInfoByUserId($info['user_id']);;
+                $info['process_type_name'] = UserAccountModel::$PAY_TYPE_MAP[$info['process_type']];
+                $this->assign('info', $info);
                 $this->display();
             }
         }
+
+
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
                 $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
             }
 
-            if (!$this->model->where(array('id' => $id))->save(array('status' =>UserAccountModel::STATUS_DISABLE))) {
+            if (!$this->model->where(array('id' => $id))->save(array('status' => UserAccountModel::STATUS_DISABLE))) {
                 $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
             }
             $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
         }
+
     }

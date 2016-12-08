@@ -34,6 +34,10 @@ class UserAccountModel extends Model {
         array('admin_note','require','管理员备注必须填写'),
         array('user_note','require','会员备注必须填写'),
     );
+    public function getUserAccountInfoById($id){
+        $info=$this->where(array('id' => $id))->find();
+        return $info;
+    }
   
 
 }

@@ -33,7 +33,59 @@
                                 <a href="{:U('RechargeCash/add')}" class="btn btn-primary pull-right ">增加申请 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
+                                <form action=""  class="form-horizontal" method="get">
+                                    <input type="hidden" name="m" value="RechargeCash">
+                                    <input type="hidden" name="c" value="index">
 
+                                    <div  class="col-sm-12">
+                                        <div class="form-group col-sm-3">
+                                            <label class=" control-label col-sm-4">会员名称：</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="col-sm-12 form-control"  placeholder="会员名称" name="username" id="username"
+                                                        value="{$Think.get.username}">
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-sm-2" >
+                                            <div class="col-sm-12">
+                                                <select class="form-control" name="process_type" id="process_type">
+                                                    <option value="0">类型</option>
+                                                    <volist name="pay_type" id="v">
+                                                        <option value="{$key}" <if condition="$Think.get.process_type eq $key ">selected="selected"</if>>{$v}</option>
+                                                    </volist>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2" >
+                                            <div class="col-sm-12">
+                                                <select class="form-control" name="payMent" id="payMent">
+                                                    <option value="0">支付方式</option>
+                                                    <volist name="payMent" id="v">
+                                                        <option value="{$v.pay_id}" <if condition="$Think.get.payMent eq $v.pay_id ">selected="selected"</if>>{$v.pay_name}</option>
+                                                    </volist>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-sm-2" >
+                                            <div class="col-sm-12">
+                                                <select class="form-control" name="is_paid" id="is_paid">
+                                                    <option value="0">到款状态</option>
+                                                    <volist name="pay_status" id="v">
+                                                        <option value="{$key}" <if condition="$Think.get.is_paid eq $key ">selected="selected"</if>>{$v}</option>
+                                                    </volist>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-sm-2">
+                                            <div class="col-sm-offset-1 col-sm-10">
+                                                <button class="btn btn-primary" type="submit">搜索</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
                             </div>
                             <!-- /BREADCRUMBS -->
 
@@ -83,7 +135,7 @@
                                             <td>{$v.amount}</td>
                                             <td>{$v.payment}</td>
                                             <td>
-                                                <if condition="$v.PAY_STATUS_SUCCESS eq Common\Model\UserAccountModel::PAY_STATUS_SUCCESS">
+                                                <if condition="$v.is_paid eq Common\Model\UserAccountModel::PAY_STATUS_SUCCESS">
                                                     <span class="label label-primary arrow-in">{$v.is_paid_name}</span>
                                                     <else/>
                                                     <span class="label  label-danger arrow-out ">{$v.is_paid_name}</span>
@@ -91,8 +143,6 @@
                                             </td>
 
                                             <td>{$v.admin_user}</td>
-
-
                                             <td>
                                                 <if condition="$v.is_paid eq Common\Model\UserAccountModel::PAY_STATUS_SUCCESS ">
                                                     <a href="{:U('RechargeCash/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>

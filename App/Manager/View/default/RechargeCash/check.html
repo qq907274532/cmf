@@ -110,6 +110,7 @@
 
                                                     <div class="col-sm-offset-4 col-sm-6">
                                                         <input type="hidden" name="id" value="{$info.id}">
+                                                        <input type="hidden" name="process_type" value="{$info.process_type}">
                                                         <div type="text" class="btn btn-primary" id="submit">提交</div>
                                                     </div>
 
@@ -130,17 +131,26 @@
             <!--/HEADER -->
             <include file="Public/footer"/>
             <script type="text/javascript">
-                $(".checkStatus").click(function(){
+                $("#submit").click(function(){
                     var id=$("input[name='id']").val();
+                    var process_type=$("input[name='process_type']").val();
                     var is_paid=$("input[name='is_paid']:checked").val();
-
+                    var admin_note=$("#admin_note").val()
+                    if($.trim(admin_note)=='') {
+                        throwExc("管理员备注必须填写");
+                        return false;
+                    }
+                    if($.trim(is_paid)=='') {
+                        throwExc("到款状态必须选择");
+                        return false;
+                    }
                     layer.confirm("你确定要提交吗？", {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "{:U('AdminUser/add')}",
+                            url: "{:U('RechargeCash/check')}",
                             type: "POST",
-                            data :{ "id":id,"status":status },
+                            data :{ "id":id,"is_paid":is_paid,"admin_note":admin_note,"process_type":process_type },
                             dataType: "json",
                             success:function(response){
                                 if(response.error==100) {
