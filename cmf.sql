@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2016-12-07 18:38:41
+Date: 2016-12-08 20:29:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `hx_account_log` (
   `change_type` tinyint(3) unsigned NOT NULL COMMENT '操作类型,0为充值,1,为提现,2为管理员调节,99为其它类型',
   PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='用户账目日志表';
 
 -- ----------------------------
 -- Records of hx_account_log
@@ -89,12 +89,12 @@ CREATE TABLE `hx_admin_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE,
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='后台管理员';
 
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-07 15:26:39', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-07 15:26:39');
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-07 20:46:29', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-07 20:46:29');
 INSERT INTO `hx_admin_user` VALUES ('2', 'root', 'pbkdf2_sha256$12000$6UUdpVdTMcxA$ypzocPbaYvbECQWOyjdwT5XJH4XgAHbp6B7rp3pfFao=', '9072745322@qq.com', '2', null, null, '2016-11-27 15:13:21', '2016-12-07 15:25:12');
 INSERT INTO `hx_admin_user` VALUES ('4', '111111', 'pbkdf2_sha256$12000$yaQobFQo9YH6$1BFWSalfqnjoVfabFJY56KDx1Oeege4G4lGhydV3wc8=', '9072745323@qq.com', '1', null, null, '2016-12-07 15:08:07', '2016-12-07 15:25:15');
 
@@ -117,7 +117,7 @@ CREATE TABLE `hx_article` (
   `userid` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
   `update_time` int(11) DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='文章表';
 
 -- ----------------------------
 -- Records of hx_article
@@ -142,7 +142,7 @@ CREATE TABLE `hx_auth_group` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of hx_auth_group
@@ -161,7 +161,7 @@ CREATE TABLE `hx_auth_group_access` (
   UNIQUE KEY `uid_group_id` (`uid`,`group_id`) USING BTREE,
   KEY `uid` (`uid`) USING BTREE,
   KEY `group_id` (`group_id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='节点和角色中间表';
 
 -- ----------------------------
 -- Records of hx_auth_group_access
@@ -189,7 +189,7 @@ CREATE TABLE `hx_auth_rule` (
   `icon` varchar(150) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='节点表';
 
 -- ----------------------------
 -- Records of hx_auth_rule
@@ -274,7 +274,7 @@ CREATE TABLE `hx_cate` (
   `sort` int(11) DEFAULT '50',
   `status` tinyint(4) DEFAULT '1' COMMENT '1:启用，2：禁用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
 
 -- ----------------------------
 -- Records of hx_cate
@@ -331,7 +331,7 @@ CREATE TABLE `hx_feedback` (
   `msg_area` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`msg_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户留言';
 
 -- ----------------------------
 -- Records of hx_feedback
@@ -366,7 +366,7 @@ CREATE TABLE `hx_link` (
   `time` int(11) DEFAULT NULL COMMENT '创建时间',
   `create_time` int(11) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='友情链接';
 
 -- ----------------------------
 -- Records of hx_link
@@ -1555,7 +1555,7 @@ CREATE TABLE `hx_nav` (
   `time` int(11) DEFAULT NULL COMMENT '创建时间',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='导航栏表';
 
 -- ----------------------------
 -- Records of hx_nav
@@ -1563,6 +1563,34 @@ CREATE TABLE `hx_nav` (
 INSERT INTO `hx_nav` VALUES ('1', '0', '1', '0', '0', 'php');
 INSERT INTO `hx_nav` VALUES ('2', '0', '1', '0', '0', 'mysql');
 INSERT INTO `hx_nav` VALUES ('4', '0', '1', '0', '0', 'html');
+
+-- ----------------------------
+-- Table structure for hx_payment
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_payment`;
+CREATE TABLE `hx_payment` (
+  `pay_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `pay_code` varchar(20) NOT NULL DEFAULT '' COMMENT '支付方式 的英文缩写',
+  `pay_name` varchar(120) NOT NULL DEFAULT '' COMMENT '支付方式名称',
+  `pay_fee` varchar(10) NOT NULL DEFAULT '0' COMMENT '支付费用',
+  `pay_desc` text NOT NULL COMMENT '支付方式描述',
+  `pay_order` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `pay_config` text NOT NULL COMMENT '用户名',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可用;1是;2否',
+  `is_cod` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否货到付款, 0否;1是',
+  `is_online` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否在线支付;0否;1是',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`pay_id`),
+  UNIQUE KEY `pay_code` (`pay_code`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='支付工具';
+
+-- ----------------------------
+-- Records of hx_payment
+-- ----------------------------
+INSERT INTO `hx_payment` VALUES ('1', 'balance', '余额支付', '0', '使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。', '0', 'a:0:{}', '1', '0', '1', '0000-00-00 00:00:00', '2016-12-07 21:09:05');
+INSERT INTO `hx_payment` VALUES ('2', 'bank', '银行汇款/转帐', '0', '银行名称\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。', '0', 'a:0:{}', '1', '0', '0', '0000-00-00 00:00:00', '2016-12-07 21:09:05');
+INSERT INTO `hx_payment` VALUES ('3', 'cod', '货到付款', '0', '开通城市：×××\n货到付款区域：×××', '0', 'a:0:{}', '1', '1', '0', '0000-00-00 00:00:00', '2016-12-07 21:09:05');
 
 -- ----------------------------
 -- Table structure for hx_region
@@ -1578,7 +1606,7 @@ CREATE TABLE `hx_region` (
   KEY `parent_id` (`parent_id`),
   KEY `region_type` (`region_type`),
   KEY `agency_id` (`agency_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3409 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3409 DEFAULT CHARSET=utf8 COMMENT='区域表';
 
 -- ----------------------------
 -- Records of hx_region
@@ -5022,93 +5050,32 @@ INSERT INTO `hx_system` VALUES ('1', '嘎嘎时代科技有限公司', '嘎嘎�
 -- ----------------------------
 DROP TABLE IF EXISTS `hx_user`;
 CREATE TABLE `hx_user` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(100) NOT NULL DEFAULT '' COMMENT '登录密码；hx_password加密',
-  `realname` varchar(50) DEFAULT '' COMMENT '用户美名',
-  `phone` char(11) DEFAULT NULL COMMENT '手机号',
-  `email` varchar(100) DEFAULT '' COMMENT '登录邮箱',
-  `sex` smallint(1) DEFAULT '0' COMMENT '性别；0：保密，1：男；2：女',
-  `birthday` datetime DEFAULT NULL COMMENT '生日',
-  `status` int(11) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
-  `score` int(11) NOT NULL DEFAULT '0' COMMENT '用户积分',
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(60) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `username` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
+  `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
+  `birthday` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '用户现有资金',
   `frozen_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '用户冻结资金',
   `pay_points` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消费积分',
   `rank_points` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员等级积分',
-  `address_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '收货信息id,表值表ecs_user_address',
-  `create_time` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态1：启用；2：禁用',
+  `address_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '收货信息id,',
+  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `user_login_key` (`username`) USING BTREE,
-  KEY `user_nicename` (`realname`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `username` (`username`),
+  KEY `email` (`email`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 -- Records of hx_user
 -- ----------------------------
-INSERT INTO `hx_user` VALUES ('1', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('2', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('3', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('4', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('5', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('6', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('7', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('8', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('9', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('10', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('11', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('12', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('13', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('14', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('15', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('16', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('17', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('18', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('19', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('20', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('21', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('22', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('23', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('24', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('25', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('26', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('27', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('28', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('29', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('30', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-11-30 15:01:43');
-INSERT INTO `hx_user` VALUES ('31', 'haoxuan', 'pbkdf2_sha256$12000$ctRV20ZMIEaN$HbmgqKr9kks05k+vNhQxiaUzylYPjMy61dlxYeJWl9k=', 'haoxuan', null, '907274532@qq.com', '0', '0000-00-00 00:00:00', '1', '0', '0.00', '0.00', '0', '0', '1', '0000-00-00 00:00:00', '2016-12-06 21:50:46');
-
--- ----------------------------
--- Table structure for hx_users
--- ----------------------------
-DROP TABLE IF EXISTS `hx_users`;
-CREATE TABLE `hx_users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_login` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
-  `user_pass` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码；hx_password加密',
-  `user_nicename` varchar(50) NOT NULL DEFAULT '' COMMENT '用户美名',
-  `user_email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
-  `user_url` varchar(100) NOT NULL DEFAULT '' COMMENT '用户个人网站',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像，相对于upload/avatar目录',
-  `sex` smallint(1) DEFAULT '0' COMMENT '性别；0：保密，1：男；2：女',
-  `birthday` int(11) DEFAULT NULL COMMENT '生日',
-  `signature` varchar(255) DEFAULT NULL COMMENT '个性签名',
-  `last_login_ip` varchar(16) NOT NULL COMMENT '最后登录ip',
-  `user_activation_key` varchar(60) NOT NULL DEFAULT '' COMMENT '激活码',
-  `user_status` int(11) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
-  `score` int(11) NOT NULL DEFAULT '0' COMMENT '用户积分',
-  `last_login_time` int(11) DEFAULT NULL,
-  `create_time` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_login_key` (`user_login`) USING BTREE,
-  KEY `user_nicename` (`user_nicename`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of hx_users
--- ----------------------------
-INSERT INTO `hx_users` VALUES ('1', 'haoxuan', '123456', 'haoxuan', '907274532@qq.com', '', '', '0', '0', '', '127.0.0.1', '', '1', '0', '1439514188', '1437654152');
+INSERT INTO `hx_user` VALUES ('1', 'ecshop@ecshop.com', 'ecshop', '554fcae493e564ee0dc75bdf2ebf94ca', '0', '1960-03-03 00:00:00', '0.00', '0.00', '98388', '15390', '1', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_user` VALUES ('2', 'vip@ecshop.com', 'vip', '232059cb5361a9336ccf1b8c2ba7657a', '0', '1949-01-01 00:00:00', '0.00', '0.00', '0', '0', '1', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_user` VALUES ('3', 'text@ecshop.com', 'text', '1cb251ec0d568de6a929b520c4aed8d1', '0', '1949-01-01 00:00:00', '0.00', '0.00', '0', '0', '1', '2', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_user` VALUES ('5', 'zuanshi@ecshop.com', 'zuanshi', '815a71fb334412e7ba4595741c5a111d', '0', '1949-01-01 00:00:00', '0.00', '10000.00', '0', '0', '1', '0', '0000-00-00 00:00:00', '2016-12-07 21:59:10');
 
 -- ----------------------------
 -- Table structure for hx_user_account
@@ -5118,10 +5085,10 @@ CREATE TABLE `hx_user_account` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `admin_user` varchar(255) NOT NULL COMMENT '操作该笔交易的管理员的用户名',
-  `amount` decimal(10,2) NOT NULL COMMENT '资金的数目，正数为增加，负数为减少',
+  `amount` decimal(60,2) NOT NULL COMMENT '资金的数目，正数为增加，负数为减少',
   `admin_note` varchar(255) NOT NULL COMMENT '管理员的备注',
   `user_note` varchar(255) NOT NULL COMMENT '用户备注',
-  `process_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '操作类型，1，退款；0，预付费，其实就是充值',
+  `process_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '操作类型，2，提现；1，其实就是充值',
   `payment` varchar(90) NOT NULL COMMENT '支付渠道的名称，取自payment的pay_name字段',
   `is_paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已经付款，０，未付；１，已付',
   `status` tinyint(1) DEFAULT '1' COMMENT '删除 1：正常，2：删除',
@@ -5130,11 +5097,19 @@ CREATE TABLE `hx_user_account` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `is_paid` (`is_paid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='会员账户';
 
 -- ----------------------------
 -- Records of hx_user_account
 -- ----------------------------
+INSERT INTO `hx_user_account` VALUES ('1', '1', 'admin', '-111.00', '1111111', '11111wqewqewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww', '2', '余额支付', '2', '1', '2016-12-07 22:45:51', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('2', '1', 'admin', '-111.00', '1111', '1111', '2', '余额支付', '2', '1', '2016-12-07 22:47:24', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('3', '1', 'admin', '-1111.00', '1111', '1111', '2', '余额支付', '2', '1', '2016-12-07 22:47:58', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('4', '1', 'admin', '-1111.00', '1111', '1111', '2', '余额支付', '2', '1', '2016-12-07 22:48:07', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('5', '1', 'admin', '99999999.99', '111', '11111', '1', '余额支付', '2', '1', '2016-12-07 22:49:18', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('6', '1', 'admin', '11111111111.00', '111', '11111', '1', '余额支付', '2', '1', '2016-12-07 22:49:45', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('7', '1', 'admin', '11111111111.00', '111', '11111', '1', '余额支付', '2', '1', '2016-12-07 22:51:11', '0000-00-00 00:00:00');
+INSERT INTO `hx_user_account` VALUES ('8', '1', 'admin', '111111.00', '11111', '11111', '1', '余额支付', '2', '1', '2016-12-07 22:52:33', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for hx_user_address
@@ -5158,7 +5133,7 @@ CREATE TABLE `hx_user_address` (
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`address_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='会员收货表';
 
 -- ----------------------------
 -- Records of hx_user_address
@@ -5182,12 +5157,12 @@ CREATE TABLE `hx_user_rank` (
   `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`rank_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='会员等级表';
 
 -- ----------------------------
 -- Records of hx_user_rank
 -- ----------------------------
 INSERT INTO `hx_user_rank` VALUES ('1', '注册用户', '111', '1111', '1', '2', '2', '1', '2011-11-11 00:00:00', '2016-12-07 10:07:54');
-INSERT INTO `hx_user_rank` VALUES ('2', 'vip', '111', '1111', '1', '2', '2', '1', '2011-11-11 00:00:00', '2016-12-07 10:07:43');
-INSERT INTO `hx_user_rank` VALUES ('3', '代销用户', '111', '1111', '1', '2', '1', '1', '2011-11-11 00:00:00', '2016-12-07 13:52:47');
+INSERT INTO `hx_user_rank` VALUES ('2', 'vip', '111', '1111', '1', '1', '1', '1', '2011-11-11 00:00:00', '2016-12-07 20:46:50');
+INSERT INTO `hx_user_rank` VALUES ('3', '代销用户', '111', '1111', '1', '1', '1', '1', '2011-11-11 00:00:00', '2016-12-07 20:46:47');
 INSERT INTO `hx_user_rank` VALUES ('4', '11', '111', '1111', '1', '2', '2', '1', '2016-12-06 23:19:44', '2016-12-07 10:07:22');
