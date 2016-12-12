@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2016-12-08 22:54:15
+Date: 2016-12-12 16:45:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `hx_account_log` (
   `change_type` tinyint(3) unsigned NOT NULL COMMENT '操作类型,0为充值,1,为提现,2为管理员调节,99为其它类型',
   PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='用户账目日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='用户账目日志表';
 
 -- ----------------------------
 -- Records of hx_account_log
@@ -73,6 +73,7 @@ INSERT INTO `hx_account_log` VALUES ('34', '1', '1910.00', '0.00', '0', '0', '20
 INSERT INTO `hx_account_log` VALUES ('35', '1', '-500.00', '0.00', '0', '0', '2016-12-06 17:11:24', '支付订单 2009061510313', '99');
 INSERT INTO `hx_account_log` VALUES ('36', '1', '-111.00', '0.00', '0', '0', '0000-00-00 00:00:00', '', '2');
 INSERT INTO `hx_account_log` VALUES ('37', '1', '-111.00', '0.00', '0', '0', '2016-12-08 22:17:27', '', '2');
+INSERT INTO `hx_account_log` VALUES ('38', '1', '-1111.00', '0.00', '0', '0', '2016-12-12 16:36:03', '', '2');
 
 -- ----------------------------
 -- Table structure for hx_admin_user
@@ -96,7 +97,7 @@ CREATE TABLE `hx_admin_user` (
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-08 20:37:13', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-08 20:37:13');
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-12 16:33:35', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-12 16:33:35');
 INSERT INTO `hx_admin_user` VALUES ('2', 'root', 'pbkdf2_sha256$12000$6UUdpVdTMcxA$ypzocPbaYvbECQWOyjdwT5XJH4XgAHbp6B7rp3pfFao=', '9072745322@qq.com', '2', null, null, '2016-11-27 15:13:21', '2016-12-07 15:25:12');
 INSERT INTO `hx_admin_user` VALUES ('4', '111111', 'pbkdf2_sha256$12000$yaQobFQo9YH6$1BFWSalfqnjoVfabFJY56KDx1Oeege4G4lGhydV3wc8=', '9072745323@qq.com', '1', null, null, '2016-12-07 15:08:07', '2016-12-07 15:25:15');
 
@@ -5080,6 +5081,37 @@ INSERT INTO `hx_user` VALUES ('3', 'text@ecshop.com', 'text', '1cb251ec0d568de6a
 INSERT INTO `hx_user` VALUES ('5', 'zuanshi@ecshop.com', 'zuanshi', '815a71fb334412e7ba4595741c5a111d', '0', '1949-01-01 00:00:00', '0.00', '10000.00', '0', '0', '1', '0', '0000-00-00 00:00:00', '2016-12-07 21:59:10');
 
 -- ----------------------------
+-- Table structure for hx_users
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_users`;
+CREATE TABLE `hx_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
+  `user_pass` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码；hx_password加密',
+  `user_nicename` varchar(50) NOT NULL DEFAULT '' COMMENT '用户美名',
+  `user_email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
+  `user_url` varchar(100) NOT NULL DEFAULT '' COMMENT '用户个人网站',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像，相对于upload/avatar目录',
+  `sex` smallint(1) DEFAULT '0' COMMENT '性别；0：保密，1：男；2：女',
+  `birthday` int(11) DEFAULT NULL COMMENT '生日',
+  `signature` varchar(255) DEFAULT NULL COMMENT '个性签名',
+  `last_login_ip` varchar(16) NOT NULL COMMENT '最后登录ip',
+  `user_activation_key` varchar(60) NOT NULL DEFAULT '' COMMENT '激活码',
+  `user_status` int(11) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
+  `score` int(11) NOT NULL DEFAULT '0' COMMENT '用户积分',
+  `last_login_time` int(11) DEFAULT NULL,
+  `create_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_login_key` (`user_login`) USING BTREE,
+  KEY `user_nicename` (`user_nicename`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_users
+-- ----------------------------
+INSERT INTO `hx_users` VALUES ('1', 'haoxuan', '123456', 'haoxuan', '907274532@qq.com', '', '', '0', '0', '', '127.0.0.1', '', '1', '0', '1439514188', '1437654152');
+
+-- ----------------------------
 -- Table structure for hx_user_account
 -- ----------------------------
 DROP TABLE IF EXISTS `hx_user_account`;
@@ -5112,7 +5144,7 @@ INSERT INTO `hx_user_account` VALUES ('5', '1', 'admin', '99999999.99', '111', '
 INSERT INTO `hx_user_account` VALUES ('6', '1', 'admin', '11111111111.00', '111', '11111', '1', '1', '2', '1', '2016-12-07 22:49:45', '0000-00-00 00:00:00');
 INSERT INTO `hx_user_account` VALUES ('7', '1', 'admin', '11111111111.00', '111', '11111', '1', '1', '2', '1', '2016-12-07 22:51:11', '0000-00-00 00:00:00');
 INSERT INTO `hx_user_account` VALUES ('8', '1', 'admin', '111111.00', '11111', '11111', '1', '1', '2', '1', '2016-12-07 22:52:33', '0000-00-00 00:00:00');
-INSERT INTO `hx_user_account` VALUES ('9', '1', 'admin', '-1111.00', '11111111', '11111', '2', '2', '2', '1', '2016-12-08 22:52:12', '2016-12-08 22:52:12');
+INSERT INTO `hx_user_account` VALUES ('9', '1', 'admin', '-1111.00', '11111111', '11111', '2', '2', '1', '1', '2016-12-08 22:52:12', '2016-12-08 22:52:12');
 
 -- ----------------------------
 -- Table structure for hx_user_address
