@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2016-12-12 16:45:51
+Date: 2016-12-13 22:21:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -97,7 +97,7 @@ CREATE TABLE `hx_admin_user` (
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-12 16:33:35', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-12 16:33:35');
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2016-12-12 20:29:52', '127.0.0.1', '2016-11-27 15:11:13', '2016-12-12 20:29:52');
 INSERT INTO `hx_admin_user` VALUES ('2', 'root', 'pbkdf2_sha256$12000$6UUdpVdTMcxA$ypzocPbaYvbECQWOyjdwT5XJH4XgAHbp6B7rp3pfFao=', '9072745322@qq.com', '2', null, null, '2016-11-27 15:13:21', '2016-12-07 15:25:12');
 INSERT INTO `hx_admin_user` VALUES ('4', '111111', 'pbkdf2_sha256$12000$yaQobFQo9YH6$1BFWSalfqnjoVfabFJY56KDx1Oeege4G4lGhydV3wc8=', '9072745323@qq.com', '1', null, null, '2016-12-07 15:08:07', '2016-12-07 15:25:15');
 
@@ -150,7 +150,7 @@ CREATE TABLE `hx_auth_group` (
 -- ----------------------------
 -- Records of hx_auth_group
 -- ----------------------------
-INSERT INTO `hx_auth_group` VALUES ('1', '超级管理员', null, '1', '71,70,69,68,67,66,65,64,63,62,61,60,59,58,57,56,55,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-07 18:01:10');
+INSERT INTO `hx_auth_group` VALUES ('1', '超级管理员', null, '1', '76,75,74,73,72,71,70,69,68,67,66,65,64,63,62,61,60,59,58,57,56,55,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-12 20:42:01');
 INSERT INTO `hx_auth_group` VALUES ('2', '普通管理员', '普通管理员', '1', '54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,17,18,19,20,21,43,44,45,46,47,48,49,50,51,52,53,37,38,39,40,41,42,24,25,26,27,28,29,30,31,32,33,34,35,36', '2016-11-27 16:28:50', '2016-12-06 20:51:06');
 INSERT INTO `hx_auth_group` VALUES ('3', '测试', '测试1', '2', '51,33,22,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1', '2016-11-27 16:28:50', '2016-12-06 22:52:17');
 
@@ -192,7 +192,7 @@ CREATE TABLE `hx_auth_rule` (
   `icon` varchar(150) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='节点表';
+) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='节点表';
 
 -- ----------------------------
 -- Records of hx_auth_rule
@@ -265,6 +265,111 @@ INSERT INTO `hx_auth_rule` VALUES ('68', 'Manager/RechargeCash/add', '添加申�
 INSERT INTO `hx_auth_rule` VALUES ('69', 'Manager/RechargeCash/edit', '修改申请', '1', '1', '', '66', 'RechargeCash/edit', '3', '2', '');
 INSERT INTO `hx_auth_rule` VALUES ('70', 'Manager/RechargeCash/del', '删除申请', '1', '1', '', '66', 'RechargeCash/del', '5', '2', '');
 INSERT INTO `hx_auth_rule` VALUES ('71', 'Manager/RechargeCash/check', '审核申请', '1', '1', '', '66', 'RechargeCash/check', '4', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('72', 'Manager/Order/lists', '订单管理', '1', '1', '', '0', 'Order/lists', '4', '1', 'fa-columns fa-fw');
+INSERT INTO `hx_auth_rule` VALUES ('73', 'Manager/Order/list', '订单列表', '1', '1', '', '72', 'Order/index', '1', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('74', 'Manager/Order/index', '订单列表', '1', '1', '', '73', 'Order/index', '1', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('75', 'Manager/Order/look', '查看', '1', '1', '', '73', 'Order/look', '2', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('76', 'Manager/Order/del', '移除', '1', '1', '', '73', 'Order/del', '3', '2', '');
+
+-- ----------------------------
+-- Table structure for hx_back_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_back_goods`;
+CREATE TABLE `hx_back_goods` (
+  `rec_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `back_id` mediumint(8) unsigned DEFAULT '0',
+  `goods_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product_sn` varchar(60) DEFAULT NULL,
+  `goods_name` varchar(120) DEFAULT NULL,
+  `brand_name` varchar(60) DEFAULT NULL,
+  `goods_sn` varchar(60) DEFAULT NULL,
+  `is_real` tinyint(1) unsigned DEFAULT '0',
+  `send_number` smallint(5) unsigned DEFAULT '0',
+  `goods_attr` text,
+  PRIMARY KEY (`rec_id`),
+  KEY `back_id` (`back_id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_back_goods
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for hx_back_order
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_back_order`;
+CREATE TABLE `hx_back_order` (
+  `back_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_sn` varchar(20) NOT NULL COMMENT '发货单号',
+  `order_sn` varchar(20) NOT NULL COMMENT '订单号',
+  `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
+  `invoice_no` varchar(50) DEFAULT NULL,
+  `shipping_id` tinyint(3) unsigned DEFAULT '0' COMMENT '快递id',
+  `shipping_name` varchar(120) DEFAULT NULL COMMENT '快递名称',
+  `user_id` mediumint(8) unsigned DEFAULT '0',
+  `action_user` varchar(30) DEFAULT NULL COMMENT '收货人',
+  `consignee` varchar(60) DEFAULT NULL,
+  `address` varchar(250) DEFAULT NULL,
+  `country` smallint(5) unsigned DEFAULT '0',
+  `province` smallint(5) unsigned DEFAULT '0',
+  `city` smallint(5) unsigned DEFAULT '0',
+  `district` smallint(5) unsigned DEFAULT '0',
+  `sign_building` varchar(120) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `zipcode` varchar(60) DEFAULT NULL,
+  `tel` varchar(60) DEFAULT NULL,
+  `mobile` varchar(60) DEFAULT NULL,
+  `how_oos` varchar(120) DEFAULT NULL,
+  `insure_fee` decimal(10,2) unsigned DEFAULT '0.00',
+  `shipping_fee` decimal(10,2) unsigned DEFAULT '0.00',
+  `suppliers_id` smallint(5) DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `return_time` datetime DEFAULT '0000-00-00 00:00:00',
+  `agency_id` smallint(5) unsigned DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`back_id`),
+  KEY `user_id` (`user_id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_back_order
+-- ----------------------------
+INSERT INTO `hx_back_order` VALUES ('1', '20090615054961769', '2009061585887', '15', '2009061585884', '3', '', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '等待所有商品备齐后再发', '0.00', '10.00', '2', '0', '0000-00-00 00:00:00', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_back_order` VALUES ('2', '20090615055104671', '2009061585887', '15', '20090615', '3', '', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '等待所有商品备齐后再发', '0.00', '10.00', '1', '0', '0000-00-00 00:00:00', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_back_order` VALUES ('3', '20090615055780744', '2009061585887', '15', '123232', '3', '', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '等待所有商品备齐后再发', '0.00', '10.00', '0', '0', '0000-00-00 00:00:00', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `hx_back_order` VALUES ('4', '20090615064331475', '2009061503335', '17', '00906150333512', '3', '', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '等待所有商品备齐后再发', '0.00', '10.00', '0', '0', '0000-00-00 00:00:00', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- ----------------------------
+-- Table structure for hx_booking_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_booking_goods`;
+CREATE TABLE `hx_booking_goods` (
+  `rec_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `email` varchar(60) NOT NULL DEFAULT '',
+  `link_man` varchar(60) NOT NULL DEFAULT '',
+  `tel` varchar(60) NOT NULL DEFAULT '',
+  `goods_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `goods_desc` varchar(255) NOT NULL DEFAULT '',
+  `goods_number` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `booking_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `is_dispose` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `dispose_user` varchar(30) NOT NULL DEFAULT '',
+  `dispose_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `dispose_note` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`rec_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_booking_goods
+-- ----------------------------
+INSERT INTO `hx_booking_goods` VALUES ('1', '1', 'ecshop@ecshop.com', '刘先生', '13986765412', '19', '可以补货吗？\n我想要一个', '1', '1242142762', '0', '', '0', '');
+INSERT INTO `hx_booking_goods` VALUES ('2', '3', 'text@ecshop.com', '叶先生', '13588104710', '17', '什么时候有货', '1', '1242143592', '0', '', '0', '');
 
 -- ----------------------------
 -- Table structure for hx_cate
@@ -313,6 +418,90 @@ CREATE TABLE `hx_comments` (
 -- ----------------------------
 -- Records of hx_comments
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for hx_delivery_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_delivery_goods`;
+CREATE TABLE `hx_delivery_goods` (
+  `rec_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `goods_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product_id` mediumint(8) unsigned DEFAULT '0',
+  `product_sn` varchar(60) DEFAULT NULL,
+  `goods_name` varchar(120) DEFAULT NULL,
+  `brand_name` varchar(60) DEFAULT NULL,
+  `goods_sn` varchar(60) DEFAULT NULL,
+  `is_real` tinyint(1) unsigned DEFAULT '0',
+  `extension_code` varchar(30) DEFAULT NULL,
+  `parent_id` mediumint(8) unsigned DEFAULT '0',
+  `send_number` smallint(5) unsigned DEFAULT '0',
+  `goods_attr` text,
+  PRIMARY KEY (`rec_id`),
+  KEY `delivery_id` (`delivery_id`,`goods_id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_delivery_goods
+-- ----------------------------
+INSERT INTO `hx_delivery_goods` VALUES ('1', '1', '13', '0', null, '诺基亚5320 XpressMusic', '诺基亚', 'ECS000013', '1', '', '0', '3', null);
+INSERT INTO `hx_delivery_goods` VALUES ('2', '1', '14', '0', null, '诺基亚5800XM', '诺基亚', 'ECS000014', '1', '', '0', '1', null);
+INSERT INTO `hx_delivery_goods` VALUES ('3', '2', '24', '0', null, 'P806', '联想', 'ECS000024', '1', '', '0', '3', null);
+INSERT INTO `hx_delivery_goods` VALUES ('4', '2', '9', '0', null, '诺基亚E66', '诺基亚', 'ECS000009', '1', '', '0', '1', null);
+INSERT INTO `hx_delivery_goods` VALUES ('5', '3', '24', '0', null, 'P806', '联想', 'ECS000024', '1', '', '0', '1', null);
+INSERT INTO `hx_delivery_goods` VALUES ('6', '3', '8', '0', null, '飞利浦9@9v', '飞利浦', 'ECS000008', '1', '', '0', '3', null);
+INSERT INTO `hx_delivery_goods` VALUES ('7', '4', '12', '0', null, '摩托罗拉A810', '摩托罗拉', 'ECS000012', '1', '', '0', '2', null);
+INSERT INTO `hx_delivery_goods` VALUES ('8', '5', '24', '0', null, 'P806', '联想', 'ECS000024', '1', '', '0', '1', null);
+
+-- ----------------------------
+-- Table structure for hx_delivery_order
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_delivery_order`;
+CREATE TABLE `hx_delivery_order` (
+  `delivery_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_sn` varchar(20) NOT NULL,
+  `order_sn` varchar(20) NOT NULL,
+  `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `invoice_no` varchar(50) DEFAULT NULL,
+  `add_time` int(10) unsigned DEFAULT '0',
+  `shipping_id` tinyint(3) unsigned DEFAULT '0',
+  `shipping_name` varchar(120) DEFAULT NULL,
+  `user_id` mediumint(8) unsigned DEFAULT '0',
+  `action_user` varchar(30) DEFAULT NULL,
+  `consignee` varchar(60) DEFAULT NULL,
+  `address` varchar(250) DEFAULT NULL,
+  `country` smallint(5) unsigned DEFAULT '0',
+  `province` smallint(5) unsigned DEFAULT '0',
+  `city` smallint(5) unsigned DEFAULT '0',
+  `district` smallint(5) unsigned DEFAULT '0',
+  `sign_building` varchar(120) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `zipcode` varchar(60) DEFAULT NULL,
+  `tel` varchar(60) DEFAULT NULL,
+  `mobile` varchar(60) DEFAULT NULL,
+  `best_time` varchar(120) DEFAULT NULL,
+  `postscript` varchar(255) DEFAULT NULL,
+  `how_oos` varchar(120) DEFAULT NULL,
+  `insure_fee` decimal(10,2) unsigned DEFAULT '0.00',
+  `shipping_fee` decimal(10,2) unsigned DEFAULT '0.00',
+  `update_time` int(10) unsigned DEFAULT '0',
+  `suppliers_id` smallint(5) DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `agency_id` smallint(5) unsigned DEFAULT '0',
+  PRIMARY KEY (`delivery_id`),
+  KEY `user_id` (`user_id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_delivery_order
+-- ----------------------------
+INSERT INTO `hx_delivery_order` VALUES ('1', '20090615054961769', '2009061585887', '15', '2009061585884', '1245044533', '3', '城际快递', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '', '', '等待所有商品备齐后再发', '0.00', '10.00', '1245044964', '2', '1', '0');
+INSERT INTO `hx_delivery_order` VALUES ('2', '20090615055104671', '2009061585887', '15', '20090615', '1245044533', '3', '城际快递', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '', '', '等待所有商品备齐后再发', '0.00', '10.00', '1245045061', '1', '1', '0');
+INSERT INTO `hx_delivery_order` VALUES ('3', '20090615055780744', '2009061585887', '15', '123232', '1245044533', '3', '城际快递', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '', '', '等待所有商品备齐后再发', '0.00', '10.00', '1245045443', '0', '1', '0');
+INSERT INTO `hx_delivery_order` VALUES ('4', '20090615060281017', '2009061525429', '16', '2009061525121', '1245045672', '3', '城际快递', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '', '', '等待所有商品备齐后再发', '0.00', '10.00', '1245045723', '2', '0', '0');
+INSERT INTO `hx_delivery_order` VALUES ('5', '20090615064331475', '2009061503335', '17', '00906150333512', '1245047978', '3', '城际快递', '1', 'admin', '刘先生', '海兴大厦', '1', '2', '52', '502', '', 'ecshop@ecshop.com', '', '010-25851234', '13986765412', '', '', '等待所有商品备齐后再发', '0.00', '10.00', '1245048189', '0', '1', '0');
 
 -- ----------------------------
 -- Table structure for hx_feedback
@@ -1566,6 +1755,195 @@ CREATE TABLE `hx_nav` (
 INSERT INTO `hx_nav` VALUES ('1', '0', '1', '0', '0', 'php');
 INSERT INTO `hx_nav` VALUES ('2', '0', '1', '0', '0', 'mysql');
 INSERT INTO `hx_nav` VALUES ('4', '0', '1', '0', '0', 'html');
+
+-- ----------------------------
+-- Table structure for hx_order_action
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_order_action`;
+CREATE TABLE `hx_order_action` (
+  `action_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `action_sn` varchar(30) DEFAULT NULL COMMENT '流水账号',
+  `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '被操作的交易号',
+  `action_user` varchar(30) NOT NULL DEFAULT '' COMMENT '操作该次的人员',
+  `order_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '作何操作0,未确认, 1已确认; 2已取消; 3无效; 4退货',
+  `action_note` varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
+  `log_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '操作时间',
+  PRIMARY KEY (`action_id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='订单操作记录表';
+
+-- ----------------------------
+-- Records of hx_order_action
+-- ----------------------------
+INSERT INTO `hx_order_action` VALUES ('1', null, '2', 'admin', '1', '[售后] 1132', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('2', null, '2', 'admin', '1', '已经发货，注意接收', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('3', null, '1', 'admin', '1', '已经发货，注意接收', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('4', null, '2', '买家', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('5', null, '1', '买家', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('6', null, '3', 'admin', '1', '已经发货了，注意接收', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('7', null, '3', '买家', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('8', null, '5', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('9', null, '6', 'admin', '3', '暂时缺货', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('10', null, '7', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('11', null, '1', 'admin', '1', '[售后] 售后', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('12', null, '2', 'admin', '4', '质量问题', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('13', null, '12', 'buyer', '2', '用户取消', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('14', null, '13', 'admin', '1', '11', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('15', null, '14', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('16', null, '14', 'admin', '1', '已经发货，请接收', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('17', null, '15', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('18', null, '15', 'admin', '1', '已经付款', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('19', null, '15', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('20', null, '15', 'admin', '1', '北京供货商', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('21', null, '3', 'admin', '4', '不喜欢这个颜色', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('22', null, '15', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('23', null, '15', 'admin', '4', '退货', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('24', null, '16', 'admin', '1', '上海供货', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('25', null, '17', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('26', null, '17', 'admin', '4', '退货', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('27', null, '19', 'admin', '1', '', '2016-12-12 21:33:01');
+INSERT INTO `hx_order_action` VALUES ('28', null, '5', 'admin', '1', '付款', '2016-12-12 21:33:01');
+
+-- ----------------------------
+-- Table structure for hx_order_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_order_goods`;
+CREATE TABLE `hx_order_goods` (
+  `rec_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
+  `goods_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `goods_name` varchar(120) NOT NULL DEFAULT '' COMMENT '商品的名称',
+  `goods_sn` varchar(60) NOT NULL DEFAULT '' COMMENT '商品的唯一货号',
+  `product_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品的购买数量',
+  `goods_number` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '商品的购买数量',
+  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品的市场售价',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品的本店售价',
+  `goods_attr` text NOT NULL COMMENT '购买该商品时所选择的属性',
+  `send_number` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '当不是实物时，是否已发货，0，否；1，是',
+  `is_real` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否是实物，0，否；1，是',
+  `extension_code` varchar(30) NOT NULL DEFAULT '' COMMENT '用户id',
+  `parent_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `is_gift` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `goods_attr_id` varchar(255) NOT NULL DEFAULT '' COMMENT '是否参加优惠活动，0，否；其他',
+  PRIMARY KEY (`rec_id`),
+  KEY `order_id` (`order_id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hx_order_goods
+-- ----------------------------
+INSERT INTO `hx_order_goods` VALUES ('1', '1', '8', '飞利浦9@9v', 'ECS000008', '0', '1', '478.79', '385.00', '颜色:黑 \n', '0', '1', '', '0', '0', '231');
+INSERT INTO `hx_order_goods` VALUES ('2', '2', '12', '摩托罗拉A810', 'ECS000012', '0', '1', '1179.60', '960.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('3', '3', '17', '夏新N7', 'ECS000017', '0', '1', '2760.00', '2300.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('4', '4', '22', '多普达Touch HD', 'ECS000022', '0', '1', '7198.80', '5999.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('5', '5', '9', '诺基亚E66', 'ECS000009', '0', '3', '2757.60', '2200.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('6', '5', '24', 'P806', 'ECS000024', '0', '1', '2400.00', '2000.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('7', '6', '5', '索爱原装M2卡读卡器', 'ECS000005', '0', '1', '24.00', '20.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('8', '7', '9', '诺基亚E66', 'ECS000009', '0', '1', '2757.60', '2298.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('9', '8', '20', '三星BC01', 'ECS000020', '0', '1', '336.00', '238.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('10', '8', '8', '飞利浦9@9v', 'ECS000008', '0', '1', '478.79', '385.00', '颜色:黑 \n', '0', '1', '', '0', '0', '231');
+INSERT INTO `hx_order_goods` VALUES ('11', '9', '24', 'P806', 'ECS000024', '0', '1', '2400.00', '2000.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('12', '10', '24', 'P806', 'ECS000024', '0', '1', '2400.00', '0.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('13', '11', '23', '诺基亚N96', 'ECS000023', '0', '1', '4440.00', '3800.00', '附加配件: 原装电池 [+100]', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('14', '12', '20', '三星BC01', 'ECS000020', '0', '1', '336.00', '238.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('15', '13', '12', '摩托罗拉A810', 'ECS000012', '0', '1', '1179.60', '960.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('16', '14', '15', '摩托罗拉A810', 'ECS000015', '0', '5', '705.60', '588.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('17', '14', '20', '三星BC01', 'ECS000020', '0', '1', '336.00', '238.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('18', '14', '22', '多普达Touch HD', 'ECS000022', '0', '1', '7198.80', '5999.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('19', '14', '3', '诺基亚原装5800耳机', 'ECS000002', '0', '4', '81.60', '68.00', '颜色:银色 \n', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('20', '14', '9', '诺基亚E66', 'ECS000009', '0', '2', '2757.60', '2298.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('21', '15', '13', '诺基亚5320 XpressMusic', 'ECS000013', '0', '3', '1583.20', '1210.00', '颜色:红[10] \n', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('22', '15', '14', '诺基亚5800XM', 'ECS000014', '0', '1', '3150.00', '2493.75', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('23', '15', '24', 'P806', 'ECS000024', '0', '4', '2400.00', '1900.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('24', '15', '9', '诺基亚E66', 'ECS000009', '0', '1', '2757.60', '2183.10', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('25', '15', '8', '飞利浦9@9v', 'ECS000008', '0', '3', '478.79', '379.05', '颜色:黑 \n', '0', '1', '', '0', '0', '231');
+INSERT INTO `hx_order_goods` VALUES ('26', '16', '12', '摩托罗拉A810', 'ECS000012', '0', '2', '1179.60', '933.85', '', '2', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('27', '16', '1', 'KD876', 'ECS000000', '0', '1', '1665.60', '1318.60', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('28', '17', '24', 'P806', 'ECS000024', '0', '1', '2400.00', '1900.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('29', '18', '24', 'P806', 'ECS000024', '0', '5', '2400.00', '100.00', '', '0', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('30', '19', '12', '摩托罗拉A810', 'ECS000012', '0', '2', '1179.60', '933.85', '', '2', '1', '', '0', '0', '');
+INSERT INTO `hx_order_goods` VALUES ('31', '19', '24', 'P806', 'ECS000024', '0', '2', '2400.00', '1850.00', '颜色:灰色 \n', '2', '1', '', '0', '0', '167');
+
+-- ----------------------------
+-- Table structure for hx_order_info
+-- ----------------------------
+DROP TABLE IF EXISTS `hx_order_info`;
+CREATE TABLE `hx_order_info` (
+  `order_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `order_sn` varchar(30) NOT NULL DEFAULT '' COMMENT '订单号,唯一',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `order_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '订单的状态;1待付款,2：待发货,3待收货,4已收货,5：交易完成6：交易取消',
+  `consignee` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的姓名',
+  `country` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的国家id',
+  `province` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的省份id',
+  `city` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的城市id',
+  `district` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的地区id',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '收货人的详细地址,用户页面填写',
+  `zipcode` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的邮编,用户页面填写',
+  `tel` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的电话,用户页面填写',
+  `mobile` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的手机,用户页面填写',
+  `email` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的Email, 用户页面填写',
+  `postscript` varchar(255) NOT NULL DEFAULT '' COMMENT '订单附言,由用户提交订单前填写',
+  `shipping_id` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户选择的配送方式id',
+  `shipping_name` varchar(120) NOT NULL DEFAULT '' COMMENT '用户选择的配送方式的名称',
+  `pay_id` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户选择的支付方式的id',
+  `pay_name` varchar(120) NOT NULL DEFAULT '' COMMENT '用户选择的支付方式名称',
+  `inv_payee` varchar(120) NOT NULL DEFAULT '' COMMENT '发票抬头,用户页面填写',
+  `inv_content` varchar(120) NOT NULL DEFAULT '' COMMENT '发票内容,用户页面选择',
+  `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品的总金额',
+  `shipping_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '配送费用',
+  `insure_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付费用,跟支付方式的配置相关',
+  `money_paid` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已付款金额',
+  `surplus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '该订单使用金额的数量,取用户设定余额,用户可用余额,订单金额中最小者',
+  `integral` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用的积分的数量,取用户使用积分,商品可用积分,用户拥有积分中最小者',
+  `integral_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '使用积分金额',
+  `bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '使用红包金额',
+  `order_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '应付款金额',
+  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单生成时间',
+  `confirm_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单确认时间',
+  `pay_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单支付时间',
+  `shipping_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单配送时间',
+  `bonus_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '红包id',
+  `invoice_no` varchar(255) NOT NULL DEFAULT '' COMMENT '发货时填写, 可在订单查询查看',
+  `extension_code` varchar(30) NOT NULL DEFAULT '' COMMENT '通过活动购买的商品的代号,group_buy是团购; auction是拍卖;snatch夺宝奇兵;正常普通产品该处理为空',
+  `extension_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '通过活动购买的物品id,取值good_activity;如果是正常普通商品,该处为0',
+  `inv_type` varchar(60) NOT NULL COMMENT '发票类型,用户页面选择',
+  `tax` decimal(10,2) NOT NULL COMMENT '发票税额',
+  `discount` decimal(10,2) NOT NULL COMMENT '折扣金额',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint(4) DEFAULT '1' COMMENT '是否删除1：正常2：删除',
+  PRIMARY KEY (`order_id`),
+  UNIQUE KEY `order_sn` (`order_sn`),
+  KEY `user_id` (`user_id`),
+  KEY `order_status` (`order_status`),
+  KEY `shipping_id` (`shipping_id`),
+  KEY `pay_id` (`pay_id`),
+  KEY `extension_code` (`extension_code`,`extension_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+-- Records of hx_order_info
+-- ----------------------------
+INSERT INTO `hx_order_info` VALUES ('1', '2009051298180', '1', '1', '刘先生', '1', '2', '52', '500', '[中国 北京 北京 海淀区] 中关村海兴大厦', '100085', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '5', '申通快递', '1', '余额支付', '', '', '385.00', '15.00', '0.00', '0.00', '400.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '122', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('2', '2009051255518', '1', '4', '刘先生', '1', '2', '52', '500', '[中国 北京 北京 海淀区] 中关村海兴大厦', '100085', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '960.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '111', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('3', '2009051267570', '1', '4', '刘先生', '1', '2', '52', '500', '[中国 北京 北京 海淀区] 中关村海兴大厦', '100085', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '2300.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('4', '2009051230249', '1', '1', '刘先生', '1', '2', '52', '500', '[中国 北京 北京 海淀区] 中关村海兴大厦', '100085', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '5999.00', '10.00', '0.00', '0.00', '5989.00', '0', '0.00', '20.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('5', '2009051276258', '1', '1', '刘先生', '1', '2', '52', '500', '[中国 北京 北京 海淀区] 中关村海兴大厦', '100085', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '5', '申通快递', '1', '余额支付', '', '', '8600.00', '15.00', '0.00', '5.00', '8610.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('6', '2009051217221', '3', '3', '叶先生', '1', '2', '52', '510', '通州区旗舰凯旋小区', '', '13588104710', '', 'text@ecshop.com', '', '5', '申通快递', '2', '银行汇款/转帐', '', '', '20.00', '15.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '35.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('7', '2009051227085', '3', '1', '叶先生', '1', '2', '52', '510', '通州区旗舰凯旋小区', '', '13588104710', '', 'text@ecshop.com', '', '5', '申通快递', '2', '银行汇款/转帐', '', '', '2298.00', '15.00', '0.00', '0.00', '1000.00', '0', '0.00', '0.00', '1198.10', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '114.90', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('8', '2009051299732', '3', '0', '叶先生', '1', '2', '52', '510', '通州区旗舰凯旋小区', '', '13588104710', '', 'text@ecshop.com', '', '5', '申通快递', '2', '银行汇款/转帐', '', '', '623.00', '15.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '638.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('9', '2009051210718', '3', '0', '叶先生', '1', '2', '52', '510', '通州区旗舰凯旋小区', '', '13588104710', '', 'text@ecshop.com', '', '5', '申通快递', '2', '银行汇款/转帐', '', '', '2000.00', '15.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '2015.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('10', '2009051268194', '1', '1', '刘先生', '1', '2', '52', '500', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '0.00', '10.00', '0.00', '0.00', '10.00', '17000', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', 'exchange_goods', '24', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('11', '2009051264945', '0', '1', '林小姐', '1', '2', '52', '500', '中关村海兴大厦', '', '135474510', '', 'linzi@116.com', '', '3', '城际快递', '2', '银行汇款/转帐', '', '', '3800.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '3810.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('12', '2009051712919', '1', '2', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '3', '货到付款', '', '', '238.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '253.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('13', '2009051719232', '1', '1', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '3', '货到付款', '', '', '960.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '975.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('14', '2009052224892', '1', '1', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '14045.00', '10.00', '0.00', '0.00', '13806.60', '0', '0.00', '5.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2', '1123344', '', '0', '', '0.00', '243.40', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('15', '2009061585887', '1', '4', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '2', '银行汇款/转帐', '', '', '17044.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '17054.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('16', '2009061525429', '1', '1', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '3186.30', '10.00', '0.00', '0.00', '3196.30', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '2009061525121', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('17', '2009061503335', '1', '4', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '1900.00', '10.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('18', '2009061510313', '1', '1', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '500.00', '10.00', '0.00', '0.00', '500.00', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '', 'group_buy', '8', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
+INSERT INTO `hx_order_info` VALUES ('19', '2009061909851', '1', '1', '刘先生', '1', '2', '52', '502', '海兴大厦', '', '010-25851234', '13986765412', 'ecshop@ecshop.com', '', '3', '城际快递', '1', '余额支付', '', '', '5567.70', '10.00', '0.00', '0.00', '5577.70', '0', '0.00', '0.00', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '232421', '', '0', '', '0.00', '0.00', '2016-12-12 21:38:23', '1');
 
 -- ----------------------------
 -- Table structure for hx_payment
