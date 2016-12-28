@@ -3,7 +3,6 @@
 
     use Manager\Model\AdminUserModel;
     use Manager\Model\AuthGroupModel;
-    use Think\Controller;
 
     class AdminUserController extends AdminBaseController
     {
@@ -13,7 +12,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('AdminUser');
+            $this->model = new AdminUserModel();
             $this->modelRole = D('AuthGroup');
             $this->modelRoleAcc = M('auth_group_access');
         }

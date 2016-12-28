@@ -1,5 +1,5 @@
 <?php
-namespace Manager\Model;
+namespace Common\Model;
 use Think\Model;
 /*****
  *		导航栏模型

@@ -2,7 +2,7 @@
     namespace Manager\Controller;
 
     use Manager\Model\AuthGroupModel;
-    use Think\Controller;
+    use Manager\Model\AuthRuleModel;
 
     class RoleController extends AdminBaseController
     {
@@ -12,8 +12,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('AuthGroup');
-            $this->AuthRulemodel = D('AuthRule');
+            $this->model = new AuthGroupModel();
         }
 
         public function index()
@@ -62,7 +61,7 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('Role/index'));
                 }
-                $this->info = $this->model->where(array('id' => $id))->find();
+                $this->info = $this->model->getAuthGroupInfoById($id);;
                 $this->display();
             }
         }
@@ -82,10 +81,11 @@
                 }
                 $this->ajaxReturn(array('error' => 200, 'message' => "授权成功"));
             } else {
+                $authRulemodel = new AuthRuleModel();
                 /*查询权限组id*/
-                $infoRule = $this->model->where(array('id' => $id))->getField('rules');
-                $node = $this->AuthRulemodel->order(array('sort', 'id' => 'desc'))->select();
-                $this->list = node_merges($node, explode(',', $infoRule));
+                $infoRule = $this->model->getAuthGroupInfoById($id);
+                $node = $authRulemodel->getAuthRuleListByWhere(['sort', 'id' => 'desc']);
+                $this->list = node_merges($node, explode(',', $infoRule['rules']));
                 $this->id = $id;
                 $this->display();
             }

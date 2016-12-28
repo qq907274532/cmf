@@ -31,6 +31,9 @@ class UserModel extends Model {
         $info=$this->where(['id'=>$uid])->getField('username');
         return $info;
     }
+    public function getUserListByWhere($where=[],$order=['id'=>'desc']){
+        return $this->where($where)->order($order)->select();
+    }
 
 }
 ?>

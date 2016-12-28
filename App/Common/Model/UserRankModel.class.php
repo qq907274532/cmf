@@ -33,5 +33,13 @@ class UserRankModel extends Model {
         array('discount','require','该会员等级的商品折扣必须填写'),
     );
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserRankInfoById($id){
+        return $this->where(['rank_id'=>$id])->find();
+    }
+
 }
 ?>

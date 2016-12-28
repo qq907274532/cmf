@@ -1,5 +1,5 @@
 <?php
-namespace Manager\Model;
+namespace Common\Model;
 use Think\Model;
 /*****
  *		友情链接模型
