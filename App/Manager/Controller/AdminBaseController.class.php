@@ -34,8 +34,8 @@
          * @return [type] [description]
          */
         public function checkAuth($auth, $id)
-        {
-            if (CONTROLLER_NAME != 'Index') {
+        {   
+            if (!in_array(CONTROLLER_NAME,C('NOT_AUTH_CONTROLLER'))) {
                 if (!$this->Auth->check($auth, $id)) {
                     $this->error('没有权限访问本页面!', U('Index/index'));
                 }

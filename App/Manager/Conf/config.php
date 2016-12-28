@@ -24,6 +24,7 @@ return array(
     'AUTH_GROUP_ACCESS' => 'auth_group_access', //用户组明细表
     'AUTH_RULE' => 'auth_rule', //权限规则表
     'AUTH_USER' => 'admin_user',//用户信息表
-    
+    'NOT_AUTH_CONTROLLER' => ['Index'],//用户信息表
+
 
 );
