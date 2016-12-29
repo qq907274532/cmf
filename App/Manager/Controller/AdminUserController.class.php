@@ -20,6 +20,7 @@
 
         public function index()
         {
+
             $this->order = array('create_time', 'id' => 'desc');
             $data = $this->page_com($this->model, $this->order);
             $roleAccess = $this->modelRoleAcc->select();
@@ -36,6 +37,7 @@
 
         public function add()
         {
+            
             if (IS_POST) {
                 try {
                     $data = I('post.');
