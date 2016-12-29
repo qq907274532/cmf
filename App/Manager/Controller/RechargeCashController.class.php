@@ -1,9 +1,10 @@
 <?php
     namespace Manager\Controller;
 
+    use Common\Model\AccountLogModel;
+    use Common\Model\PaymentModel;
     use Common\Model\UserAccountModel;
     use Common\Model\UserModel;
-    use Think\Controller;
 
     class RechargeCashController extends AdminBaseController
     {
@@ -13,14 +14,16 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('UserAccount');
+            $this->model = new UserAccountModel();
         }
 
         public function index()
         {
-            $this->order = array('create_time'=>'desc', 'id' => 'desc');
+            $payMentModel = new PaymentModel();
+            $userModel = new UserModel();
+            $this->order = array('create_time' => 'desc', 'id' => 'desc');
             //查询出支付方式
-            $payMent = D('Payment')->getPaymentListByStatus();
+            $payMent = $payMentModel->getPaymentListByStatus();
             //组合成新的数组
             $newPayMent = array_combine(array_column($payMent, 'pay_id'), array_column($payMent, 'pay_name'));
             $where = ['status' => UserAccountModel::STATUS_ENABLE];
@@ -29,7 +32,7 @@
             $payMentType = empty(I('payMent')) ? '' : I('payMent');
             $is_paid = empty(I('is_paid')) ? '' : I('is_paid');
             if (!empty($title)) {
-                $userInfo = D('User')->getUserInfoByUserName($username);
+                $userInfo = $userModel->getUserInfoByUserName($username);
                 $where['user_id'] = array('eq', $userInfo['id']);
             }
             if (!empty($process_type)) {
@@ -42,9 +45,14 @@
                 $where['payment_id'] = array('eq', $payMentType);
             }
             $data = $this->page_com($this->model, $this->order, $where);
+            $userList = $userModel->getUserListByWhere();
+            $newUserList = array_combine(array_column($userList, 'id'), array_column($userList, 'username'));
             foreach ($data['list'] as $k => $v) {
+                $data['list'][$k]['user_name'] = '暂无此用户';
+                if (in_array($v['user_id'], array_keys($newUserList))) {
+                    $data['list'][$k]['user_name'] = $newUserList[$v['user_id']];
+                }
                 $data['list'][$k]['amount'] = "¥" . sprintf('%0.2f', abs($v['amount'])) . "元";
-                $data['list'][$k]['user_name'] = D('User')->getUserInfoByUserId($v['user_id']);
                 $data['list'][$k]['payment'] = $newPayMent[$v['payment_id']];
                 $data['list'][$k]['process_type_name'] = UserAccountModel::$PAY_TYPE_MAP[$v['process_type']];
                 $data['list'][$k]['is_paid_name'] = UserAccountModel::$PAY_STATUS[$v['is_paid']];
@@ -61,8 +69,9 @@
         public function add()
         {
             if (IS_POST) {
+                $userModel = new UserModel();
                 $username = I('post.username');
-                $userInfo = D('User')->getUserInfoByUserName($username);
+                $userInfo = $userModel->getUserInfoByUserName($username);
                 $this->model->startTrans();
                 try {
                     if (empty($userInfo)) {
@@ -74,10 +83,11 @@
                     $user_note = I('post.user_note');
                     $payMent = I('post.payMent');
                     $amount = I('post.amount');
-                   
-                    $this->model->addAcount($userInfo['id'],$_SESSION['name'],$amount,$admin_note,$user_note,$payMent,$pay_type,$is_paid);
+
+                    $this->model->addAcount($userInfo['id'], $_SESSION['name'], $amount, $admin_note, $user_note, $payMent, $pay_type, $is_paid);
                     if ($is_paid == UserAccountModel::PAY_STATUS_SUCCESS) {
-                        D('AccountLog')->addAcountLog($userInfo['id'], $amount, $pay_type);
+                        $accountLogModel = new AccountLogModel();
+                        $accountLogModel->addAcountLog($userInfo['id'], $amount, $pay_type);
                     }
                     $this->model->commit();
                     $this->ajaxReturn(array('error' => 200, 'message' => "申请成功"));
@@ -87,16 +97,19 @@
                 }
 
             } else {
+                $payMentModel = new PaymentModel();
                 $this->pay_status = UserAccountModel::$PAY_STATUS;
                 $this->pay_type = UserAccountModel::$PAY_TYPE_MAP;
-                $this->payMent = D('Payment')->getPaymentListByStatus();
+                $this->payMent = $payMentModel->getPaymentListByStatus();
                 $this->display();
             }
         }
-        public function edit(){
+
+        public function edit()
+        {
             $id = I('id');
-            $errno=100;
-            if(IS_POST){
+            $errno = 100;
+            if (IS_POST) {
                 if (($id = I('id', 0, 'intval')) <= 0) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "数据格式有误"));
                 }
@@ -106,41 +119,44 @@
                 if (empty($user_note = I('user_note'))) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "用户备注必须填写"));
                 }
-               $data=[
-                   'admin_note'=>$admin_note,
-                   'user_note'=>$user_note,
-               ];
-                if($this->model->where(['id'=>$id])->save($data)){
+                $data = [
+                    'admin_note' => $admin_note,
+                    'user_note' => $user_note,
+                ];
+                if ($this->model->where(['id' => $id])->save($data)) {
                     $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
-                }else{
+                } else {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "修改失败"));
                 }
-            }else{
+            } else {
                 if ($id <= 0) {
                     $this->error("不合法请求", U('RechargeCash/index'));
                 }
+                $payMentModel = new PaymentModel();
+                $userModel = new UserModel();
                 $info = $this->model->getUserAccountInfoById($id);
+                $info = [
+                    'username' => $userModel->getUserInfoByUserId($info['user_id']),
+                    'amount' => abs($info['amount']),
+                ];
                 $this->pay_status = UserAccountModel::$PAY_STATUS;
-                $info['username'] = D('User')->getUserInfoByUserId($info['user_id']);;
-                $info['amount']=abs($info['amount']);
                 $this->pay_type = UserAccountModel::$PAY_TYPE_MAP;
-                $this->payMent = D('Payment')->getPaymentListByStatus();
+                $this->payMent = $payMentModel->getPaymentListByStatus();
                 $this->assign('info', $info);
                 $this->display();
             }
         }
+
         //审核
         public function check()
         {
             $id = I('id');
             if (IS_POST) {
                 try {
-                    $is_paid = I('post.is_paid');
-                    $admin_note = I('post.admin_note');
-                    if (empty($is_paid)) {
+                    if (empty($is_paid = I('post.is_paid'))) {
                         throw new \Exception('到款状态必须选择');
                     }
-                    if (empty($admin_note)) {
+                    if (empty($admin_note = I('post.admin_note'))) {
                         throw new \Exception('管理员备注必须填写');
                     }
                     $data = [
@@ -151,7 +167,8 @@
                     $info = $this->model->getUserAccountInfoById($id);
                     $this->model->where(['id' => $id])->save($data);
                     if ($is_paid == UserAccountModel::PAY_STATUS_SUCCESS) {
-                        D('AccountLog')->addAcountLog($info['user_id'], $info['amount'], $info['process_type']);
+                        $accountLogModel = new AccountLogModel();
+                        $accountLogModel->addAcountLog($info['user_id'], $info['amount'], $info['process_type']);
                     }
                     $this->model->commit();
                     $this->ajaxReturn(array('error' => 200, 'message' => "操作成功"));
@@ -163,10 +180,13 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('RechargeCash/index'));
                 }
+                $userModel = new UserModel();
                 $info = $this->model->getUserAccountInfoById($id);
+                $info = [
+                    'username' => $userModel->getUserInfoByUserId($info['user_id']),
+                    'process_type_name' => UserAccountModel::$PAY_TYPE_MAP[$info['process_type']],
+                ];
                 $this->pay_status = UserAccountModel::$PAY_STATUS;
-                $info['username'] = D('User')->getUserInfoByUserId($info['user_id']);;
-                $info['process_type_name'] = UserAccountModel::$PAY_TYPE_MAP[$info['process_type']];
                 $this->assign('info', $info);
                 $this->display();
             }

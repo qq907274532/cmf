@@ -2,6 +2,9 @@
     namespace Manager\Controller;
 
 
+    use Common\Model\OrderInfoModel;
+    use Common\Model\UserModel;
+
     class OrderController extends AdminBaseController
     {
         private $model;
@@ -10,7 +13,7 @@
         public function __construct()
         {
             parent::__construct();
-//            $this->model = D('User');
+            $this->model = new OrderInfoModel();
         }
 
         public function index()
@@ -19,8 +22,8 @@
 //            $username = empty(I('username')) ? '' : I('username');
 //            $startTime = empty(I('startTime')) ? '' : I('startTime');
 //            $endTime = empty(I('endTime')) ? '' : I('endTime');
-//            $this->order = array('create_time', 'id' => 'desc');
-//            $where = "1=1";
+            $this->order = array('create_time', 'order_id' => 'desc');
+            $where = "1=1";
 //            if (!empty($username)) {
 //                $where .= " and  (username like '%" . $username . "%')";
 //            }
@@ -30,11 +33,11 @@
 //            if (!empty($endTime)) {
 //                $where .= " and create_time <='" . $startTime . "'";
 //            }
-//            $data = $this->page_com($this->model, $this->order, $where);
-//            foreach ($data['list'] as $k => $v) {
-//                $data['list'][$k]['statusName'] = UserModel::$STATUS_MAP[$v['status']];
-//            }
-//            $this->data = $data;
+            $data = $this->page_com($this->model, $this->order, $where);
+            foreach ($data['list'] as $k => $v) {
+                $data['list'][$k]['statusName'] = UserModel::$STATUS_MAP[$v['status']];
+            }
+            $this->data = $data;
             $this->display();
         }
 
@@ -43,7 +46,7 @@
             if (($id = I('id', 0, 'intval')) <= 0) {
                 $this->error("不合法请求", U('Users/index'));
             }
-            $this->data = $this->page_com(D('AccountLog'),['log_id'=>'desc'], array('user_id'=>$id));
+            $this->data = $this->page_com(D('AccountLog'), ['log_id' => 'desc'], array('user_id' => $id));
             $this->display();
         }
 

@@ -1,8 +1,10 @@
 <?php
     namespace Manager\Controller;
 
+    use Common\Model\AccountLogModel;
+    use Common\Model\RegionModel;
+    use Common\Model\UserAddressModel;
     use Common\Model\UserModel;
-    use Think\Controller;
 
     class UsersController extends AdminBaseController
     {
@@ -12,7 +14,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('User');
+            $this->model = new UserModel();
         }
 
         public function index()
@@ -44,7 +46,8 @@
             if (($id = I('id', 0, 'intval')) <= 0) {
                 $this->error("不合法请求", U('Users/index'));
             }
-            $this->data = $this->page_com(D('AccountLog'),['log_id'=>'desc'], array('user_id'=>$id));
+            $accountLogModel = new AccountLogModel();
+            $this->data = $this->page_com($accountLogModel, ['log_id' => 'desc'], array('user_id' => $id));
             $this->display();
         }
 
@@ -56,8 +59,10 @@
             if (($id = I('id', 0, 'intval')) <= 0) {
                 $this->error("不合法请求", U('Users/index'));
             }
-            $userAddress = D('UserAddress')->getUsersAddressListByUid($id);
-            $getRegionList = D('Region')->getRegionList();
+            $userAddressModel = new UserAddressModel();
+            $regionModel = new RegionModel();
+            $userAddress = $userAddressModel->getUsersAddressListByUid($id);
+            $getRegionList = $regionModel->getRegionList();
             $newRegionList = array_combine(array_column($getRegionList, 'region_id'), array_column($getRegionList, 'region_name'));
             foreach ($userAddress as $k => $v) {
                 $userAddress[$k]['country_name'] = $newRegionList[$v['country']];

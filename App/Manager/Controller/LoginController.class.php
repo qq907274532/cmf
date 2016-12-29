@@ -1,8 +1,6 @@
 <?php
     namespace Manager\Controller;
 
-
-
     use Manager\Model\AdminUserModel;
     use Think\Controller;
 
@@ -13,31 +11,32 @@
         public function _initialize()
         {
 
-            $this->model = D("AdminUser");
+
         }
 
         public function index()
         {
             if (IS_POST) {
-                $error=100;
+                $this->model = new AdminUserModel();
+                $error = 100;
                 if (empty($verify = trim(I('verify')))) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'验证码不能为空'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '验证码不能为空'));
                 }
                 if (!$this->model->check_verify($verify)) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'验证码不正确'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '验证码不正确'));
                 }
                 if (empty($username = trim(I('username')))) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名不能为空'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '用户名不能为空'));
                 }
                 if (empty($password = trim(I('password')))) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'密码不能为空'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '密码不能为空'));
                 }
 
                 if (empty($userInfoDetail = $this->model->userInfo(array('username' => $username)))) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名或密码不正确'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '用户名或密码不正确'));
                 }
                 if (!checkPassword($userInfoDetail['password'], $password)) {
-                    $this->ajaxReturn(array('error'=>$error,'message'=>'用户名或密码不正确'));
+                    $this->ajaxReturn(array('error' => $error, 'message' => '用户名或密码不正确'));
                 }
                 if ($userInfoDetail['status'] == AdminUserModel::STATUS_DISABLE) {
                     throw new \Exception("该用户已被禁用");
@@ -51,7 +50,7 @@
                 session('id', $userInfoDetail['id']);
                 session('name', $userInfoDetail['username']);
                 session('email', $userInfoDetail['email']);
-                $this->ajaxReturn(array('error'=>200,'message'=>'登录成功'));
+                $this->ajaxReturn(array('error' => 200, 'message' => '登录成功'));
             } else {
                 $this->display();
             }

@@ -2,7 +2,6 @@
     namespace Manager\Controller;
 
     use Manager\Model\AuthRuleModel;
-    use Think\Controller;
 
     class NodeController extends AdminBaseController
     {
@@ -12,7 +11,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('AuthRule');
+            $this->model = new AuthRuleModel();
         }
 
         public function index()
@@ -46,7 +45,7 @@
                 $this->ajaxReturn(array('error' => 200, 'msg' => '添加成功'));
 
             } else {
-                $this->menu=AuthRuleModel::$MENU_MAP;
+                $this->menu = AuthRuleModel::$MENU_MAP;
                 $list = $this->model->where(array('status' => AuthRuleModel::STATUS_ENABLE))->order(array('sort', 'id' => 'desc'))->select();
                 $this->assign('list', node_merges($list));
                 $this->display();
@@ -62,10 +61,10 @@
                     $this->ajaxReturn(array('error' => $errno, 'message' => "不合法请求"));
                 }
                 $data = I('post.');
-                if(!is_numeric($data['sort'])){
+                if (!is_numeric($data['sort'])) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "排序必须是数字"));
                 }
-                if(intval($data['menu'])<0){
+                if (intval($data['menu']) < 0) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "请选择是否是菜单"));
                 }
                 if (empty($data['icon'])) {
@@ -83,7 +82,7 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('Node/index'));
                 }
-                $this->menu=AuthRuleModel::$MENU_MAP;
+                $this->menu = AuthRuleModel::$MENU_MAP;
                 $this->info = $this->model->where(array('id' => $id))->find();
                 $list = $this->model->where(array('status' => AuthRuleModel::STATUS_ENABLE))->order(array('sort', 'id' => 'desc'))->select();
                 $this->assign('list', node_merges($list));

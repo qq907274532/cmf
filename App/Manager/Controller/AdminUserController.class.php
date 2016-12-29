@@ -2,8 +2,9 @@
     namespace Manager\Controller;
 
     use Manager\Model\AdminUserModel;
+    use Manager\Model\AuthGroupAccessModel;
     use Manager\Model\AuthGroupModel;
-    use Think\Controller;
+    use Manager\Model\AuthRuleModel;
 
     class AdminUserController extends AdminBaseController
     {
@@ -13,19 +14,18 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('AdminUser');
-            $this->modelRole = D('AuthGroup');
-            $this->modelRoleAcc = M('auth_group_access');
+            $this->model =new AdminUserModel();
         }
 
         public function index()
         {
-
+            $authGroupAccessModel = new AuthGroupAccessModel();
+            $authGroupModel =new AuthRuleModel();
             $this->order = array('create_time', 'id' => 'desc');
             $data = $this->page_com($this->model, $this->order);
-            $roleAccess = $this->modelRoleAcc->select();
+            $roleAccess = $authGroupAccessModel->getList();
             $newRoleAccess = array_combine(array_column($roleAccess, 'uid'), array_column($roleAccess, 'group_id'));
-            $roleList = $this->modelRole->select();
+            $roleList = $authGroupModel->getAuthRuleListByWhere();
             $newRoleList = array_combine(array_column($roleList, 'id'), array_column($roleList, 'title'));
             foreach ($data['list'] as $k => $v) {
                 $data['list'][$k]['name'] = $newRoleList[$newRoleAccess[$v['id']]];
@@ -37,8 +37,8 @@
 
         public function add()
         {
-            
             if (IS_POST) {
+                $authGroupAccessModel = new AuthGroupAccessModel();
                 try {
                     $data = I('post.');
                     $data['create_time'] = date("Y-m-d H:i:s");
@@ -51,7 +51,7 @@
                     } else {
                         $data['password'] = makePassword($data['password']);
                         $uid = $this->model->add($data);
-                        $gid = $this->modelRoleAcc->add(array('group_id' => I('role'), 'uid' => $uid));
+                        $gid = $authGroupAccessModel->add(array('group_id' => I('role'), 'uid' => $uid));
                         $this->model->commit();
                         $this->ajaxReturn(array('error' => 200, 'message' => "添加成功"));
                     }
@@ -61,7 +61,8 @@
                 }
 
             } else {
-                $this->roleList = $this->modelRole->where(array('status' => AuthGroupModel::STATUS_ENABLE))->select();
+                $authGroupModel = new AuthRuleModel();
+                $this->roleList = $authGroupModel->getAuthRuleListByWhere(['id'=>'desc'],['status' => AuthGroupModel::STATUS_ENABLE]);
                 $this->display();
             }
         }
@@ -69,6 +70,7 @@
         public function edit()
         {
             $id = I('id');
+            $authGroupAccessModel = new AuthGroupAccessModel();
             if (IS_POST) {
                 try {
                     if ($id <= 0) {
@@ -80,7 +82,7 @@
                     if(!checkEmail($email)){
                         throw new \Exception("邮箱格式不正确");
                     }
-                    $this->modelRoleAcc->where(array('uid' => $id))->save(['group_id'=>$group_id]);
+                    $authGroupAccessModel->where(array('uid' => $id))->save(['group_id'=>$group_id]);
                     $this->model->where(array('id'=>$id))->save(['email'=>$email]);
                     $this->model->commit();
                     $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
@@ -92,9 +94,11 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('AdminUser/index'));
                 }
-                $info = $this->model->where(array('id' => $id))->find();
-                $info['role_id'] = $this->modelRoleAcc->where(array('uid' => $id))->getField('group_id');
-                $this->roleList = $this->modelRole->where(array('status' => AuthGroupModel::STATUS_ENABLE))->select();
+                $authGropModel = new AuthGroupModel();
+                $info = $this->model->getAdminUserInfoById($id);
+                $authGroupInfo= $authGroupAccessModel->getInfoByUid($id);
+                $info['role_id'] =$authGroupInfo['group_id'];
+                $this->roleList = $authGropModel->getAuthGroupList(['id'=>'desc'],['status' => AuthGroupModel::STATUS_ENABLE]);
                 $this->assign('info', $info);
                 $this->display();
             }

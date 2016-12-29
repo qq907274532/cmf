@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: luofei614 <weibo.com/luofei614>　
 // +----------------------------------------------------------------------
-namespace Classs;
+namespace Library;
 /**
  * 权限认证类
  * 功能特性：
@@ -273,6 +273,16 @@ class Auth{
         return array_unique($authList);
     }
 
+    /**
+     * 获取用户组的权限
+     * @param $id
+     * @return array
+     */
+    public function  getRuleListById($id){
+        $rules = $this->getGroups($id);
+        $rbac = $this->getRules($rules[0]['rules']);
+        return node_merges($rbac);
+    }
     /**
      * 获得用户资料,根据自己的情况读取数据库
      */

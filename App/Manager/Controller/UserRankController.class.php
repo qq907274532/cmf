@@ -2,7 +2,6 @@
     namespace Manager\Controller;
 
     use Common\Model\UserRankModel;
-    use Think\Controller;
 
     class UserRankController extends AdminBaseController
     {
@@ -12,7 +11,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = D('UserRank');
+            $this->model = new UserRankModel();
         }
 
         public function index()
@@ -72,7 +71,7 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('UserRank/index'));
                 }
-                $this->info = $this->model->where(array('rank_id' => $id))->find();
+                $this->info = $this->model->getUserRankInfoById($id);
                 $this->special_rank = UserRankModel::$SPECIAL_RANK;
                 $this->show_price = UserRankModel::$SHOW_PRICE;
                 $this->display();
@@ -93,6 +92,7 @@
             }
             $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
         }
+
         /**
          * 是否显示价格
          */

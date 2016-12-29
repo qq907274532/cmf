@@ -50,6 +50,14 @@ class AdminUserModel extends Model {
 		$cate=M(self::TBL_CATE)->where(array('id'=>$id))->getField('cate');
 		return $cate;
 	}
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminUserInfoById($id){
+        return $this->where(['id'=>$id])->find();
+    }
+
 
 }
 ?>

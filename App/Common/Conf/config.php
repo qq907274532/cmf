@@ -1,11 +1,12 @@
 <?php
-if(file_exists("Data/conf/db.php")){
-	$db=include "Data/conf/db.php";
-}else{
-	$db=array();
-}
-
-$config= array(
+return array(
+    'DB_TYPE' => 'mysql',
+    'DB_HOST' => '127.0.0.1',
+    'DB_NAME' => 'cmf',
+    'DB_USER' => 'root',
+    'DB_PWD' => 'root',
+    'DB_PORT' => '3306',
+    'DB_PREFIX' => 'hx_',
 	'URL_MODEL'=>'1',
 	'COMM_TITLE'=>'易名轩管理系统',
 	'PAGE_NUMBER'=>'15',
@@ -18,5 +19,3 @@ $config= array(
     'DEFAULT_V_LAYER'       =>  'View/default',
 	
 );
-
-return  array_merge($config,$db);
