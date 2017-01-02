@@ -25,6 +25,7 @@ return array(
     'AUTH_RULE' => 'auth_rule', //权限规则表
     'AUTH_USER' => 'admin_user',//用户信息表
     'NOT_AUTH_CONTROLLER' => ['Index'],//用户信息表
+    'DEFAULT_V_LAYER'       =>  'View/default',
 
 
 );

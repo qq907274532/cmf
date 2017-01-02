@@ -23,7 +23,7 @@
 //            $startTime = empty(I('startTime')) ? '' : I('startTime');
 //            $endTime = empty(I('endTime')) ? '' : I('endTime');
             $this->order = array('create_time', 'order_id' => 'desc');
-            $where = "1=1";
+            $where = "status='".OrderInfoModel::STATUS_ENABLE."'";
 //            if (!empty($username)) {
 //                $where .= " and  (username like '%" . $username . "%')";
 //            }
@@ -35,9 +35,10 @@
 //            }
             $data = $this->page_com($this->model, $this->order, $where);
             foreach ($data['list'] as $k => $v) {
-                $data['list'][$k]['statusName'] = UserModel::$STATUS_MAP[$v['status']];
+                $data['list'][$k]['orderStatusName'] =OrderInfoModel::$ORDER_STATUS_MAP[$v['order_status']];
             }
             $this->data = $data;
+            $this->list = OrderInfoModel::$ORDER_STATUS_MAP;
             $this->display();
         }
 
@@ -76,8 +77,8 @@
             if (($id = I('id', 0, 'intval')) <= 0) {
                 $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
             }
-            $status = intval(I('status', 0, 'intval')) == UserModel::STATUS_ENABLE ? UserModel::STATUS_DISABLE : UserModel::STATUS_ENABLE;
-            if (!$this->model->where(array('id' => $id))->save(array('status' => $status))) {
+            $status = OrderInfoModel::STATUS_DISABLE;
+            if (!$this->model->where(array('order_id' => $id))->save(array('status' => $status))) {
                 $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
             }
             $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));

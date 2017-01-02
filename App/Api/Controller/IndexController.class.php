@@ -1,8 +1,7 @@
 <?php
-namespace Home\Controller;
+namespace  Api\Controller;
 use Think\Controller;
 class IndexController extends IndexBaseController {
     public function index(){
-       $this->display();
     }
 }
