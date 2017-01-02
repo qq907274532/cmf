@@ -4,6 +4,7 @@
     use Manager\Model\AdminUserModel;
     use Manager\Model\AuthGroupAccessModel;
     use Manager\Model\AuthGroupModel;
+    use Manager\Model\AuthRuleModel;
 
     class AdminUserController extends AdminBaseController
     {
@@ -13,20 +14,18 @@
         public function __construct()
         {
             parent::__construct();
-            $this->model = new AdminUserModel();
-            $this->modelRole = D('AuthGroup');
-            $this->modelRoleAcc = M('auth_group_access');
+            $this->model =new AdminUserModel();
         }
 
         public function index()
         {
-            $authGroupModel = new AuthGroupModel();
             $authGroupAccessModel = new AuthGroupAccessModel();
+            $authGroupModel =new AuthRuleModel();
             $this->order = array('create_time', 'id' => 'desc');
             $data = $this->page_com($this->model, $this->order);
             $roleAccess = $authGroupAccessModel->getList();
             $newRoleAccess = array_combine(array_column($roleAccess, 'uid'), array_column($roleAccess, 'group_id'));
-            $roleList = $authGroupModel->getAuthGroupList();
+            $roleList = $authGroupModel->getAuthRuleListByWhere();
             $newRoleList = array_combine(array_column($roleList, 'id'), array_column($roleList, 'title'));
             foreach ($data['list'] as $k => $v) {
                 $data['list'][$k]['name'] = $newRoleList[$newRoleAccess[$v['id']]];
@@ -43,7 +42,7 @@
                 try {
                     $data = I('post.');
                     $data['create_time'] = date("Y-m-d H:i:s");
-                    if (!checkEmail($data['email'])) {
+                    if(!checkEmail($data['email'])){
                         throw new \Exception("邮箱格式不正确");
                     }
                     $this->model->startTrans();
@@ -62,8 +61,8 @@
                 }
 
             } else {
-                $authGroupModel = new AuthGroupModel();
-                $this->roleList = $authGroupModel->getAuthGroupList(['id' => 'desc'], ['status' => AuthGroupModel::STATUS_ENABLE]);
+                $authGroupModel = new AuthRuleModel();
+                $this->roleList = $authGroupModel->getAuthRuleListByWhere(['id'=>'desc'],['status' => AuthGroupModel::STATUS_ENABLE]);
                 $this->display();
             }
         }
@@ -80,11 +79,11 @@
                     $this->model->startTrans();
                     $group_id = I('post.role');
                     $email = I('post.email');
-                    if (!checkEmail($email)) {
+                    if(!checkEmail($email)){
                         throw new \Exception("邮箱格式不正确");
                     }
-                    $authGroupAccessModel->where(array('uid' => $id))->save(['group_id' => $group_id]);
-                    $this->model->where(array('id' => $id))->save(['email' => $email]);
+                    $authGroupAccessModel->where(array('uid' => $id))->save(['group_id'=>$group_id]);
+                    $this->model->where(array('id'=>$id))->save(['email'=>$email]);
                     $this->model->commit();
                     $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
                 } catch (\Exception $e) {
@@ -95,44 +94,41 @@
                 if ($id <= 0) {
                     $this->error("不合法请求", U('AdminUser/index'));
                 }
-                $authGroupModel = new AuthGroupModel();
+                $authGropModel = new AuthGroupModel();
                 $info = $this->model->getAdminUserInfoById($id);
-                $authGroupAccessInfo = $authGroupAccessModel->getInfoByUid($id);
-                $info['role_id'] = $authGroupAccessInfo['group_id'];
-                $this->roleList = $authGroupModel->getAuthGroupList(['id' => 'desc'], ['status' => AuthGroupModel::STATUS_ENABLE]);
+                $authGroupInfo= $authGroupAccessModel->getInfoByUid($id);
+                $info['role_id'] =$authGroupInfo['group_id'];
+                $this->roleList = $authGropModel->getAuthGroupList(['id'=>'desc'],['status' => AuthGroupModel::STATUS_ENABLE]);
                 $this->assign('info', $info);
                 $this->display();
             }
         }
-
-        public function modifyPassword()
-        {
+        public function modifyPassword(){
             $id = I('id', 0, 'intval');
             $errno = 100;
-            if (IS_POST) {
+            if(IS_POST){
                 if ($id <= 0) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => "数据格式有误"));
                 }
-                if (empty($password = I('post.password'))) {
+                if(empty($password=I('post.password'))){
                     $this->ajaxReturn(array('error' => $errno, 'message' => "新密码不能为空"));
                 }
-                if (empty($repassword = I('post.repassword'))) {
+                if(empty($repassword=I('post.repassword'))){
                     $this->ajaxReturn(array('error' => $errno, 'message' => "确认密码不能为空"));
                 }
-                if ($password != $repassword) {
+                if($password!=$repassword){
                     $this->ajaxReturn(array('error' => $errno, 'message' => "新密码和确认密码不一致"));
                 }
-                $data['password'] = makePassword($password);
+                $data['password']=makePassword($password);
                 if (!$this->model->where(array('id' => $id))->save($data)) {
                     $this->ajaxReturn(array('error' => $errno, 'message' => '操作失败'));
                 }
                 $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
-            } else {
+            }else{
                 $this->id = $id;
                 $this->display();
             }
         }
-
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
