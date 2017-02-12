@@ -90,10 +90,10 @@
                         $accountLogModel->addAcountLog($userInfo['id'], $amount, $pay_type);
                     }
                     $this->model->commit();
-                    $this->ajaxReturn(array('error' => 200, 'message' => "申请成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "申请成功"));
                 } catch (\Exception $e) {
                     $this->model->rollback();
-                    $this->ajaxReturn(array('error' => 100, 'message' => $e->getMessage()));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => $e->getMessage()));
                 }
 
             } else {
@@ -108,25 +108,24 @@
         public function edit()
         {
             $id = I('id');
-            $errno = 100;
             if (IS_POST) {
                 if (($id = I('id', 0, 'intval')) <= 0) {
-                    $this->ajaxReturn(array('error' => $errno, 'message' => "数据格式有误"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
                 }
                 if (empty($admin_note = I('admin_note'))) {
-                    $this->ajaxReturn(array('error' => $errno, 'message' => "管理员的备注必须填写"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "管理员的备注必须填写"));
                 }
                 if (empty($user_note = I('user_note'))) {
-                    $this->ajaxReturn(array('error' => $errno, 'message' => "用户备注必须填写"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "用户备注必须填写"));
                 }
                 $data = [
                     'admin_note' => $admin_note,
                     'user_note' => $user_note,
                 ];
                 if ($this->model->where(['id' => $id])->save($data)) {
-                    $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "修改成功"));
                 } else {
-                    $this->ajaxReturn(array('error' => $errno, 'message' => "修改失败"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "修改失败"));
                 }
             } else {
                 if ($id <= 0) {
@@ -171,10 +170,10 @@
                         $accountLogModel->addAcountLog($info['user_id'], $info['amount'], $info['process_type']);
                     }
                     $this->model->commit();
-                    $this->ajaxReturn(array('error' => 200, 'message' => "操作成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "操作成功"));
                 } catch (\Exception $e) {
                     $this->model->rollback();
-                    $this->ajaxReturn(array('error' => 100, 'message' => $e->getMessage()));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => $e->getMessage()));
                 }
             } else {
                 if ($id <= 0) {
@@ -196,13 +195,13 @@
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
 
             if (!$this->model->where(array('id' => $id))->save(array('status' => UserAccountModel::STATUS_DISABLE))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
 
     }

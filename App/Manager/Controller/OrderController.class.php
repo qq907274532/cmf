@@ -19,23 +19,27 @@
         public function index()
         {
 
-//            $username = empty(I('username')) ? '' : I('username');
-//            $startTime = empty(I('startTime')) ? '' : I('startTime');
-//            $endTime = empty(I('endTime')) ? '' : I('endTime');
+            $username = empty(I('username')) ? '' : I('username');
+            $orderNum = empty(I('order_num')) ? '' : I('order_num');
+            $orderStatus = empty(I('order_status')) ? '' : I('order_status');
+          
             $this->order = array('create_time', 'order_id' => 'desc');
-            $where = "status='".OrderInfoModel::STATUS_ENABLE."'";
-//            if (!empty($username)) {
-//                $where .= " and  (username like '%" . $username . "%')";
-//            }
-//            if (!empty($startTime)) {
-//                $where .= " and create_time >='" . $startTime . "'";
-//            }
-//            if (!empty($endTime)) {
-//                $where .= " and create_time <='" . $startTime . "'";
-//            }
+            $where = [
+                'status' => OrderInfoModel::STATUS_ENABLE
+            ];
+
+            if (!empty($username)) {
+                $where['username'] = array('like', '%' . $username . '%');
+            }
+            if (!empty($orderStatus)) {
+                $where['order_status'] = array('eq', $orderStatus);
+            }
+            if (!empty($orderNum)) {
+                $where['order_sn'] = array('eq', $orderNum);
+            }
             $data = $this->page_com($this->model, $this->order, $where);
             foreach ($data['list'] as $k => $v) {
-                $data['list'][$k]['orderStatusName'] =OrderInfoModel::$ORDER_STATUS_MAP[$v['order_status']];
+                $data['list'][$k]['orderStatusName'] = OrderInfoModel::$ORDER_STATUS_MAP[$v['order_status']];
             }
             $this->data = $data;
             $this->list = OrderInfoModel::$ORDER_STATUS_MAP;
@@ -75,12 +79,12 @@
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
             $status = OrderInfoModel::STATUS_DISABLE;
             if (!$this->model->where(array('order_id' => $id))->save(array('status' => $status))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
     }

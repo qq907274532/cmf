@@ -77,12 +77,12 @@
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
             $status = intval(I('status', 0, 'intval')) == UserModel::STATUS_ENABLE ? UserModel::STATUS_DISABLE : UserModel::STATUS_ENABLE;
             if (!$this->model->where(array('id' => $id))->save(array('status' => $status))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
     }

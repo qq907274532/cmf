@@ -2,15 +2,6 @@
 return array(
 	'SHOW_PAGE_TRACE' => false,
 	'URL_CASE_INSENSITIVE' => false,
-	'SystemTitle' => '买嘎嘎时代科技有限公司',
-	'SystemTitles' => '嘎嘎时代',
-	'Serverice' => '服务器信息',
-	'Team' => '技术团队配置',
-	'Android' => '张三',
-	'PHPer' => '李四，王五',
-	'Ios' => '小李',
-	'The_team' => '嘎嘎时代技术团队',
-	'Leader' => '12345',
 	'server_info' => php_uname(), //服务器信息
 	'server' => $_SERVER['SERVER_SOFTWARE'], //服务器环境
 	'php' => PHP_VERSION, //php版本

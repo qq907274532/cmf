@@ -45,10 +45,10 @@
                 $data['parent_id'] = I('post.parent_id');
                 $msg_id = I('post.msg_id');
                 if (empty($data['msg_content'])) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "回复内容必须填写"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "回复内容必须填写"));
                 }
                 if (!checkEmail($data['email'])) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "邮件格式不正确"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "邮件格式不正确"));
                 }
                 if (empty($data['parent_id'])) {
                     $data['parent_id'] = $msg_id;
@@ -64,9 +64,9 @@
                 }
 
                 if ($msgReplay) {
-                    $this->ajaxReturn(array('error' => 200, 'message' => "回复成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "回复成功"));
                 } else {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "回复失败"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "回复失败"));
                 }
 
 
@@ -83,12 +83,12 @@
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
 
             if (!$this->model->where(array('msg_id' => $id))->save(array('msg_status' => FeedbackModel::STATUS_DISABLE))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
     }

@@ -84,7 +84,7 @@
                 $authRulemodel = new AuthRuleModel();
                 /*查询权限组id*/
                 $infoRule = $this->model->getAuthGroupInfoById($id);
-                $node = $authRulemodel->getAuthRuleListByWhere(['sort', 'id' => 'desc']);
+                $node = $authRulemodel->getAuthRuleList(['sort', 'id' => 'desc']);
                 $this->list = node_merges($node, explode(',', $infoRule['rules']));
                 $this->id = $id;
                 $this->display();

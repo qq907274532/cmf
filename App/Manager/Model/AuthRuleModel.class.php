@@ -35,7 +35,7 @@
          * @param array $where
          * @return mixed
          */
-        public function getAuthRuleListByWhere($order = ['id' => 'desc'], $where = [])
+        public function getAuthRuleList($order = ['id' => 'desc'], $where = ['status'=>self::STATUS_ENABLE])
         {
             return $this->where($where)->order($order)->select();
         }

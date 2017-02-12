@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-01-18 23:44:58
+Date: 2017-02-12 15:27:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `hx_account_log` (
   `change_type` tinyint(3) unsigned NOT NULL COMMENT '操作类型,0为充值,1,为提现,2为管理员调节,99为其它类型',
   PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='用户账目日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户账目日志表';
 
 -- ----------------------------
 -- Records of hx_account_log
@@ -71,7 +71,6 @@ INSERT INTO `hx_account_log` VALUES ('32', '1', '0.00', '0.00', '1900', '1900', 
 INSERT INTO `hx_account_log` VALUES ('33', '1', '0.00', '0.00', '-1900', '-1900', '2016-12-06 17:11:24', '由于退货或未发货操作，退回订单 2009061503335 赠送的积分', '99');
 INSERT INTO `hx_account_log` VALUES ('34', '1', '1910.00', '0.00', '0', '0', '2016-12-06 17:11:24', '由于取消、无效或退货操作，退回支付订单 2009061503335 时使用的预付款', '99');
 INSERT INTO `hx_account_log` VALUES ('35', '1', '-500.00', '0.00', '0', '0', '2016-12-06 17:11:24', '支付订单 2009061510313', '99');
-INSERT INTO `hx_account_log` VALUES ('36', '1', '-111.00', '0.00', '0', '0', '0000-00-00 00:00:00', '', '2');
 INSERT INTO `hx_account_log` VALUES ('37', '1', '-111.00', '0.00', '0', '0', '2016-12-08 22:17:27', '', '2');
 INSERT INTO `hx_account_log` VALUES ('38', '1', '-1111.00', '0.00', '0', '0', '2016-12-12 16:36:03', '', '2');
 
@@ -90,14 +89,14 @@ CREATE TABLE `hx_admin_user` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`) USING BTREE,
+  UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台管理员';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='后台管理员';
 
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2017-01-02 12:12:08', '127.0.0.1', '2016-11-27 15:11:13', '2017-01-02 12:12:08');
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2017-02-12 14:24:30', '127.0.0.1', '2016-11-27 15:11:13', '2017-02-12 14:24:30');
 
 -- ----------------------------
 -- Table structure for hx_article
@@ -109,7 +108,7 @@ CREATE TABLE `hx_article` (
   `title` varchar(200) DEFAULT NULL COMMENT '文章标题',
   `desc` varchar(200) DEFAULT NULL COMMENT '描述',
   `content` longtext COMMENT '文章内容',
-  `time` int(11) DEFAULT '0' COMMENT '创建时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `del` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:正常；2：删除',
   `recommend` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否推荐 1：否；2：是',
   `top` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否置顶:1否；2：是',
@@ -118,7 +117,7 @@ CREATE TABLE `hx_article` (
   `userid` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='文章表';
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文章表';
 
 -- ----------------------------
 -- Records of hx_article
@@ -137,7 +136,7 @@ CREATE TABLE `hx_auth_group` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 -- ----------------------------
 -- Records of hx_auth_group
@@ -153,10 +152,10 @@ DROP TABLE IF EXISTS `hx_auth_group_access`;
 CREATE TABLE `hx_auth_group_access` (
   `uid` mediumint(8) unsigned NOT NULL,
   `group_id` mediumint(8) unsigned NOT NULL,
-  UNIQUE KEY `uid_group_id` (`uid`,`group_id`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `group_id` (`group_id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='节点和角色中间表';
+  UNIQUE KEY `uid_group_id` (`uid`,`group_id`),
+  KEY `uid` (`uid`),
+  KEY `group_id` (`group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='节点和角色中间表';
 
 -- ----------------------------
 -- Records of hx_auth_group_access
@@ -186,8 +185,8 @@ CREATE TABLE `hx_auth_rule` (
   `menu` int(1) DEFAULT '0' COMMENT '是否是菜单,1是菜单 2：不是',
   `icon` varchar(150) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='节点表';
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='节点表';
 
 -- ----------------------------
 -- Records of hx_auth_rule
@@ -285,7 +284,7 @@ CREATE TABLE `hx_back_goods` (
   PRIMARY KEY (`rec_id`),
   KEY `back_id` (`back_id`),
   KEY `goods_id` (`goods_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_back_goods
@@ -305,7 +304,7 @@ CREATE TABLE `hx_back_order` (
   `shipping_name` varchar(120) DEFAULT NULL COMMENT '快递名称',
   `user_id` mediumint(8) unsigned DEFAULT '0',
   `action_user` varchar(30) DEFAULT NULL COMMENT '收货人',
-  `consignee` varchar(60) DEFAULT NULL,
+  `consignee` varchar(60) DEFAULT '',
   `address` varchar(250) DEFAULT NULL,
   `country` smallint(5) unsigned DEFAULT '0',
   `province` smallint(5) unsigned DEFAULT '0',
@@ -321,14 +320,14 @@ CREATE TABLE `hx_back_order` (
   `shipping_fee` decimal(10,2) unsigned DEFAULT '0.00',
   `suppliers_id` smallint(5) DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `return_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `return_time` datetime DEFAULT NULL,
   `agency_id` smallint(5) unsigned DEFAULT '0',
-  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`back_id`),
   KEY `user_id` (`user_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_back_order
@@ -347,14 +346,14 @@ CREATE TABLE `hx_booking_goods` (
   `goods_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `goods_desc` varchar(255) NOT NULL DEFAULT '',
   `goods_number` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `booking_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `booking_time` datetime DEFAULT NULL,
   `is_dispose` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `dispose_user` varchar(30) NOT NULL DEFAULT '',
-  `dispose_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `dispose_time` datetime DEFAULT NULL,
   `dispose_note` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`rec_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_booking_goods
@@ -371,7 +370,7 @@ CREATE TABLE `hx_cate` (
   `sort` int(11) DEFAULT '50',
   `status` tinyint(4) DEFAULT '1' COMMENT '1:启用，2：禁用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文章分类表';
 
 -- ----------------------------
 -- Records of hx_cate
@@ -387,14 +386,14 @@ CREATE TABLE `hx_comments` (
   `uid` int(11) NOT NULL DEFAULT '0' COMMENT '发表评论的用户id',
   `full_name` varchar(50) DEFAULT NULL COMMENT '评论者昵称',
   `email` varchar(255) DEFAULT NULL COMMENT '评论者邮箱',
-  `createtime` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
+  `create_time` datetime DEFAULT NULL,
   `content` text NOT NULL COMMENT '评论内容',
   `parentid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被回复的评论id',
   `aid` int(11) DEFAULT NULL COMMENT '评论内容id',
   PRIMARY KEY (`id`),
-  KEY `comment_parent` (`parentid`) USING BTREE,
-  KEY `createtime` (`createtime`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `comment_parent` (`parentid`),
+  KEY `createtime` (`create_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_comments
@@ -421,7 +420,7 @@ CREATE TABLE `hx_delivery_goods` (
   PRIMARY KEY (`rec_id`),
   KEY `delivery_id` (`delivery_id`,`goods_id`),
   KEY `goods_id` (`goods_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_delivery_goods
@@ -437,7 +436,7 @@ CREATE TABLE `hx_delivery_order` (
   `order_sn` varchar(20) NOT NULL,
   `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `invoice_no` varchar(50) DEFAULT NULL,
-  `add_time` int(10) unsigned DEFAULT '0',
+  `add_time` datetime DEFAULT NULL,
   `shipping_id` tinyint(3) unsigned DEFAULT '0',
   `shipping_name` varchar(120) DEFAULT NULL,
   `user_id` mediumint(8) unsigned DEFAULT '0',
@@ -453,19 +452,19 @@ CREATE TABLE `hx_delivery_order` (
   `zipcode` varchar(60) DEFAULT NULL,
   `tel` varchar(60) DEFAULT NULL,
   `mobile` varchar(60) DEFAULT NULL,
-  `best_time` varchar(120) DEFAULT NULL,
+  `best_time` datetime DEFAULT NULL,
   `postscript` varchar(255) DEFAULT NULL,
   `how_oos` varchar(120) DEFAULT NULL,
   `insure_fee` decimal(10,2) unsigned DEFAULT '0.00',
   `shipping_fee` decimal(10,2) unsigned DEFAULT '0.00',
-  `update_time` int(10) unsigned DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `suppliers_id` smallint(5) DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `agency_id` smallint(5) unsigned DEFAULT '0',
   PRIMARY KEY (`delivery_id`),
   KEY `user_id` (`user_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_delivery_order
@@ -485,13 +484,13 @@ CREATE TABLE `hx_feedback` (
   `msg_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '类型1:投诉;2:询问,3:售后,4:求购',
   `msg_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
   `msg_content` text NOT NULL COMMENT '内容',
-  `msg_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '时间',
+  `msg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '时间',
   `message_img` varchar(255) NOT NULL DEFAULT '0' COMMENT '图片',
   `order_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '是否回复',
   `msg_area` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`msg_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户留言';
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户留言';
 
 -- ----------------------------
 -- Records of hx_feedback
@@ -511,7 +510,7 @@ CREATE TABLE `hx_link` (
   `time` int(11) DEFAULT NULL COMMENT '创建时间',
   `create_time` int(11) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='友情链接';
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='友情链接';
 
 -- ----------------------------
 -- Records of hx_link
@@ -528,7 +527,7 @@ CREATE TABLE `hx_log` (
   `name` varchar(255) DEFAULT NULL,
   `ip` varchar(20) DEFAULT NULL COMMENT '登录ip',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1152 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_log
@@ -546,7 +545,7 @@ CREATE TABLE `hx_nav` (
   `time` int(11) DEFAULT NULL COMMENT '创建时间',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='导航栏表';
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='导航栏表';
 
 -- ----------------------------
 -- Records of hx_nav
@@ -563,10 +562,10 @@ CREATE TABLE `hx_order_action` (
   `action_user` varchar(30) NOT NULL DEFAULT '' COMMENT '操作该次的人员',
   `order_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '作何操作0,未确认, 1已确认; 2已取消; 3无效; 4退货',
   `action_note` varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
-  `log_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '操作时间',
+  `log_time` datetime DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`action_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='订单操作记录表';
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单操作记录表';
 
 -- ----------------------------
 -- Records of hx_order_action
@@ -596,7 +595,7 @@ CREATE TABLE `hx_order_goods` (
   PRIMARY KEY (`rec_id`),
   KEY `order_id` (`order_id`),
   KEY `goods_id` (`goods_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_order_goods
@@ -617,17 +616,17 @@ CREATE TABLE `hx_order_info` (
   `city` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的城市id',
   `district` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '收货人的地区id',
   `address` varchar(255) NOT NULL DEFAULT '' COMMENT '收货人的详细地址,用户页面填写',
-  `zipcode` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的邮编,用户页面填写',
-  `tel` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的电话,用户页面填写',
+  `zipcode` varchar(60) DEFAULT '' COMMENT '收货人的邮编,用户页面填写',
+  `tel` varchar(60) DEFAULT '' COMMENT '收货人的电话,用户页面填写',
   `mobile` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的手机,用户页面填写',
-  `email` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的Email, 用户页面填写',
-  `postscript` varchar(255) NOT NULL DEFAULT '' COMMENT '订单附言,由用户提交订单前填写',
-  `shipping_id` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户选择的配送方式id',
-  `shipping_name` varchar(120) NOT NULL DEFAULT '' COMMENT '用户选择的配送方式的名称',
+  `email` varchar(60) DEFAULT '' COMMENT '收货人的Email, 用户页面填写',
+  `postscript` varchar(255) DEFAULT '' COMMENT '订单附言,由用户提交订单前填写',
+  `shipping_id` tinyint(3) DEFAULT '0' COMMENT '用户选择的配送方式id',
+  `shipping_name` varchar(120) DEFAULT '' COMMENT '用户选择的配送方式的名称',
   `pay_id` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户选择的支付方式的id',
   `pay_name` varchar(120) NOT NULL DEFAULT '' COMMENT '用户选择的支付方式名称',
-  `inv_payee` varchar(120) NOT NULL DEFAULT '' COMMENT '发票抬头,用户页面填写',
-  `inv_content` varchar(120) NOT NULL DEFAULT '' COMMENT '发票内容,用户页面选择',
+  `inv_payee` varchar(120) DEFAULT '' COMMENT '发票抬头,用户页面填写',
+  `inv_content` varchar(120) DEFAULT '' COMMENT '发票内容,用户页面选择',
   `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品的总金额',
   `shipping_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '配送费用',
   `insure_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付费用,跟支付方式的配置相关',
@@ -637,19 +636,19 @@ CREATE TABLE `hx_order_info` (
   `integral_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '使用积分金额',
   `bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '使用红包金额',
   `order_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '应付款金额',
-  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单生成时间',
-  `confirm_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单确认时间',
-  `pay_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单支付时间',
-  `shipping_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '订单配送时间',
-  `bonus_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '红包id',
-  `invoice_no` varchar(255) NOT NULL DEFAULT '' COMMENT '发货时填写, 可在订单查询查看',
-  `extension_code` varchar(30) NOT NULL DEFAULT '' COMMENT '通过活动购买的商品的代号,group_buy是团购; auction是拍卖;snatch夺宝奇兵;正常普通产品该处理为空',
-  `extension_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '通过活动购买的物品id,取值good_activity;如果是正常普通商品,该处为0',
-  `inv_type` varchar(60) NOT NULL COMMENT '发票类型,用户页面选择',
-  `tax` decimal(10,2) NOT NULL COMMENT '发票税额',
-  `discount` decimal(10,2) NOT NULL COMMENT '折扣金额',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `status` tinyint(4) DEFAULT '1' COMMENT '是否删除1：正常2：删除',
+  `create_time` datetime NOT NULL COMMENT '订单生成时间',
+  `confirm_time` datetime DEFAULT NULL COMMENT '订单确认时间',
+  `pay_time` datetime DEFAULT NULL COMMENT '订单支付时间',
+  `shipping_time` datetime DEFAULT NULL COMMENT '订单配送时间',
+  `bonus_id` mediumint(8) unsigned DEFAULT '0' COMMENT '红包id',
+  `invoice_no` varchar(255) DEFAULT '' COMMENT '发货时填写, 可在订单查询查看',
+  `extension_code` varchar(30) DEFAULT '' COMMENT '通过活动购买的商品的代号,group_buy是团购; auction是拍卖;snatch夺宝奇兵;正常普通产品该处理为空',
+  `extension_id` mediumint(8) unsigned DEFAULT '0' COMMENT '通过活动购买的物品id,取值good_activity;如果是正常普通商品,该处为0',
+  `inv_type` varchar(60) DEFAULT NULL COMMENT '发票类型,用户页面选择',
+  `tax` decimal(10,2) DEFAULT NULL COMMENT '发票税额',
+  `discount` decimal(10,2) DEFAULT NULL COMMENT '折扣金额',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否删除1：正常2：删除',
   PRIMARY KEY (`order_id`),
   UNIQUE KEY `order_sn` (`order_sn`),
   KEY `user_id` (`user_id`),
@@ -657,11 +656,17 @@ CREATE TABLE `hx_order_info` (
   KEY `shipping_id` (`shipping_id`),
   KEY `pay_id` (`pay_id`),
   KEY `extension_code` (`extension_code`,`extension_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单表';
 
 -- ----------------------------
 -- Records of hx_order_info
 -- ----------------------------
+INSERT INTO `hx_order_info` VALUES ('20', '1486883229929903294', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:09', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:07:09', '1');
+INSERT INTO `hx_order_info` VALUES ('21', '1486883240851504636', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:20', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:07:20', '1');
+INSERT INTO `hx_order_info` VALUES ('22', '1486883241231607534', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:21', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:07:21', '1');
+INSERT INTO `hx_order_info` VALUES ('23', '1486883241569608853', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:21', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:07:21', '1');
+INSERT INTO `hx_order_info` VALUES ('24', '1486883241886601493', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:21', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:07:21', '1');
+INSERT INTO `hx_order_info` VALUES ('25', '1486883242208601114', '1', '1', '张鑫', '1', '1', '1', '1', '这是测试订单', '277500', '', '18518011371', '', '', '1', '这是测试', '1', '微信支付', '', '', '100.00', '0.00', '0.00', '0.00', '0.00', '0', '0.00', '0.00', '200.00', '2017-02-12 15:07:22', null, null, null, '0', '', '', '0', null, null, null, '2017-02-12 15:22:57', '2');
 
 -- ----------------------------
 -- Table structure for hx_payment
@@ -678,11 +683,11 @@ CREATE TABLE `hx_payment` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可用;1是;2否',
   `is_cod` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否货到付款, 0否;1是',
   `is_online` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否在线支付;0否;1是',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`pay_id`),
   UNIQUE KEY `pay_code` (`pay_code`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='支付工具';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='支付工具';
 
 -- ----------------------------
 -- Records of hx_payment
@@ -702,7 +707,7 @@ CREATE TABLE `hx_region` (
   KEY `parent_id` (`parent_id`),
   KEY `region_type` (`region_type`),
   KEY `agency_id` (`agency_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3409 DEFAULT CHARSET=utf8 COMMENT='区域表';
+) ENGINE=MyISAM AUTO_INCREMENT=3409 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='区域表';
 
 -- ----------------------------
 -- Records of hx_region
@@ -726,7 +731,7 @@ CREATE TABLE `hx_system` (
   `copyright` varchar(200) DEFAULT NULL COMMENT '底部版权',
   `content` text COMMENT '关于我们',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of hx_system
@@ -741,55 +746,26 @@ CREATE TABLE `hx_user` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '' COMMENT '邮箱',
   `username` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
+  `password` varchar(60) NOT NULL DEFAULT '' COMMENT '密码',
   `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
-  `birthday` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `birthday` datetime DEFAULT NULL,
   `user_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '用户现有资金',
   `frozen_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '用户冻结资金',
   `pay_points` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消费积分',
   `rank_points` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员等级积分',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态1：启用；2：禁用',
   `address_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '收货信息id,',
-  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员表';
 
 -- ----------------------------
 -- Records of hx_user
 -- ----------------------------
-
--- ----------------------------
--- Table structure for hx_users
--- ----------------------------
-DROP TABLE IF EXISTS `hx_users`;
-CREATE TABLE `hx_users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_login` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
-  `user_pass` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码；hx_password加密',
-  `user_nicename` varchar(50) NOT NULL DEFAULT '' COMMENT '用户美名',
-  `user_email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
-  `user_url` varchar(100) NOT NULL DEFAULT '' COMMENT '用户个人网站',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像，相对于upload/avatar目录',
-  `sex` smallint(1) DEFAULT '0' COMMENT '性别；0：保密，1：男；2：女',
-  `birthday` int(11) DEFAULT NULL COMMENT '生日',
-  `signature` varchar(255) DEFAULT NULL COMMENT '个性签名',
-  `last_login_ip` varchar(16) NOT NULL COMMENT '最后登录ip',
-  `user_activation_key` varchar(60) NOT NULL DEFAULT '' COMMENT '激活码',
-  `user_status` int(11) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
-  `score` int(11) NOT NULL DEFAULT '0' COMMENT '用户积分',
-  `last_login_time` int(11) DEFAULT NULL,
-  `create_time` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_login_key` (`user_login`) USING BTREE,
-  KEY `user_nicename` (`user_nicename`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of hx_users
--- ----------------------------
+INSERT INTO `hx_user` VALUES ('1', '907274532@qq.com', '浩轩', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9', '0', '2017-02-12 14:54:13', '0.00', '0.00', '0', '0', '1', '0', '2017-02-12 14:54:20', '2017-02-12 14:55:31');
 
 -- ----------------------------
 -- Table structure for hx_user_account
@@ -806,12 +782,12 @@ CREATE TABLE `hx_user_account` (
   `payment_id` tinyint(1) NOT NULL COMMENT '支付方式id',
   `is_paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已经付款，０，未付；１，已付',
   `status` tinyint(1) DEFAULT '1' COMMENT '删除 1：正常，2：删除',
-  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `pay_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `pay_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `is_paid` (`is_paid`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='会员账户';
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员账户';
 
 -- ----------------------------
 -- Records of hx_user_account
@@ -835,11 +811,11 @@ CREATE TABLE `hx_user_address` (
   `zipcode` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的邮编',
   `tel` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的电话',
   `mobile` varchar(60) NOT NULL DEFAULT '' COMMENT '收货人的手机号',
-  `create_time` datetime NOT NULL,
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`address_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='会员收货表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员收货表';
 
 -- ----------------------------
 -- Records of hx_user_address
@@ -858,10 +834,10 @@ CREATE TABLE `hx_user_rank` (
   `show_price` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否在不是该等级会员购买页面显示该会员等级的折扣价格.1,显示;2,不显示',
   `special_rank` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否事特殊会员等级组.1,不是;2,是',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1：启用;2：禁用',
-  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`rank_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='会员等级表';
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员等级表';
 
 -- ----------------------------
 -- Records of hx_user_rank
