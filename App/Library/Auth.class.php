@@ -91,13 +91,15 @@ class Auth{
     }
 
     /**
-      * 检查权限
-      * @param name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-      * @param uid  int           认证用户的id
-      * @param string mode        执行check的模式
-      * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-      * @return boolean           通过验证返回true;失败返回false
+     * 检查权限
+     * @param $name     //名称m
+     * @param $uid      //用户id
+     * @param int $type   //类型
+     * @param string $mode  //
+     * @param string $relation
+     * @return bool
      */
+
     public function check($name, $uid, $type=1, $mode='url', $relation='or') {
         if (!$this->_config['AUTH_ON'])
             return true;
@@ -145,12 +147,13 @@ class Auth{
         return false;
     }
 
+
     /**
-     * 根据用户id获取用户组,返回值为数组
-     * @param  uid int     用户id
+     *  根据用户id获取用户组,返回值为数组
+     * @param $uid   用户id
      * @return array       用户所属的用户组 array(
      *     array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
-     *     ...)   
+     *     ...)
      */
     public function getGroups($uid) {
         static $groups = array();
@@ -167,10 +170,11 @@ class Auth{
 
         return $groups[$uid];
     }
+
     /**
-     * [getRules 获取权限]
-     * @param  [type] $uid [用户id]
-     * @return [type]      [description]
+     * 获取权限名称
+     * @param $rules
+     * @return mixed
      */
     public function getRules($rules){
         static $groups = array();
@@ -185,30 +189,33 @@ class Auth{
          }
         return $user_groups;
     }
+
     /**
-     * [getId 查询第三极分类的pid]
-     * @param  [type] $name [description]
-     * @return [type]       [description]
+     * 用户二级分类pid
+     * @param $name
+     * @return mixed
      */
     public function getId($name){
         $authRuleId = M(C('AUTH_RULE'))->where(array('name'=>$name))->getField('pid');
         return $authRuleId;
 
     }
+
     /**
-     * [getFirstId 查询第二级分类pid]
-     * @param  [type] $id [id]
-     * @return [type]     [description]
+     * 查找用户的一级分类pid
+     * @param $id
+     * @return mixed
      */
     public function getFirstId($id){
          $authRuleFirstId = M(C('AUTH_RULE'))->where(array('id'=>$id))->getField('pid');
         return $authRuleFirstId;
     }
-    
+
     /**
      * 获得权限列表
-     * @param integer $uid  用户id
-     * @param integer $type 
+     * @param $uid  用户id
+     * @param $type
+     * @return array|mixed
      */
     protected function getAuthList($uid,$type) {
         static $_authList = array(); //保存用户验证通过的权限列表
@@ -283,15 +290,18 @@ class Auth{
         $rbac = $this->getRules($rules[0]['rules']);
         return node_merges($rbac);
     }
+   
     /**
      * 获得用户资料,根据自己的情况读取数据库
+     * @param $uid    // 用户id
+     * @return mixed
      */
     protected function getUserInfo($uid) {
-        static $userinfo=array();
-        if(!isset($userinfo[$uid])){
-             $userinfo[$uid]=M()->where(array('uid'=>$uid))->table($this->_config['AUTH_USER'])->find();
+        static $userInfo=array();
+        if(!isset($userInfo[$uid])){
+            $userInfo[$uid]=M()->where(array('uid'=>$uid))->table($this->_config['AUTH_USER'])->find();
         }
-        return $userinfo[$uid];
+        return $userInfo[$uid];
     }
 
 }
