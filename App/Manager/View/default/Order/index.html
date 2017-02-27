@@ -60,7 +60,7 @@
                                             <div class="col-sm-8">
                                                 <select class="form-control" name="order_status" id="order_status">
                                                     <option value="0">请选择</option>
-                                                    <volist name="list" id="v">
+                                                    <volist name="list" id="v" key="k">
                                                         <option value="{$k}" <if condition="$Think.get.order_status eq $k">selected=selected</if> >{$v}</option>
                                                     </volist>
                                                 </select>

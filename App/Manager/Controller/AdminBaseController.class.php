@@ -7,6 +7,8 @@
     {
         private $Auth;
         private $name;
+        const ERROR_NUMBER = 100;
+        const SUCCESS_NUMBER = 200;
 
         public function __construct()
         {
@@ -28,8 +30,8 @@
         }
 
         /**
-         * [checkAuth 判断是否有权限]
-         * @return [type] [description]
+         * @param $auth
+         * @param $id
          */
         public function checkAuth($auth, $id)
         {
@@ -43,12 +45,11 @@
 
         //公共的分页 只适合单表查询
         /**
-         * [公共分页]5
-         * @param  [type] $model   [模型]
-         * @param  [type] $where   [where条件]
-         * @param  [type] $pageAll [每页多少条数]
-         * @param  [type] $order   [排序]
-         * @return [type]          [description]
+         * @param $model
+         * @param array $order
+         * @param array $where
+         * @param string $pageAll
+         * @return array
          */
         public function page_com($model, $order = [], $where = [], $pageAll = '20')
         {
@@ -66,6 +67,4 @@
             );
             return $data;
         }
-
-
     }

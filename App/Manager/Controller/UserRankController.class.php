@@ -34,12 +34,12 @@
                 $data['create_time'] = date("Y-m-d H:i:s");
                 $data['status'] = UserRankModel::STATUS_ENABLE;
                 if (!$this->model->create($data)) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => $this->model->getError()));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => $this->model->getError()));
                 }
                 if ($this->model->add($data)) {
-                    $this->ajaxReturn(array('error' => 200, 'message' => "添加成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "添加成功"));
                 } else {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "添加失败"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "添加失败"));
                 }
 
 
@@ -55,15 +55,15 @@
             $id = I('id');
             if (IS_POST) {
                 if ($id <= 0) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => "不合法请求"));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "不合法请求"));
                 }
                 $data = I('post.');
                 unset($data['id']);
                 if (!$this->model->create($data)) {
-                    $this->ajaxReturn(array('error' => 100, 'message' => $this->model->getError()));
+                    $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => $this->model->getError()));
                 }
                 if ($this->model->where(array('rank_id' => $id))->save($data)) {
-                    $this->ajaxReturn(array('error' => 200, 'message' => "修改成功"));
+                    $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => "修改成功"));
                 } else {
                     $this->ajaxReturn(array('error' => 100, 'message' => "修改失败"));
                 }
@@ -84,13 +84,13 @@
         public function specialRank()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
             $status = intval(I('status', 0, 'intval')) == UserRankModel::IS_SPECIAL_RANK ? UserRankModel::IS_SPECIAL_RANK : UserRankModel::IS_NOT_SPECIAL_RANK;
             if (!$this->model->where(array('rank_id' => $id))->save(array('special_rank' => $status))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
 
         /**
@@ -99,24 +99,24 @@
         public function showPrice()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
             $status = intval(I('status', 0, 'intval')) == UserRankModel::IS_SHOW_PRICE ? UserRankModel::IS_SHOW_PRICE : UserRankModel::IS_NOT_SHOW_PRICE;
             if (!$this->model->where(array('rank_id' => $id))->save(array('show_price' => $status))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
 
         public function del()
         {
             if (($id = I('id', 0, 'intval')) <= 0) {
-                $this->ajaxReturn(array('error' => 100, 'message' => "数据格式有误"));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => "数据格式有误"));
             }
             $status = intval(I('status', 0, 'intval')) == UserRankModel::STATUS_ENABLE ? UserRankModel::STATUS_DISABLE : UserRankModel::STATUS_ENABLE;
             if (!$this->model->where(array('rank_id' => $id))->save(array('status' => $status))) {
-                $this->ajaxReturn(array('error' => 100, 'message' => '操作失败'));
+                $this->ajaxReturn(array('error' => self::ERROR_NUMBER, 'message' => '操作失败'));
             }
-            $this->ajaxReturn(array('error' => 200, 'message' => '操作成功'));
+            $this->ajaxReturn(array('error' => self::SUCCESS_NUMBER, 'message' => '操作成功'));
         }
     }
