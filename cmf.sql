@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-02-12 15:27:17
+Date: 2017-03-06 14:02:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -96,7 +96,7 @@ CREATE TABLE `hx_admin_user` (
 -- ----------------------------
 -- Records of hx_admin_user
 -- ----------------------------
-INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2017-02-12 14:24:30', '127.0.0.1', '2016-11-27 15:11:13', '2017-02-12 14:24:30');
+INSERT INTO `hx_admin_user` VALUES ('1', 'admin', 'pbkdf2_sha256$12000$HVqHjtCOhoKo$TZOQbvzgln4Ni4WfJtWw3Dz0it9ugCGIxXeAK9sen/4=', '907274532@qq.com', '1', '2017-02-16 21:39:14', '127.0.0.1', '2016-11-27 15:11:13', '2017-02-16 21:39:14');
 
 -- ----------------------------
 -- Table structure for hx_article
@@ -186,7 +186,7 @@ CREATE TABLE `hx_auth_rule` (
   `icon` varchar(150) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='节点表';
+) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='节点表';
 
 -- ----------------------------
 -- Records of hx_auth_rule
@@ -264,6 +264,9 @@ INSERT INTO `hx_auth_rule` VALUES ('73', 'Manager/Order/list', '订单列表', '
 INSERT INTO `hx_auth_rule` VALUES ('74', 'Manager/Order/index', '订单列表', '1', '1', '', '73', 'Order/index', '1', '2', '');
 INSERT INTO `hx_auth_rule` VALUES ('75', 'Manager/Order/look', '查看', '1', '1', '', '73', 'Order/look', '2', '2', '');
 INSERT INTO `hx_auth_rule` VALUES ('76', 'Manager/Order/del', '移除', '1', '1', '', '73', 'Order/del', '3', '2', '');
+INSERT INTO `hx_auth_rule` VALUES ('77', 'Manager/Log/common', '日志管理', '1', '1', '', '0', 'Log/common', '12', '1', 'fa-envelope-o');
+INSERT INTO `hx_auth_rule` VALUES ('78', 'Manager/OperationLog/list', '操作日志', '1', '1', '', '77', 'OperationLog/list', '1', '1', '');
+INSERT INTO `hx_auth_rule` VALUES ('79', 'Manager/OperationLog/index', '列表', '1', '1', '', '78', 'OperationLog/index', '1', '2', '');
 
 -- ----------------------------
 -- Table structure for hx_back_goods
@@ -522,16 +525,22 @@ CREATE TABLE `hx_link` (
 DROP TABLE IF EXISTS `hx_log`;
 CREATE TABLE `hx_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL COMMENT '管理员远',
-  `time` int(11) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `ip` varchar(20) DEFAULT NULL COMMENT '登录ip',
+  `uid` int(11) NOT NULL COMMENT '管理员',
+  `module` varchar(50) NOT NULL DEFAULT '' COMMENT '模块',
+  `controller` varchar(50) NOT NULL DEFAULT '' COMMENT '控制器',
+  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '方法',
+  `post_value` varchar(255) DEFAULT NULL COMMENT 'post提交内容',
+  `get_value` varchar(255) DEFAULT '' COMMENT 'get 提交内容',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hx_log
 -- ----------------------------
+INSERT INTO `hx_log` VALUES ('1', '1', 'Manager', 'Node', 'edit', '{\"pid\":\"0\",\"title\":\"\\u7cfb\\u7edf\\u8bbe\\u7f6e\",\"name\":\"Common\\/common\\/list\",\"url\":\"common\\/list\",\"icon\":\"fa-cog\",\"sort\":\"50\",\"menu\":\"1\",\"id\":\"17\"}', '[]', '2017-03-06 13:20:17');
+INSERT INTO `hx_log` VALUES ('2', '1', 'Manager', 'Node', 'edit', '[]', '{\"id\":\"1\"}', '2017-03-06 13:21:59');
+INSERT INTO `hx_log` VALUES ('3', '1', 'Manager', 'BasicSettings', 'index', '[]', '[]', '2017-03-06 13:22:14');
 
 -- ----------------------------
 -- Table structure for hx_nav
