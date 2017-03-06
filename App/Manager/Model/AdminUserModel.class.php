@@ -8,8 +8,7 @@ use Think\Model;
  *****/
 class AdminUserModel extends Model {
 	
-	const TBL_ADMIN="admin_user";
-	const TBL_RULE="auth_rule";
+	
 	const STATUS_ENABLE="1";
 	const STATUS_DISABLE="2";
 	protected $_validate = array(
@@ -32,9 +31,14 @@ class AdminUserModel extends Model {
 		$userInfo=$this->where($where)->find();
 		return $userInfo;
 	}
-	public function infoUpdate($id,$data){
-		M(self::TBL_ADMIN)->where(array('id'=>$id))->save($data);
-	}
+	 /**
+     * 获取管理员列表
+     * @return mixed
+     */
+	public function getListByStatus(){
+        $result=$this->where(['status'=>self::STATUS_ENABLE])->select();
+        return $result;
+    }
 
 	/**
 	 * [check_verify 验证验证码是否正确]
@@ -46,10 +50,7 @@ class AdminUserModel extends Model {
       $verify = new \Think\Verify();
       return $verify->check($code, $id);
     }
-	public function cate($id){
-		$cate=M(self::TBL_CATE)->where(array('id'=>$id))->getField('cate');
-		return $cate;
-	}
+
     /**
      * @param $id
      * @return mixed
