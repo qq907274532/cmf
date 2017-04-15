@@ -21,7 +21,7 @@
             $this->name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
 
             $this->checkAuth($this->name, $_SESSION['id']);
-            self::addLog($_SESSION['id'],MODULE_NAME,CONTROLLER_NAME,ACTION_NAME,I('post.'),I('get.'));
+           // self::addLog($_SESSION['id'],MODULE_NAME,CONTROLLER_NAME,ACTION_NAME,I('post.'),I('get.'));
             /*第三级菜单pid*/
             $openId = $this->Auth->getId($this->name);
             $this->assign('openFirstId', $this->Auth->getFirstId($openId));

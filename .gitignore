@@ -1,3 +1,2 @@
-.idea
-App/Logs/*
-Runtime/*
+Runtime/
+.idea/
